@@ -1,0 +1,6 @@
+google-generativeai
+neo4j
+sentence-transformers
+faiss-cpu
+streamlit
+pandas

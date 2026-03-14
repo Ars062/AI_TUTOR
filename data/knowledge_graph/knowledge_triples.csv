@@ -1,0 +1,21 @@
+source,relation,target
+Recursion,requires,Base Case
+Recursion,calls,Itself
+Recursion,used_in,Factorial
+Recursion,used_in,Fibonacci
+Base Case,stops,Recursion
+Factorial,example_of,Recursion
+Fibonacci,example_of,Recursion
+Binary Search,can_use,Recursion
+Divide and Conquer,related_to,Recursion
+Loop,alternative_to,Recursion
+Stack Memory,used_by,Recursion
+Recursive Function,needs,Base Case
+Recursive Function,calls,Itself
+Function,can_be,Recursive Function
+Algorithm,example,Binary Search
+Algorithm,example,Merge Sort
+Merge Sort,uses,Divide and Conquer
+Merge Sort,can_use,Recursion
+Programming,contains,Recursion
+Computer Science,includes,Algorithms
