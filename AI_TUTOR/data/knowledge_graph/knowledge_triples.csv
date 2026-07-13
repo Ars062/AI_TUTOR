@@ -1,0 +1,62 @@
+source,relation,target
+Recursion,requires,Base Case
+Recursion,calls,Itself
+Recursion,used_in,Factorial
+Recursion,used_in,Fibonacci
+Recursion,used_in,Tree Traversal
+Base Case,stops,Recursion
+Factorial,example_of,Recursion
+Fibonacci,example_of,Recursion
+Binary Search,can_use,Recursion
+Divide and Conquer,related_to,Recursion
+Loop,alternative_to,Recursion
+Stack Memory,used_by,Recursion
+Recursive Function,needs,Base Case
+Recursive Function,calls,Itself
+Function,can_be,Recursive Function
+Algorithm,example,Binary Search
+Algorithm,example,Merge Sort
+Merge Sort,uses,Divide and Conquer
+Merge Sort,can_use,Recursion
+Programming,contains,Recursion
+Computer Science,includes,Algorithms
+Computer Science,includes,Data Structures
+Data Structures,includes,Arrays
+Data Structures,includes,Linked Lists
+Data Structures,includes,Trees
+Data Structures,includes,Stacks
+Data Structures,includes,Queues
+Data Structures,includes,Hash Tables
+Trees,includes,Binary Tree
+Trees,includes,Binary Search Tree
+Trees,includes,AVL Tree
+Trees,includes,Heap
+Binary Search Tree,property,Left Less Than Parent
+Binary Search Tree,property,Right Greater Than Parent
+Tree Traversal,includes,In-order
+Tree Traversal,includes,Pre-order
+Tree Traversal,includes,Post-order
+Tree Traversal,includes,Level-order
+Sorting Algorithms,includes,Bubble Sort
+Sorting Algorithms,includes,Merge Sort
+Sorting Algorithms,includes,Quick Sort
+Sorting Algorithms,includes,Insertion Sort
+Sorting Algorithms,includes,Selection Sort
+Merge Sort,complexity,O(n log n)
+Quick Sort,complexity,O(n log n)
+Bubble Sort,complexity,O(n^2)
+Binary Search,complexity,O(log n)
+Time Complexity,measured_by,Big O Notation
+Big O Notation,includes,O(1)
+Big O Notation,includes,O(log n)
+Big O Notation,includes,O(n)
+Big O Notation,includes,O(n log n)
+Big O Notation,includes,O(n^2)
+Stacks,principle,LIFO
+Queues,principle,FIFO
+Arrays,property,Contiguous Memory
+Linked Lists,property,Dynamic Size
+Hash Tables,property,Key-Value Storage
+Graphs,includes,Directed Graph
+Graphs,includes,Undirected Graph
+Graphs,includes,Weighted Graph

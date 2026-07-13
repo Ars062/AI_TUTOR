@@ -1,0 +1,7 @@
+Recursion is useful when solving problems that can be broken into smaller
+identical problems.
+
+Examples:
+- Tree traversal
+- Factorial
+- Fibonacci

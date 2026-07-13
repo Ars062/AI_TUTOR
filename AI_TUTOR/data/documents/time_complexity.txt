@@ -1,0 +1,19 @@
+Time complexity describes how runtime grows with input size n.
+
+Big O Notation (worst case):
+- O(1): Constant time (array access)
+- O(log n): Logarithmic (binary search)
+- O(n): Linear (simple loop)
+- O(n log n): Linearithmic (efficient sorts)
+- O(n^2): Quadratic (nested loops)
+- O(2^n): Exponential (recursive without optimization)
+- O(n!): Factorial (permutations)
+
+Rules:
+- Drop constants: O(2n) → O(n)
+- Drop non-dominant terms: O(n^2 + n) → O(n^2)
+- Consider all inputs: O(n*m) for nested loops on different inputs
+
+Space complexity: how much extra memory algorithm needs
+- In-place algorithms use O(1) extra space
+- Recursive algorithms often use O(n) stack space

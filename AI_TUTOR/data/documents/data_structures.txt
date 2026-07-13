@@ -1,0 +1,24 @@
+Data structures organize and store data efficiently.
+
+Arrays: Contiguous memory, O(1) access by index, fixed size
+Linked Lists: Nodes with pointers, O(n) access, dynamic size
+- Singly linked: each node points to next
+- Doubly linked: each node points to next and previous
+- Circular: last node points back to first
+
+Stacks: LIFO (Last In, First Out). Operations: push, pop, peek
+Queues: FIFO (First In, First Out). Operations: enqueue, dequeue, front
+
+Trees: Hierarchical structure
+- Binary Tree: each node has at most 2 children
+- Binary Search Tree: left < parent < right
+- Balanced Trees: AVL, Red-Black (auto-balancing)
+
+Hash Tables: Key-value storage with O(1) average access
+- Hash function maps key to bucket
+- Collisions resolved by chaining or open addressing
+
+Graphs: Nodes connected by edges
+- Directed/Undirected
+- Weighted/Unweighted
+- Adjacency matrix or adjacency list representation

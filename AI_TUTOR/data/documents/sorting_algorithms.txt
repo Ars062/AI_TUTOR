@@ -1,0 +1,16 @@
+Sorting algorithms arrange elements in a specific order.
+
+Common sorting algorithms:
+- Bubble Sort: Repeatedly swaps adjacent elements if out of order
+- Merge Sort: Divide and conquer, splits array into halves, sorts, and merges
+- Quick Sort: Picks a pivot, partitions around it, recursively sorts
+- Insertion Sort: Builds sorted array one element at a time
+- Selection Sort: Repeatedly finds minimum element and places it at front
+
+Time complexities:
+- Bubble, Insertion, Selection: O(n^2)
+- Merge, Quick: O(n log n)
+
+Space complexity:
+- In-place sorts: Bubble, Insertion, Selection, Quick
+- Out-of-place: Merge Sort (O(n) extra space)

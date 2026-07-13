@@ -1,0 +1,11 @@
+Recursion is a programming technique where a function calls itself.
+
+A recursive function must include:
+1. Base case
+2. Recursive case
+
+Example:
+factorial(n) = n * factorial(n-1)
+
+Base case:
+factorial(0) = 1

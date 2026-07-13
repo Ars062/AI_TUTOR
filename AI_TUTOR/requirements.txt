@@ -1,0 +1,9 @@
+groq
+python-dotenv
+neo4j
+sentence-transformers
+faiss-cpu
+streamlit
+pandas
+numpy
+requests
