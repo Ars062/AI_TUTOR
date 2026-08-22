@@ -1,10 +1,11 @@
 import os
+import re
 import pickle
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
 
-from src.config import DOCUMENTS_DIR, FAISS_INDEX_PATH
+from src.config import DOCUMENTS_DIR, FAISS_INDEX_PATH, CHUNK_SIZE, CHUNK_OVERLAP
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -14,6 +15,40 @@ SUPPORTED_EXTENSIONS = {".txt", ".md", ".csv"}
 def _read_file(path):
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
+
+
+def chunk_text(text, size=None, overlap=None):
+    """Split text into overlapping chunks, breaking on paragraph/sentence/word."""
+    if size is None:
+        size = CHUNK_SIZE
+    if overlap is None:
+        overlap = CHUNK_OVERLAP
+
+    text = re.sub(r"\n{3,}", "\n\n", (text or "").strip())
+    if len(text) <= size:
+        return [text] if text else []
+
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = min(start + size, len(text))
+        if end >= len(text):
+            piece = text[start:end].strip()
+            if len(piece) > 50:
+                chunks.append(piece)
+            break
+        cut = max(
+            text.rfind("\n\n", start, end),
+            text.rfind(". ", start, end),
+            text.rfind(" ", start, end),
+        )
+        if cut > start + size // 2:
+            end = cut + 1
+        piece = text[start:end].strip()
+        if len(piece) > 50:
+            chunks.append(piece)
+        start = max(end - overlap, start + 1)
+    return chunks
 
 
 def build_vector_index(doc_folder=None):
@@ -35,8 +70,9 @@ def build_vector_index(doc_folder=None):
         try:
             text = _read_file(path)
             if text.strip():
-                documents.append(text)
-                filenames.append(file)
+                for chunk in chunk_text(text):
+                    documents.append(chunk)
+                    filenames.append(file)
         except Exception as e:
             print(f"Warning: could not read {file}: {e}")
 

@@ -1,0 +1,3442 @@
+# Wikipedia: Big O notation (CC BY-SA)
+# Source: https://en.wikipedia.org/wiki/Big_O_notation
+
+Big
+
+notation
+
+is a
+
+mathematical notation
+
+that describes the approximate size of a
+
+function
+
+on a
+
+domain
+
+. Big O is a member of a
+
+family of notations
+
+invented by the German mathematicians
+
+Paul Bachmann
+
+and
+
+Edmund Landau
+
+and expanded by others, collectively called
+
+Bachmann–Landau notation
+
+. The letter O stands for
+
+Ordnung
+
+, that is, the
+
+order of approximation
+
+In
+
+computer science
+
+, big O notation is used to
+
+classify algorithms
+
+by how their run time or space requirements
+
+grow with the input.
+
+In
+
+analytic number theory
+
+, big O notation expresses bounds on the growth of an
+
+arithmetical function
+
+, as for the remainder term in the
+
+prime number theorem
+
+In
+
+mathematical analysis
+
+, including
+
+calculus
+
+, Big O notation bounds the error when truncating a
+
+power series
+
+and expresses the quality
+
+of approximation of a real or complex valued function by a simpler function.
+
+Often, big O notation characterizes functions according to their growth rates as the variable becomes large: different functions with the same
+
+asymptotic
+
+growth rate may be represented using the same O notation. The letter O is used because the growth rate of a function is also referred to as the
+
+order of the function
+
+. A description of a function in terms of big O notation only provides an
+
+upper bound
+
+on the growth rate of the function.
+
+Associated with big O notation are several related notations, using the symbols
+
+{\displaystyle o}
+
+{\displaystyle \sim }
+
+{\displaystyle \Omega }
+
+{\displaystyle \ll }
+
+{\displaystyle \gg }
+
+{\displaystyle \asymp }
+
+{\displaystyle \omega }
+
+, and
+
+{\displaystyle \Theta }
+
+to describe other kinds of bounds on growth rates.
+
+Bachmann proposed the notation in 1894 and Landau extended it in 1909. An earlier notation was proposed by
+
+Paul du Bois-Reymond
+
+in 1870.
+
+Formal definition
+
+Let
+
+{\textstyle f,}
+
+the function to be estimated, be either a
+
+real
+
+or
+
+complex
+
+valued function defined on a
+
+domain
+
+{\textstyle D,}
+
+and let
+
+{\textstyle g,}
+
+the comparison function, be a non-negative real valued function defined on the same set
+
+{\textstyle D.}
+
+Common choices for the domain are intervals of real numbers, bounded or unbounded, the set of positive integers, the set of
+
+complex numbers
+
+and tuples of real/complex numbers. With the domain written explicitly or understood implicitly, one writes
+
+{\displaystyle f(x)=O{\bigl (}g(x){\bigr )}\ }
+
+which is read as
+
+{\textstyle f(x)}
+
+is
+
+big
+
+{\textstyle O}
+
+of
+
+{\textstyle g(x)}
+
+if there exists a positive real number
+
+{\textstyle M}
+
+such that
+
+{\displaystyle \left|f(x)\right|\leq M\ g(x)\qquad ~{\mathsf {\ for\ all\ }}~\quad x\in D.}
+
+If
+
+{\displaystyle g(x)>0}
+
+(i.e.
+
+is also never zero) throughout the domain
+
+{\displaystyle D,}
+
+an equivalent definition is that the ratio
+
+{\textstyle {\frac {f(x)}{g(x)}}}
+
+is
+
+bounded
+
+, i.e. there is a positive real number
+
+{\displaystyle M}
+
+so that
+
+{\textstyle {\Big |}{\frac {f(x)}{g(x)}}{\Big |}\leq M}
+
+for all
+
+{\displaystyle x\in D.}
+
+These encompass all the uses of
+
+big
+
+{\textstyle O}
+
+in
+
+computer science
+
+and mathematics, including its use where the domain is finite, infinite, real, complex, single variate, or multivariate. In most applications, one chooses the function
+
+{\displaystyle g(x)}
+
+appearing within the
+
+argument
+
+of
+
+{\textstyle O{\bigl (}\cdot {\bigr )}}
+
+to be as simple a form as possible, omitting constant factors and lower order terms. The number
+
+{\textstyle M}
+
+is called the
+
+implied constant
+
+because it is normally not specified. When using
+
+big
+
+{\textstyle O}
+
+notation, what matters is that some finite
+
+{\displaystyle M}
+
+exists, not its specific value. This simplifies the presentation of many analytic inequalities.
+
+For functions defined on
+
+positive real numbers
+
+or positive integers, a more restrictive and somewhat conflicting definition
+
+is still in common use,
+
+10
+
+especially in computer science.
+
+When restricted to functions which are
+
+eventually
+
+positive, the notation
+
+{\displaystyle f(x)=O{\bigl (}g(x){\bigr )}\qquad ~{\mathsf {as}}\quad x\to \infty }
+
+means that for some real number
+
+{\textstyle a,}
+
+{\textstyle f(x)=O{\bigl (}g(x){\bigr )}}
+
+in the domain
+
+{\textstyle \left[a,\infty \right).}
+
+Here, the expression
+
+{\textstyle x\to \infty }
+
+does not indicate a
+
+limit
+
+, but the notion that the inequality holds for
+
+large enough
+
+{\textstyle x.}
+
+The expression
+
+{\textstyle x\to \infty }
+
+often is omitted.
+
+Similarly, for a real number
+
+{\textstyle a,}
+
+the notation
+
+as
+
+{\displaystyle f(x)=O{\bigl (}g(x){\bigr )}\qquad ~{\text{ as }}\ x\to a}
+
+means that for some constant
+
+{\textstyle c>0,}
+
+{\textstyle f(x)=O{\bigl (}g(x){\bigr )}}
+
+on the interval
+
+{\displaystyle \left[a-c,a+c\right];}
+
+that is, in a small neighborhood of
+
+{\displaystyle a.}
+
+In addition, the notation
+
+{\displaystyle \ f(x)=h(x)+O{\bigl (}g(x){\bigr )}\ }
+
+means
+
+{\textstyle f(x)-h(x)=O{\bigl (}g(x){\bigr )}.}
+
+More complicated expressions
+
+are also possible.
+
+Despite the presence of the equal sign (
+
+) as written, the expression
+
+{\textstyle f(x)=O{\bigl (}g(x){\bigr )}}
+
+does not refer to an
+
+equality
+
+, but rather to an inequality relating
+
+{\textstyle f}
+
+and
+
+{\textstyle g.}
+
+In the 1930s,
+
+the Russian number theorist
+
+I.M. Vinogradov
+
+introduced the notation
+
+{\displaystyle \ll ,}
+
+which has been increasingly used in number theory
+
+11
+
+12
+
+and other branches of mathematics, as an alternative to the
+
+{\textstyle O}
+
+notation. We have
+
+{\displaystyle \ f\ll g\iff f=O{\bigl (}g{\bigr )}.}
+
+Frequently both notations are used in the same work.
+
+Set version of big O
+
+In computer science
+
+it is common to define
+
+big
+
+{\textstyle O}
+
+as also defining a
+
+set
+
+of functions. With the positive (or non-negative) function
+
+{\displaystyle g(x)}
+
+specified, one interprets
+
+{\textstyle O{\bigl (}g(x){\bigr )}}
+
+as representing the
+
+set
+
+of all functions
+
+{\textstyle {\tilde {f}}}
+
+that satisfy
+
+{\textstyle {\tilde {f}}(x)=O{\bigl (}g(x){\bigr )}.}
+
+One can then equivalently write
+
+{\textstyle f(x)\in O{\bigl (}g(x){\bigr )},}
+
+read as "the function
+
+{\textstyle \ f(x)\ }
+
+is among the set of all functions of
+
+order at most
+
+{\textstyle g(x).}
+
+Examples with an infinite domain
+
+In typical usage the
+
+{\displaystyle O}
+
+notation is applied to an infinite interval of real numbers
+
+{\displaystyle [a,\infty )}
+
+and captures the behavior of the function for very large
+
+{\displaystyle x}
+
+. In this setting, the contribution of the terms that grow "most quickly" will eventually make the other ones irrelevant. As a result, the following simplification rules can be applied:
+
+If
+
+{\displaystyle f(x)}
+
+is a sum of several terms, if there is one with largest growth rate, it can be kept, and all others omitted.
+
+If
+
+{\displaystyle f(x)}
+
+is a product of several factors, any constants (factors in the product that do not depend on
+
+{\displaystyle x}
+
+) can be omitted.
+
+For example, let
+
+{\displaystyle f(x)=6x^{4}-2x^{3}+5}
+
+, and suppose we wish to simplify this function, using
+
+{\displaystyle O}
+
+notation, to describe its growth rate for large
+
+{\displaystyle x}
+
+. This function is the sum of three terms:
+
+{\displaystyle 6x^{4}}
+
+{\displaystyle -2x^{3}}
+
+, and
+
+{\displaystyle 5}
+
+. Of these three terms, the one with the highest growth rate is the one with the largest exponent as a function of
+
+{\displaystyle x}
+
+, namely
+
+{\displaystyle 6x^{4}}
+
+. Now one may apply the second rule:
+
+{\displaystyle 6x^{4}}
+
+is a product of
+
+{\displaystyle 6}
+
+and
+
+{\displaystyle x^{4}}
+
+in which the first factor does not depend on
+
+{\displaystyle x}
+
+. Omitting this factor results in the simplified form
+
+{\displaystyle x^{4}}
+
+. Thus, we say that
+
+{\displaystyle f(x)}
+
+is a "big O" of
+
+{\displaystyle x^{4}}
+
+. Mathematically, we can write
+
+{\displaystyle f(x)=O(x^{4})}
+
+for all
+
+{\displaystyle x\geq 1}
+
+. One may confirm this calculation using the formal definition: let
+
+{\displaystyle f(x)=6x^{4}-2x^{3}+5}
+
+and
+
+{\displaystyle g(x)=x^{4}}
+
+. Applying the
+
+formal definition
+
+from above, the statement that
+
+{\displaystyle f(x)=O(x^{4})}
+
+is equivalent to its expansion,
+
+{\displaystyle |f(x)|\leq Mx^{4}}
+
+for some suitable choice of a positive real number
+
+{\displaystyle M}
+
+and for all
+
+{\displaystyle x\geq 1}
+
+. To prove this, let
+
+13
+
+{\displaystyle M=13}
+
+. Then, for all
+
+{\displaystyle x\geq 1}
+
+13
+
+{\displaystyle {\begin{aligned}|6x^{4}-2x^{3}+5|&\leq 6x^{4}+|-2x^{3}|+5\\&\leq 6x^{4}+2x^{4}+5x^{4}\\&=13x^{4}\end{aligned}}}
+
+so
+
+13
+
+{\displaystyle |6x^{4}-2x^{3}+5|\leq 13x^{4}.}
+
+While it is also true, by the same argument, that
+
+10
+
+{\displaystyle f(x)=O(x^{10})}
+
+, this is a less precise
+
+approximation of the function
+
+{\displaystyle f}
+
+On the other hand, the statement
+
+{\displaystyle f(x)=O(x^{3})}
+
+is false, because the term
+
+{\displaystyle 6x^{4}}
+
+causes
+
+{\displaystyle f(x)/x^{3}}
+
+to be unbounded.
+
+When a function
+
+{\displaystyle T(n)}
+
+describes the number
+
+of steps required in an algorithm with input
+
+{\displaystyle n}
+
+, an expression such as
+
+{\displaystyle T(n)=O(n^{2})}
+
+with the implied domain being the set of positive integers, may be interpreted as saying that the algorithm has
+
+at most the order of
+
+{\displaystyle n^{2}}
+
+time complexity.
+
+Example with a finite domain
+
+Big O can also be used to describe the
+
+error term
+
+in an approximation to a mathematical function on a finite interval. The most significant terms are written explicitly, and then the least-significant terms are summarized in a single big O term. Consider, for example, the
+
+exponential series
+
+and two expressions of it that are valid when
+
+{\displaystyle x}
+
+is small:
+
+for all finite
+
+for all
+
+1.
+
+{\displaystyle {\begin{aligned}e^{x}&=1+x+{\frac {\;x^{2}\ }{2!}}+{\frac {\;x^{3}\ }{3!}}+{\frac {\;x^{4}\ }{4!}}+\dotsb &&{\text{ for all finite }}x\\[4pt]&=1+x+{\frac {\;x^{2}\ }{2}}+O(|x|^{3})&&{\text{ for all }}|x|\leq 1\\[4pt]&=1+x+O(x^{2})&&{\text{ for all }}|x|\leq 1.\end{aligned}}}
+
+The middle expression
+
+the line with
+
+{\displaystyle O(|x^{3}|)}
+
+means the absolute-value of the error
+
+{\displaystyle \ e^{x}-(1+x+{\frac {\;x^{2}\ }{2}})\ }
+
+is at most some constant times
+
+{\displaystyle ~|x^{3}|\ }
+
+when
+
+{\displaystyle \ x~}
+
+is small.
+
+This is an example of the use of
+
+Taylor's theorem
+
+The behavior of a given function may be very different on finite domains than on infinite domains, for example,
+
+for
+
+{\displaystyle (x+1)^{8}=x^{8}+O(x^{7})\quad {\text{ for }}x\geq 1}
+
+while
+
+for
+
+1.
+
+{\displaystyle (x+1)^{8}=1+8x+O(x^{2})\quad {\text{ for }}|x|\leq 1.}
+
+Multivariate examples
+
+sin
+
+for
+
+any real number
+
+{\displaystyle x\sin y=O(x)\quad {\text{ for }}x\geq 1,y{\text{ any real number}}}
+
+14
+
+for all
+
+{\displaystyle 3a^{2}+7ab+2b^{2}+a+3b+14\ll a^{2}+b^{2}\ll a^{2}\quad {\text{ for all }}a\geq b\geq 1}
+
+for all real
+
+that are not both
+
+{\displaystyle {\frac {xy}{x^{2}+y^{2}}}=O(1)\quad {\text{ for all real }}x,y{\text{ that are not both }}0}
+
+for
+
+{\displaystyle x^{it}=O(1)\quad {\text{ for }}x\neq 0,t\in \mathbb {R} .}
+
+Here we have a
+
+complex variable
+
+function of two variables.
+
+In general, any bounded function is
+
+{\displaystyle O(1)}
+
+10
+
+for
+
+2.
+
+{\displaystyle (x+y)^{10}=O(x^{10})\quad {\text{ for }}x\geq 1,-2\leq y\leq 2.}
+
+The last example illustrates a mixing of finite and infinite domains on the different variables.
+
+In all of these examples, the bound is uniform
+
+in both variables. Sometimes in a multivariate expression, one variable is
+
+more important than others, and one may express
+
+that the implied constant
+
+{\displaystyle M}
+
+depends on one
+
+or more of the variables using subscripts to the big O symbol or the
+
+{\displaystyle \ll }
+
+symbol. For example, consider the expression
+
+for
+
+any real number.
+
+{\displaystyle (1+x)^{b}=1+O_{b}(x)\quad {\text{ for }}0\leq x\leq 1,b{\text{ any real number.}}}
+
+This means that for each real number
+
+{\displaystyle b}
+
+, there
+
+is a constant
+
+{\displaystyle M_{b}}
+
+which depends on
+
+{\displaystyle b}
+
+, so that for all
+
+{\displaystyle 0\leq x\leq 1}
+
+{\displaystyle |(1+x)^{b}-1|\leq M_{b}\cdot x.}
+
+This particular statement follows from the
+
+general binomial theorem
+
+Another example, common in the theory of
+
+Taylor series
+
+, is
+
+for all
+
+being any real number.
+
+{\displaystyle e^{x}=1+x+O_{r}(x^{2})\quad {\text{ for all }}|x|\leq r,r{\text{ being any real number.}}}
+
+Here the implied constant depends on the size of the domain.
+
+The subscript convention applies to all of the other
+
+notations in this page.
+
+Properties
+
+Product
+
+and
+
+{\displaystyle f_{1}=O(g_{1}){\text{ and }}f_{2}=O(g_{2})\Rightarrow f_{1}f_{2}=O(g_{1}g_{2})}
+
+{\displaystyle f\cdot O(g)=O(|f|g)}
+
+Sum
+
+If
+
+{\displaystyle f_{1}=O(g_{1})}
+
+and
+
+{\displaystyle f_{2}=O(g_{2})}
+
+then
+
+max
+
+{\displaystyle f_{1}+f_{2}=O(\max(g_{1},g_{2}))}
+
+. It follows that if
+
+{\displaystyle f_{1}=O(g)}
+
+and
+
+{\displaystyle f_{2}=O(g)}
+
+then
+
+{\displaystyle f_{1}+f_{2}=O(g)}
+
+Multiplication by a constant
+
+Let
+
+be a nonzero constant. Then
+
+{\displaystyle O(|k|\cdot g)=O(g)}
+
+. In other words, if
+
+{\displaystyle f=O(g)}
+
+, then
+
+{\displaystyle k\cdot f=O(g).}
+
+Transitive property
+
+If
+
+{\displaystyle f=O(g)}
+
+and
+
+{\displaystyle g=O(h)}
+
+then
+
+{\displaystyle f=O(h)}
+
+If the function
+
+{\displaystyle f}
+
+of a positive integer
+
+{\displaystyle n}
+
+can be written as a finite sum of other functions, then the fastest growing one determines the order of
+
+{\displaystyle f(n)}
+
+. For example,
+
+log
+
+for
+
+1.
+
+{\displaystyle f(n)=9\log n+5(\log n)^{4}+3n^{2}+2n^{3}=O(n^{3})\qquad {\text{for }}n\geq 1.}
+
+Some general rules about growth
+
+toward infinity
+
+; the 2nd and 3rd property below
+
+can be proved rigorously using
+
+L'Hôpital's rule
+
+Large powers dominate small powers
+
+For
+
+{\displaystyle b\geq a}
+
+, then
+
+{\displaystyle n^{a}=O(n^{b})}
+
+as
+
+{\displaystyle n\to \infty }
+
+Powers dominate logarithms
+
+For any positive
+
+{\displaystyle a,b,}
+
+log
+
+{\displaystyle (\log n)^{a}=O_{a,b}(n^{b}),}
+
+no matter how large
+
+{\displaystyle a}
+
+is and how small
+
+{\displaystyle b}
+
+is. Here, the implied constant depends
+
+on both
+
+{\displaystyle a}
+
+and
+
+{\displaystyle b}
+
+Exponentials dominate powers
+
+For any positive
+
+{\displaystyle a,b,}
+
+{\displaystyle n^{a}=O_{a,b}(e^{bn}),}
+
+no matter how large
+
+{\displaystyle a}
+
+is and how small
+
+{\displaystyle b}
+
+is.
+
+A function that grows faster than
+
+{\displaystyle n^{c}}
+
+for any
+
+{\displaystyle c}
+
+is called
+
+superpolynomial
+
+. One that grows more slowly than any exponential function of the form
+
+{\displaystyle c^{n}}
+
+with
+
+{\displaystyle c>1}
+
+is called
+
+subexponential
+
+. An algorithm can require time that is both superpolynomial and subexponential; examples of this include the fastest known algorithms for
+
+integer factorization
+
+and the function
+
+log
+
+{\displaystyle n^{\log n}}
+
+We may ignore any powers of
+
+{\displaystyle n}
+
+inside of the logarithms. For any positive
+
+{\displaystyle c}
+
+, the notation
+
+log
+
+{\displaystyle O(\log n)}
+
+means exactly the same thing as
+
+log
+
+{\displaystyle O(\log(n^{c}))}
+
+, since
+
+log
+
+{\displaystyle \log(n^{c})=c\log n}
+
+. Similarly, logs with different constant bases are equivalent with respect to Big O
+
+notation. On the other hand, exponentials with different bases are not of the same order. For example,
+
+{\displaystyle 2^{n}}
+
+and
+
+{\displaystyle 3^{n}}
+
+are not of the same order.
+
+More complicated expressions
+
+In more complicated usage,
+
+{\displaystyle O(\cdot )}
+
+can appear in different places in an equation, even several times on each side. For example, the following are true for
+
+{\displaystyle n}
+
+a positive integer:
+
+log
+
+{\displaystyle {\begin{aligned}(n+1)^{2}&=n^{2}+O(n),\\(n+O(n^{1/2}))\cdot (n+O(\log n))^{2}&=n^{3}+O(n^{5/2}),\\n^{O(1)}&=O(e^{n}).\end{aligned}}}
+
+The meaning of such statements is as follows: for
+
+any
+
+functions which satisfy each
+
+{\displaystyle O(\cdot )}
+
+on the left side, there are
+
+some
+
+functions satisfying each
+
+{\displaystyle O(\cdot )}
+
+on the right side, such that substituting all these functions into the equation makes the two sides equal. For example, the third equation above means: "For any function satisfying
+
+{\displaystyle f(n)=O(1)}
+
+, there is some function
+
+{\displaystyle g(n)=O(e^{n})}
+
+such that
+
+{\displaystyle n^{f(n)}=g(n)}
+
+". The implied constant in the statement "
+
+{\displaystyle g(n)=O(e^{n})}
+
+" may
+
+depend on the implied constant in the expression
+
+{\displaystyle f(n)=O(1)}
+
+".
+
+Some further examples:
+
+for
+
+sin
+
+for all real
+
+{\displaystyle {\begin{aligned}f=O(g)\;&\Rightarrow \;\int _{a}^{b}f=O{\bigg (}\int _{a}^{b}g{\bigg )}\\f(x)=g(x)+O(1)\;&\Rightarrow \;e^{f(x)}=O(e^{g(x)})\\(1+O(1/x))^{O(x)}&=O(1)\quad {\text{ for }}x>0\\\sin x&=O(|x|)\quad {\text{ for all real }}x.\end{aligned}}}
+
+Vinogradov's ≫ and Knuth's big Ω
+
+When
+
+{\displaystyle f,g}
+
+are both positive functions,
+
+Vinogradov
+
+introduced the notation
+
+{\displaystyle f(x)\gg g(x)}
+
+, which means the same as
+
+{\displaystyle g(x)=O(f(x))}
+
+. Vinogradov's two notations enjoy visual symmetry, as
+
+for positive functions
+
+{\displaystyle f,g}
+
+, we have
+
+{\displaystyle f(x)\ll g(x)\Longleftrightarrow g(x)\gg f(x).}
+
+In 1976,
+
+Donald Knuth
+
+defined
+
+{\displaystyle f(x)=\Omega (g(x))\Longleftrightarrow g(x)=O(f(x))}
+
+which has the same meaning as Vinogradov's
+
+{\displaystyle f(x)\gg g(x)}
+
+However, much earlier, Hardy and Littlewood
+
+had defined
+
+{\displaystyle \Omega }
+
+differently
+
+, and their notation enjoys widespread use today in analytic number theory.
+
+13
+
+11
+
+12
+
+Justifying his use of the
+
+{\displaystyle \Omega }
+
+-symbol to describe a stronger property,
+
+Knuth wrote: "For all the applications I have seen so far in computer science, a stronger requirement ... is much more appropriate". Knuth further wrote, "Although I have changed Hardy and Littlewood's definition of
+
+{\displaystyle \Omega }
+
+, I feel justified in doing so because their definition is by no means in wide use, and because there are other ways to say what they want to say in the comparatively rare cases when their definition applies."
+
+Knuth's big
+
+{\displaystyle \Omega }
+
+enjoys widespread use today
+
+in computer science and
+
+combinatorics
+
+Hardy's ≍ and Knuth's big Θ
+
+In analytic number theory,
+
+12
+
+the
+
+notation
+
+{\displaystyle f(x)\asymp g(x)}
+
+means both
+
+{\displaystyle f(x)=O(g(x))}
+
+and
+
+{\displaystyle g(x)=O(f(x))}
+
+. This notation is originally due to Hardy.
+
+Knuth's notation for the same notion
+
+is
+
+{\displaystyle f(x)=\Theta (g(x))}
+
+Roughly speaking, these statements assert that
+
+{\displaystyle f(x)}
+
+and
+
+{\displaystyle g(x)}
+
+have the
+
+same order
+
+. These notations mean that there are
+
+positive constants
+
+{\displaystyle M,N}
+
+so that
+
+{\displaystyle Ng(x)\leq f(x)\leq Mg(x)}
+
+for all
+
+{\displaystyle x}
+
+in the common domain of
+
+{\displaystyle f,g}
+
+. When the functions are defined on the positive integers or positive real numbers, as with big O, writers oftentimes interpret statements
+
+{\displaystyle f(x)=\Omega (g(x))}
+
+and
+
+{\displaystyle f(x)=\Theta (g(x))}
+
+as holding for all sufficiently large
+
+{\displaystyle x}
+
+, that is, for all
+
+{\displaystyle x}
+
+beyond some point
+
+{\displaystyle x_{0}}
+
+. Sometimes this is indicated by appending
+
+{\displaystyle x\to \infty }
+
+to the statement. For example,
+
+10
+
+{\displaystyle 2n^{2}-10n=\Theta (n^{2})}
+
+is true for the domain
+
+{\displaystyle n\geq 6}
+
+but false if the
+
+domain is all positive integers, since the function is zero at
+
+{\displaystyle n=5}
+
+Further examples
+
+20
+
+12
+
+for all
+
+1.
+
+{\displaystyle n^{3}+20n^{2}+n+12\asymp n^{3}\quad {\text{ for all }}n\geq 1.}
+
+for all
+
+1.
+
+{\displaystyle (1+x)^{8}=x^{8}+\Theta (x^{7})\quad {\text{ for all }}x\geq 1.}
+
+The notation
+
+for all
+
+{\displaystyle f(n)=e^{\Omega (n)}\quad {\text{ for all }}n\geq 1,}
+
+means that there is a positive constant
+
+{\displaystyle M}
+
+so that
+
+{\displaystyle f(n)\geq e^{Mn}}
+
+for all
+
+{\displaystyle n\geq 1}
+
+. By contrast,
+
+for all
+
+{\displaystyle f(n)=e^{-O(n)}\quad {\text{ for all }}n\geq 1,}
+
+means that there is a positive constant
+
+{\displaystyle M}
+
+so that
+
+{\displaystyle f(n)\geq e^{-Mn}}
+
+for all
+
+{\displaystyle n\geq 1}
+
+and
+
+for all
+
+{\displaystyle f(n)=e^{\Theta (n)}\quad {\text{ for all }}n\geq 1,}
+
+means that there are positive constants
+
+{\displaystyle M,N}
+
+so that
+
+{\displaystyle e^{Mn}\leq f(n)\leq e^{Nn}}
+
+for all
+
+{\displaystyle n\geq 1}
+
+For any domain
+
+{\displaystyle D}
+
+{\displaystyle f(x)=g(x)+O(1)\Longleftrightarrow e^{f(x)}\asymp e^{g(x)},}
+
+each statement being for all
+
+{\displaystyle x}
+
+in
+
+{\displaystyle D}
+
+Orders of common functions
+
+Here is a list of classes of functions that are commonly encountered when analyzing the running time of an algorithm. In each case,
+
+is a positive constant and
+
+increases without bound. The slower-growing functions are generally listed first.
+
+Notation
+
+Name
+
+Example
+
+{\displaystyle O(1)}
+
+constant
+
+Finding the median value for a sorted array of numbers; Calculating
+
+{\displaystyle (-1)^{n}}
+
+; Using a constant-size
+
+lookup table
+
+{\displaystyle O(\alpha (n))}
+
+inverse Ackermann function
+
+Amortized complexity per operation for the
+
+Disjoint-set data structure
+
+log
+
+{\displaystyle O(\log \log n)}
+
+double logarithmic
+
+Average number of comparisons spent finding an item using
+
+interpolation search
+
+in a sorted array of uniformly distributed values
+
+log
+
+{\displaystyle O(\log n)}
+
+logarithmic
+
+Finding an item in a sorted array with a
+
+binary search
+
+or a balanced search
+
+tree
+
+as well as all operations in a
+
+binomial heap
+
+log
+
+{\displaystyle O((\log n)^{c})}
+
+{\textstyle c>1}
+
+polylogarithmic
+
+Matrix chain ordering can be solved in polylogarithmic time on a
+
+parallel random-access machine
+
+{\displaystyle O(n^{c})}
+
+{\textstyle 0<c<1}
+
+fractional power
+
+Searching in a
+
+k-d tree
+
+Trial division
+
+naive primality testing (
+
+{\displaystyle O({\sqrt {n}})}
+
+{\displaystyle O(n)}
+
+linear
+
+Finding an item in an unsorted list or in an unsorted array; adding two
+
+-bit integers by
+
+ripple carry
+
+log
+
+{\displaystyle O(n\log ^{*}n)}
+
+log-star
+
+Performing
+
+triangulation
+
+of a simple polygon using Seidel's algorithm,
+
+14
+
+where
+
+log
+
+if
+
+log
+
+if
+
+{\displaystyle \log ^{*}(n)={\begin{cases}0,&{\text{if }}n\leq 1\\1+\log ^{*}(\log n),&{\text{if }}n>1\end{cases}}}
+
+log
+
+{\displaystyle O(n\log n)=O(\log n!)}
+
+linearithmic
+
+, loglinear, quasilinear, or "
+
+log
+
+{\displaystyle n\log n}
+
+Performing a
+
+fast Fourier transform
+
+; fastest possible
+
+comparison sort
+
+heapsort
+
+and
+
+merge sort
+
+{\displaystyle O(n^{2})}
+
+quadratic
+
+Multiplying two
+
+{\displaystyle n}
+
+-digit numbers by
+
+schoolbook multiplication
+
+; simple sorting algorithms, such as
+
+bubble sort
+
+selection sort
+
+and
+
+insertion sort
+
+; (worst-case) bound on some usually faster sorting algorithms such as
+
+quicksort
+
+Shellsort
+
+, and
+
+tree sort
+
+{\displaystyle O(n^{c})}
+
+polynomial
+
+or algebraic
+
+Tree-adjoining grammar
+
+parsing; maximum
+
+matching
+
+for
+
+bipartite graphs
+
+; finding the
+
+determinant
+
+with
+
+LU decomposition
+
+ln
+
+{\displaystyle L_{n}[\alpha ,c]=e^{(c+o(1))(\ln n)^{\alpha }(\ln \ln n)^{1-\alpha }}}
+
+{\textstyle 0<\alpha <1}
+
+L-notation
+
+or
+
+sub-exponential
+
+Factoring a number using the
+
+quadratic sieve
+
+or
+
+number field sieve
+
+{\displaystyle O(c^{n})}
+
+{\textstyle c>1}
+
+exponential
+
+Finding the (exact) solution to the
+
+travelling salesman problem
+
+using
+
+dynamic programming
+
+; determining if two logical statements are equivalent using
+
+brute-force search
+
+{\displaystyle O(n!)}
+
+factorial
+
+Solving the
+
+travelling salesman problem
+
+via brute-force search; generating all unrestricted permutations of a
+
+poset
+
+; finding the
+
+determinant
+
+with
+
+Laplace expansion
+
+; enumerating
+
+all partitions of a set
+
+The statement
+
+{\displaystyle f(n)=O(n!)}
+
+is sometimes weakened to
+
+{\displaystyle f(n)=O\left(n^{n}\right)}
+
+to derive simpler formulas for asymptotic complexity.
+
+In many of these examples, the running time is
+
+actually
+
+{\displaystyle \Theta (g(n))}
+
+, which conveys more
+
+precision.
+
+Little-o notation
+
+For real or complex-valued functions of a real variable
+
+{\displaystyle x}
+
+with
+
+{\displaystyle g(x)>0}
+
+for
+
+sufficiently large
+
+{\displaystyle x}
+
+, one writes
+
+as
+
+{\displaystyle f(x)=o(g(x))\quad {\text{ as }}x\to \infty }
+
+if
+
+lim
+
+0.
+
+{\displaystyle \lim _{x\to \infty }{\frac {f(x)}{g(x)}}=0.}
+
+That is, for every positive constant
+
+there exists a constant
+
+{\displaystyle x_{0}}
+
+such that
+
+for all
+
+{\displaystyle |f(x)|\leq \varepsilon g(x)\quad {\text{ for all }}x\geq x_{0}.}
+
+Intuitively, this means that
+
+{\displaystyle g(x)}
+
+grows much faster than
+
+{\displaystyle f(x)}
+
+, or equivalently
+
+{\displaystyle f(x)}
+
+grows much slower than
+
+{\displaystyle g(x)}
+
+For example, one has
+
+200
+
+{\displaystyle 200x=o(x^{2})}
+
+and
+
+{\displaystyle 1/x=o(1),}
+
+both as
+
+{\displaystyle x\to \infty .}
+
+When one is interested in the behavior of a function for large values of
+
+{\displaystyle x}
+
+, little-o notation makes a
+
+stronger statement
+
+than the corresponding big-O notation: every function that is little-o of
+
+{\displaystyle g}
+
+is also big-O of
+
+{\displaystyle g}
+
+on some interval
+
+{\displaystyle [a,\infty )}
+
+, but not every function that is big-O of
+
+{\displaystyle g}
+
+is little-o of
+
+{\displaystyle g}
+
+. For example,
+
+{\displaystyle 2x^{2}=O(x^{2})}
+
+but
+
+{\displaystyle 2x^{2}\neq o(x^{2})}
+
+for
+
+{\displaystyle x\geq 1}
+
+Little-o respects a number of arithmetic operations. For example,
+
+if
+
+{\displaystyle c}
+
+is a nonzero constant and
+
+{\displaystyle f=o(g)}
+
+then
+
+{\displaystyle c\cdot f=o(g)}
+
+, and
+
+if
+
+{\displaystyle f=o(F)}
+
+and
+
+{\displaystyle g=o(G)}
+
+then
+
+{\displaystyle f\cdot g=o(F\cdot G).}
+
+if
+
+{\displaystyle f=o(F)}
+
+and
+
+{\displaystyle g=o(G)}
+
+then
+
+{\displaystyle f+g=o(F+G)}
+
+It also satisfies a
+
+transitivity
+
+relation:
+
+if
+
+{\displaystyle f=o(g)}
+
+and
+
+{\displaystyle g=o(h)}
+
+then
+
+{\displaystyle f=o(h).}
+
+Little-o can also be generalized to the finite case:
+
+as
+
+{\displaystyle f(x)=o(g(x))\quad {\text{ as }}x\to x_{0}}
+
+if
+
+lim
+
+0.
+
+{\displaystyle \lim _{x\to x_{0}}{\frac {f(x)}{g(x)}}=0.}
+
+In other words,
+
+{\displaystyle f(x)=\alpha (x)g(x)}
+
+for some
+
+{\displaystyle \alpha (x)}
+
+with
+
+lim
+
+{\displaystyle \lim _{x\to x_{0}}\alpha (x)=0}
+
+This definition is especially useful in the computation of
+
+limits
+
+using
+
+Taylor series
+
+. For example:
+
+sin
+
+as
+
+{\displaystyle \sin x=x-{\frac {x^{3}}{3!}}+\ldots =x+o(x^{2}){\text{ as }}x\to 0}
+
+, so
+
+lim
+
+sin
+
+lim
+
+{\displaystyle \lim _{x\to 0}{\frac {\sin x}{x}}=\lim _{x\to 0}{\frac {x+o(x^{2})}{x}}=\lim _{x\to 0}1+o(x)=1}
+
+Asymptotic notation
+
+A relation related to little-o is the
+
+asymptotic
+
+notation
+
+{\displaystyle \sim }
+
+For real valued functions
+
+{\displaystyle f,g}
+
+, the expression
+
+as
+
+{\displaystyle f(x)\sim g(x)\quad {\text{ as }}x\to \infty }
+
+means
+
+lim
+
+1.
+
+{\displaystyle \lim _{x\to \infty }{\frac {f(x)}{g(x)}}=1.}
+
+One can connect this to little-o by observing that
+
+{\displaystyle f(x)\sim g(x)}
+
+is also equivalent to
+
+{\displaystyle f(x)=(1+o(1))g(x)}
+
+. Here
+
+{\displaystyle o(1)}
+
+refers to a function tending to zero as
+
+{\displaystyle x\to \infty }
+
+. One reads this as
+
+{\displaystyle f(x)}
+
+is
+
+asymptotic to
+
+{\displaystyle g(x)}
+
+". For nonzero functions on the same (finite or infinite) domain,
+
+{\displaystyle \sim }
+
+forms an
+
+equivalence relation
+
+One of the most famous theorems using the notation
+
+{\displaystyle \sim }
+
+is
+
+Stirling's formula
+
+as
+
+{\displaystyle n!\sim {\bigg (}{\frac {n}{e}}{\bigg )}^{n}{\sqrt {2\pi n}}\quad {\text{ as }}n\to \infty .}
+
+In number theory, the famous
+
+prime number theorem
+
+states that
+
+log
+
+as
+
+{\displaystyle \pi (x)\sim {\frac {x}{\log x}}\quad {\text{ as }}x\to \infty ,}
+
+where
+
+{\displaystyle \pi (x)}
+
+is the number of primes which
+
+are at most
+
+{\displaystyle x}
+
+and
+
+log
+
+{\displaystyle \log }
+
+is the
+
+natural logarithm
+
+of
+
+{\displaystyle x}
+
+As with little-o, there is a version with finite limits (two-sided or
+
+one-sided
+
+) as well, for example
+
+sin
+
+as
+
+0.
+
+{\displaystyle \sin x\sim x\quad {\text{ as }}x\to 0.}
+
+Further examples:
+
+as
+
+for any positive constants
+
+{\displaystyle x^{a}=o_{a,b}(e^{bx})\quad {\text{ as }}x\to \infty ,{\text{ for any positive constants }}a,b,}
+
+{\displaystyle f(x)=g(x)+o(1)\quad \Longleftrightarrow \quad e^{f(x)}\sim e^{g(x)}\quad (x\to \infty ).}
+
+{\displaystyle \sum _{n=1}^{\infty }{\frac {1}{n^{s}}}\sim {\frac {1}{s-1}}\quad (s\to 1^{+}).}
+
+The last asymptotic is a basic property of the
+
+Riemann zeta function
+
+Knuth's little 𝜔
+
+For eventually positive, real valued functions
+
+{\displaystyle f,g,}
+
+the notation
+
+as
+
+{\displaystyle f(x)=\omega (g(x))\quad {\text{ as }}x\to \infty }
+
+means
+
+lim
+
+{\displaystyle \lim _{x\to \infty }{\frac {f(x)}{g(x)}}=\infty .}
+
+In other words,
+
+{\displaystyle g(x)=o(f(x))}
+
+Roughly speaking, this means that
+
+{\displaystyle f(x)}
+
+grows much faster than does
+
+{\displaystyle g(x)}
+
+The Hardy–Littlewood Ω notation
+
+In 1914
+
+G. H. Hardy
+
+and
+
+J. E. Littlewood
+
+introduced the new symbol
+
+{\displaystyle \ \Omega ,}
+
+which is defined as follows:
+
+{\displaystyle f(x)=\Omega (g(x))\quad }
+
+as
+
+{\displaystyle \quad x\to \infty \quad }
+
+if
+
+lim sup
+
+{\displaystyle \quad \limsup _{x\to \infty }\ \left|{\frac {\ f(x)\ }{g(x)}}\right|>0~.}
+
+Thus
+
+{\displaystyle ~f(x)=\Omega (g(x))~}
+
+is the negation of
+
+{\displaystyle ~f(x)=o(g(x))~.}
+
+In 1916 the same authors introduced the two new symbols
+
+{\displaystyle \ \Omega _{R}\ }
+
+and
+
+{\displaystyle \ \Omega _{L}\ ,}
+
+defined as:
+
+15
+
+{\displaystyle f(x)=\Omega _{R}(g(x))\quad }
+
+as
+
+{\displaystyle \quad x\to \infty \quad }
+
+if
+
+lim sup
+
+{\displaystyle \quad \limsup _{x\to \infty }\ {\frac {\ f(x)\ }{g(x)}}>0\
+
+;}
+
+{\displaystyle f(x)=\Omega _{L}(g(x))\quad }
+
+as
+
+{\displaystyle \quad x\to \infty \quad }
+
+if
+
+lim inf
+
+{\displaystyle \quad ~\liminf _{x\to \infty }\ {\frac {\ f(x)\ }{g(x)}}<0~.}
+
+These symbols were used by
+
+E. Landau
+
+, with the same meanings, in 1924.
+
+16
+
+Authors that followed Landau, however, use a different notation for the same definitions:
+
+11
+
+The symbol
+
+{\displaystyle \ \Omega _{R}\ }
+
+has been replaced by the current notation
+
+{\displaystyle \ \Omega _{+}\ }
+
+with the same definition, and
+
+{\displaystyle \ \Omega _{L}\ }
+
+became
+
+{\displaystyle \ \Omega _{-}~.}
+
+These three symbols
+
+{\displaystyle \ \Omega \ ,\Omega _{+}\ ,\Omega _{-}\ ,}
+
+as well as
+
+{\displaystyle \ f(x)=\Omega _{\pm }(g(x))\ }
+
+(meaning that
+
+{\displaystyle \ f(x)=\Omega _{+}(g(x))\ }
+
+and
+
+{\displaystyle \ f(x)=\Omega _{-}(g(x))\ }
+
+are both satisfied), are now currently used in
+
+analytic number theory
+
+11
+
+12
+
+Simple examples
+
+We have
+
+sin
+
+{\displaystyle \sin x=\Omega (1)\quad }
+
+as
+
+{\displaystyle \quad x\to \infty \ ,}
+
+and more precisely
+
+sin
+
+{\displaystyle \sin x=\Omega _{\pm }(1)\quad }
+
+as
+
+{\displaystyle \quad x\to \infty ,~}
+
+where
+
+{\displaystyle \Omega _{\pm }}
+
+means that the left side is both
+
+{\displaystyle \Omega _{+}(1)}
+
+and
+
+{\displaystyle \Omega _{-}(1)}
+
+We have
+
+sin
+
+{\displaystyle 1+\sin x=\Omega (1)\quad }
+
+as
+
+{\displaystyle \quad x\to \infty \ ,}
+
+and more precisely
+
+sin
+
+{\displaystyle 1+\sin x=\Omega _{+}(1)\quad }
+
+as
+
+{\displaystyle \quad x\to \infty \
+
+;}
+
+however
+
+sin
+
+{\displaystyle 1+\sin x\neq \Omega _{-}(1)\quad }
+
+as
+
+{\displaystyle \quad x\to \infty ~.}
+
+Family of Bachmann–Landau notations
+
+For understanding the formal definitions, consult the
+
+list of logic symbols
+
+used in mathematics.
+
+Notation
+
+Name
+
+Description
+
+Formal definition
+
+Compact definition
+
+17
+
+18
+
+{\displaystyle f(n)=O(g(n))}
+
+or
+
+{\displaystyle f(n)\ll g(n)}
+
+(Vinogradov's notation)
+
+Big O; Big Oh; Big Omicron
+
+{\displaystyle |f|}
+
+is bounded above by
+
+(up to constant factor
+
+{\displaystyle k}
+
+{\displaystyle \exists k>0\,\forall n\in D\colon |f(n)|\leq k\,g(n)}
+
+sup
+
+{\displaystyle \sup _{n\in D}{\frac {\left|f(n)\right|}{g(n)}}<\infty }
+
+{\displaystyle f(n)=o(g(n))}
+
+Small O; Small Oh; Little O; Little Oh
+
+is dominated by
+
+asymptotically (for any constant factor
+
+{\displaystyle k}
+
+{\displaystyle \forall k>0\,\exists n_{0}\,\forall n>n_{0}\colon |f(n)|\leq k\,g(n)}
+
+lim
+
+{\displaystyle \lim _{n\to \infty }{\frac {f(n)}{g(n)}}=0}
+
+{\displaystyle f(n)=\Omega (g(n))}
+
+Big Omega in number theory (Hardy–Littlewood)
+
+{\displaystyle |f|}
+
+is not dominated by
+
+asymptotically
+
+{\displaystyle \exists k>0\,\forall n_{0}\,\exists n>n_{0}\colon |f(n)|\geq k\,g(n)}
+
+lim sup
+
+{\displaystyle \limsup _{n\to \infty }{\frac {|f(n)|}{g(n)}}>0}
+
+{\displaystyle f(n)=\Omega _{+}(g(n))}
+
+Omega plus (Hardy–Littlewood)
+
+{\displaystyle f}
+
+is not dominated by
+
+asymptotically
+
+{\displaystyle \exists k>0\,\forall n_{0}\,\exists n>n_{0}\colon f(n)\geq k\,g(n)}
+
+lim sup
+
+{\displaystyle \limsup _{n\to \infty }{\frac {f(n)}{g(n)}}>0}
+
+{\displaystyle f(n)=\Omega _{-}(g(n))}
+
+Omega minus (Hardy–Littlewood)
+
+{\displaystyle -f}
+
+is not dominated by
+
+asymptotically
+
+{\displaystyle \exists k>0\,\forall n_{0}\,\exists n>n_{0}\colon -f(n)\geq k\,g(n)}
+
+lim sup
+
+{\displaystyle \limsup _{n\to \infty }{\frac {-f(n)}{g(n)}}>0}
+
+{\displaystyle f(n)=\Omega _{\pm }(g(n))}
+
+Omega plus and minus
+
+neither
+
+{\displaystyle f}
+
+nor
+
+{\displaystyle -f}
+
+is dominated by
+
+asymptotically
+
+{\displaystyle f(n)=\Omega _{+}(g(n))}
+
+and
+
+{\displaystyle f(n)=\Omega _{-}(g(n))}
+
+{\displaystyle f(n)\asymp g(n)}
+
+(Hardy's notation) or
+
+{\displaystyle f(n)=\Theta (g(n))}
+
+(Knuth notation)
+
+Of the same order as (Hardy); Big Theta (Knuth)
+
+is bounded by
+
+both above (with constant factor
+
+{\displaystyle k_{2}}
+
+) and below (with constant factor
+
+{\displaystyle k_{1}}
+
+{\displaystyle \exists k_{1}>0\,\exists k_{2}>0\,\forall n\in D\colon }
+
+{\displaystyle k_{1}\,g(n)\leq f(n)\leq k_{2}\,g(n)}
+
+{\displaystyle f(n)=O(g(n))}
+
+and
+
+{\displaystyle g(n)=O(f(n))}
+
+{\displaystyle f(n)\sim g(n)}
+
+as
+
+{\displaystyle n\to a}
+
+, where
+
+{\displaystyle a}
+
+is finite,
+
+{\displaystyle \infty }
+
+or
+
+{\displaystyle -\infty }
+
+Asymptotic equivalence
+
+is equal to
+
+asymptotically
+
+{\displaystyle \forall \varepsilon >0\,\exists n_{0}\,\forall n>n_{0}\colon \left|{\frac {f(n)}{g(n)}}-1\right|<\varepsilon }
+
+(in the case
+
+{\displaystyle a=\infty }
+
+lim
+
+{\displaystyle \lim _{n\to a}{\frac {f(n)}{g(n)}}=1}
+
+{\displaystyle f(n)\gg g(n)}
+
+(Vinogradov's notation) or
+
+{\displaystyle f(n)=\Omega (g(n))}
+
+(Knuth's notation)
+
+No particular name in number theory (Vinogradov),
+
+Big Omega in complexity theory (Knuth)
+
+is bounded below by
+
+, up to a constant factor
+
+{\displaystyle \exists k>0\,\forall n\in D\colon f(n)\geq k\,g(n)}
+
+inf
+
+{\displaystyle \inf _{n\in D}{\frac {f(n)}{g(n)}}>0}
+
+{\displaystyle f(n)=\omega (g(n))}
+
+as
+
+{\displaystyle n\to a}
+
+where
+
+{\displaystyle a}
+
+can be finite,
+
+{\displaystyle \infty }
+
+or
+
+{\displaystyle -\infty }
+
+Small Omega; Little Omega
+
+dominates
+
+asymptotically
+
+{\displaystyle \forall k>0\,\exists n_{0}\,\forall n>n_{0}\colon f(n)>k\,g(n)}
+
+(for
+
+{\displaystyle a=\infty }
+
+lim
+
+{\displaystyle \lim _{n\to a}{\frac {f(n)}{g(n)}}=\infty }
+
+The limit definitions assume
+
+{\displaystyle g(n)>0}
+
+for
+
+{\displaystyle n}
+
+in a neighborhood of the limit; when the
+
+limit is
+
+{\displaystyle \infty }
+
+, this means that
+
+{\displaystyle g(n)>0}
+
+for sufficiently large
+
+{\displaystyle n}
+
+Computer science and combinatorics use the big
+
+{\displaystyle O}
+
+, big Theta
+
+{\displaystyle \Theta }
+
+, little
+
+{\displaystyle o}
+
+, little omega
+
+{\displaystyle \omega }
+
+and Knuth's big Omega
+
+{\displaystyle \Omega }
+
+notations.
+
+Analytic number theory often uses the big
+
+{\displaystyle O}
+
+, small
+
+{\displaystyle o}
+
+, Hardy's
+
+{\displaystyle \asymp }
+
+Hardy–Littlewood's big Omega
+
+{\displaystyle \Omega }
+
+(with or without the +, − or ± subscripts), Vinogradov's
+
+{\displaystyle \ll }
+
+and
+
+{\displaystyle \gg }
+
+notations and
+
+{\displaystyle \sim }
+
+notations.
+
+11
+
+12
+
+The small omega
+
+{\displaystyle \omega }
+
+notation is not used as often in analysis or in number theory.
+
+19
+
+Quality of approximations using different notation
+
+Informally, especially in computer science, the big
+
+{\displaystyle O}
+
+notation often can be used somewhat differently to describe an asymptotic
+
+tight
+
+bound where using big Theta
+
+{\displaystyle \Theta }
+
+notation might be more factually appropriate in a given context
+
+20
+
+For example, when considering a function
+
+73
+
+22
+
+58
+
+{\displaystyle T(n)=73n^{3}+22n^{2}+58}
+
+, all of the following are generally acceptable, but tighter bounds (such as numbers 2,3 and 4 below) are usually strongly preferred over looser bounds (such as number 1 below).
+
+100
+
+{\displaystyle T(n)=O(n^{100})}
+
+{\displaystyle T(n)=O(n^{3})}
+
+{\displaystyle T(n)=\Theta (n^{3})}
+
+73
+
+{\displaystyle T(n)\sim 73n^{3}}
+
+as
+
+{\displaystyle n\to \infty }
+
+While all three statements are true, progressively more information is contained in each. In some fields, however, the big O notation (number 2 in the lists above) would be used more commonly than the big Theta notation (items numbered 3 in the lists above). For example, if
+
+{\displaystyle T(n)}
+
+represents the running time of a newly developed algorithm for input size
+
+{\displaystyle n}
+
+, the inventors and users of the algorithm might be more inclined to put an upper bound on how long it will take to run without making an explicit statement about the lower bound or asymptotic behavior.
+
+Extensions to the Bachmann–Landau notations
+
+Another notation sometimes used in computer science is
+
+{\displaystyle {\tilde {O}}}
+
+(read
+
+soft-O
+
+), which hides polylogarithmic factors. There are two definitions in use: some authors use
+
+{\displaystyle f(n)={\tilde {O}}(g(n))}
+
+as shorthand for
+
+log
+
+{\displaystyle f(n)=O(g(n)\log ^{k}n)}
+
+for some
+
+{\displaystyle k}
+
+, while others use it as shorthand for
+
+log
+
+{\displaystyle f(n)=O(g(n)\log ^{k}g(n))}
+
+21
+
+When
+
+{\displaystyle g(n)}
+
+is polynomial in
+
+{\displaystyle n}
+
+, there is no difference; however, the latter definition allows one to say, e.g. that
+
+{\displaystyle n2^{n}={\tilde {O}}(2^{n})}
+
+while the former definition allows for
+
+log
+
+{\displaystyle \log ^{k}n={\tilde {O}}(1)}
+
+for any constant
+
+{\displaystyle k}
+
+. Some authors write
+
+for the same purpose as the latter definition.
+
+22
+
+Essentially, it is less precise version of the big
+
+notation, ignoring
+
+logarithmic factors
+
+in the
+
+growth-rate
+
+of the function. Since
+
+log
+
+{\displaystyle \log ^{k}n=o(n^{\varepsilon })}
+
+for any constant
+
+{\displaystyle k}
+
+and any
+
+{\displaystyle \varepsilon >0}
+
+, logarithmic factors are far less significant than powers of
+
+{\displaystyle n}
+
+and even more insignificant compared with exponentials.
+
+Also, the
+
+notation
+
+, defined as
+
+ln
+
+{\displaystyle L_{n}[\alpha ,c]=e^{(c+o(1))(\ln n)^{\alpha }(\ln \ln n)^{1-\alpha }},}
+
+is convenient for functions that are between
+
+polynomial
+
+and
+
+exponential
+
+in terms of
+
+log
+
+{\displaystyle \log n}
+
+Generalizations and related usages
+
+The generalization to functions taking values in any
+
+normed vector space
+
+is straightforward (replacing absolute values by norms), where
+
+{\displaystyle f}
+
+and
+
+{\displaystyle g}
+
+need not take their values in the same space. A generalization to functions
+
+{\displaystyle g}
+
+taking values in any
+
+topological group
+
+is also possible
+
+The "limiting process"
+
+{\displaystyle x\to x_{0}}
+
+can also be generalized by introducing an arbitrary
+
+filter base
+
+, i.e. to directed
+
+nets
+
+{\displaystyle f}
+
+and
+
+{\displaystyle g}
+
+. The
+
+{\displaystyle o}
+
+notation can be used to define
+
+derivatives
+
+and
+
+differentiability
+
+in quite general spaces, and also (asymptotical) equivalence of functions,
+
+{\displaystyle f\sim g\iff (f-g)\in o(g)}
+
+which is an
+
+equivalence relation
+
+and a more restrictive notion than the relationship "
+
+{\displaystyle f}
+
+is
+
+{\displaystyle \Theta (g)}
+
+" from above. (It reduces to
+
+lim
+
+{\displaystyle \lim f/g=1}
+
+if
+
+{\displaystyle f}
+
+and
+
+{\displaystyle g}
+
+are positive real valued functions.) For example,
+
+{\displaystyle 2x=\Theta (x)}
+
+is, but
+
+{\displaystyle 2x-x\neq o(x)}
+
+History
+
+In 1870, Paul du Bois-Reymond
+
+defined
+
+{\displaystyle f(x)\succ \phi (x)}
+
+{\displaystyle f(x)\sim \phi (x)}
+
+and
+
+{\displaystyle f(x)\prec \phi (x)}
+
+to mean, respectively,
+
+lim
+
+0.
+
+{\displaystyle \lim _{x\to \infty }{\frac {f(x)}{\phi (x)}}=\infty ,\quad \lim _{x\to \infty }{\frac {f(x)}{\phi (x)}}>0,\quad \lim _{x\to \infty }{\frac {f(x)}{\phi (x)}}=0.}
+
+These were not widely adopted and are not used today.
+
+The first and third are symmetric:
+
+{\displaystyle f(x)\prec \phi (x)}
+
+means the same as
+
+{\displaystyle \phi (x)\succ f(x)}
+
+. Landau later adopted
+
+{\displaystyle \sim }
+
+with the narrower definition that the limit of
+
+{\displaystyle f(x)/\phi (x)}
+
+equals 1.
+
+The symbol O was first introduced by the number theorist
+
+Paul Bachmann
+
+in 1894, in the second volume of his book
+
+Analytische Zahlentheorie
+
+("
+
+analytic number theory
+
+").
+
+The number theorist
+
+Edmund Landau
+
+adopted it, and was thus inspired to introduce in 1909 the notation o;
+
+hence both are now called Landau symbols. These notations were used in applied mathematics during the 1950s for asymptotic analysis.
+
+23
+
+The symbol
+
+{\displaystyle \Omega }
+
+(in the sense "is not little
+
+of") was introduced in 1914 by Hardy and Littlewood.
+
+Hardy and Littlewood also introduced in 1916 the left and right
+
+{\displaystyle \Omega }
+
+symbols
+
+{\displaystyle \Omega _{R}}
+
+{\displaystyle \Omega _{L}}
+
+(now commonly denoted
+
+{\displaystyle \Omega _{+},\Omega _{-}}
+
+).
+
+15
+
+This
+
+{\displaystyle \Omega }
+
+notation has been commonly used in number theory since the 1950s.
+
+13
+
+Hardy introduced the symbols
+
+{\displaystyle \preccurlyeq }
+
+and advocated for Bois-Reymond's
+
+{\displaystyle \prec }
+
+(as well as the already mentioned other symbols) in his 1910 tract "Orders of Infinity",
+
+but made use of them only in three papers (1910–1913). In his nearly 400 remaining papers and books he consistently used the Landau symbols O and o.
+
+24
+
+Hardy's symbols
+
+{\displaystyle \preccurlyeq }
+
+and
+
+{\displaystyle \mathbin {\,\asymp \;\;\;\;\!\!\!\!\!\!\!\!\!\!\!\!\!-} }
+
+are not used any more.
+
+The symbol
+
+{\displaystyle \sim }
+
+, although it had been used before with different meanings,
+
+was given its modern definition by Landau in 1909
+
+and by Hardy in 1910.
+
+On the same page, Hardy defined the symbol
+
+{\displaystyle \asymp }
+
+, where
+
+{\displaystyle f(x)\asymp g(x)}
+
+means that both
+
+{\displaystyle f(x)=O(g(x))}
+
+and
+
+{\displaystyle g(x)=O(f(x))}
+
+are satisfied. The notation is still used in analytic number theory.
+
+25
+
+12
+
+Hardy also proposed the symbol
+
+{\displaystyle \mathbin {\,\asymp \;\;\;\;\!\!\!\!\!\!\!\!\!\!\!\!\!-} }
+
+, where
+
+{\displaystyle f\mathbin {\,\asymp \;\;\;\;\!\!\!\!\!\!\!\!\!\!\!\!\!-} g}
+
+means that
+
+{\displaystyle f\sim Kg}
+
+for some constant
+
+{\displaystyle K\not =0}
+
+(this
+
+corresponds to Bois-Reymond's notation
+
+{\displaystyle f\sim g}
+
+).
+
+In the 1930s, Vinogradov
+
+popularized the notation
+
+{\displaystyle f(x)\ll g(x)}
+
+and
+
+{\displaystyle g(x)\gg f(x)}
+
+, both of which mean
+
+{\displaystyle f(x)=O(g(x))}
+
+. This notation became standard in analytic number theory.
+
+In the 1970s, big O was popularized in computer science by
+
+Donald Knuth
+
+, who proposed the different notation
+
+{\displaystyle f(x)=\Theta (g(x))}
+
+for Hardy's
+
+{\displaystyle f(x)\asymp g(x)}
+
+, and proposed a different definition for the Hardy and Littlewood Omega notation.
+
+Matters of notation
+
+Arrows
+
+In mathematics, an expression such as
+
+{\displaystyle x\to \infty }
+
+indicates the presence of a
+
+limit
+
+. In big-O notation and related notations
+
+{\displaystyle \Omega ,\Theta ,\gg ,\ll ,\asymp }
+
+, there is no implied limit, in contrast with
+
+little-o
+
+{\displaystyle \sim }
+
+and
+
+{\displaystyle \omega }
+
+notations.
+
+Notation such as
+
+{\displaystyle f(x)=O(g(x))\;\;(x\to \infty )}
+
+can be considered an
+
+abuse of notation
+
+Equals sign
+
+Some consider
+
+{\displaystyle f(x)=O(g(x))}
+
+to also be an
+
+abuse of notation
+
+, since the use of the equals sign could be misleading as it suggests a symmetry that this statement does not have. As
+
+de Bruijn
+
+says,
+
+{\displaystyle O(x)=O(x^{2})}
+
+is true but
+
+{\displaystyle O(x^{2})=O(x)}
+
+is not.
+
+26
+
+Knuth
+
+describes such statements as "one-way equalities", since if the sides could be reversed, "we could deduce ridiculous things like
+
+{\displaystyle n=n^{2}}
+
+from the identities
+
+{\displaystyle n=O(n^{2})}
+
+and
+
+{\displaystyle n^{2}=O(n^{2})}
+
+27
+
+In another letter, Knuth also pointed out that
+
+28
+
+the equality sign is not symmetric with respect to such notations [as, in this notation,] mathematicians customarily use the '=' sign as they use the word 'is' in English: Aristotle is a man, but a man isn't necessarily Aristotle.
+
+For these reasons, some advocate for using
+
+set notation
+
+and write
+
+{\displaystyle f(x)\in O(g(x))}
+
+read as "
+
+{\displaystyle f(x)}
+
+is an element of
+
+{\displaystyle O(g(x))}
+
+", or "
+
+{\displaystyle f(x)}
+
+is in the set
+
+{\displaystyle O(g(x))}
+
+thinking of
+
+{\displaystyle O(g(x))}
+
+as the class of all functions
+
+{\displaystyle h(x)}
+
+such that
+
+{\displaystyle h(x)=O(g(x))}
+
+27
+
+However, the use of the equals sign is customary.
+
+26
+
+27
+
+and is more convenient in more complex expressions of the form
+
+{\displaystyle f(x)=g(x)+O(h(x))=O(k(x)).}
+
+The Vinogradov notations
+
+{\displaystyle \ll }
+
+and
+
+{\displaystyle \gg }
+
+, which are widely used in number theory
+
+11
+
+12
+
+do not suffer from this defect, as they more clearly indicate that big-O indicates an
+
+inequality
+
+rather than an
+
+equality
+
+. They also enjoy a symmetry that big-O notation lacks:
+
+{\displaystyle f(x)\ll g(x)}
+
+means the same as
+
+{\displaystyle g(x)\gg f(x)}
+
+In combinatorics and computer science, these notations
+
+are rarely seen.
+
+Typesetting
+
+Big O is typeset as an italicized uppercase "
+
+, as in the following example:
+
+{\displaystyle O(n^{2})}
+
+29
+
+30
+
+In
+
+TeX
+
+, it is produced by simply typing 'O' inside math mode. Unlike Greek-named Bachmann–Landau notations, it needs no special symbol. However, some authors use the calligraphic variant
+
+{\displaystyle {\mathcal {O}}}
+
+instead.
+
+31
+
+32
+
+The big-O originally stands for "order of" ("Ordnung", Bachmann 1894), and is thus a Latin letter. Neither Bachmann nor Landau ever call it "Omicron". The symbol was much later on (1976) viewed by Knuth as a capital
+
+omicron
+
+probably in reference to his definition of the symbol
+
+Omega
+
+. The digit
+
+zero
+
+should not be used.
+
+See also
+
+Asymptotic computational complexity
+
+Asymptotic expansion
+
+: Approximation of functions by a series, generalizing Taylor's formula
+
+Asymptotically optimal algorithm
+
+: A phrase frequently used to describe an algorithm that has an upper bound asymptotically within a constant of a lower bound for the problem
+
+Big O in probability notation
+
+Limit inferior and limit superior
+
+: An explanation of some of the limit notation used in this article
+
+Master theorem (analysis of algorithms)
+
+: For analyzing divide-and-conquer recursive algorithms using big O notation
+
+Nachbin's theorem
+
+: A precise method of bounding
+
+complex analytic
+
+functions so that the domain of convergence of
+
+integral transforms
+
+can be stated
+
+Order of approximation
+
+Order of accuracy
+
+Computational complexity of mathematical operations
+
+References and notes
+
+Notes
+
+Further reading
+
+Knuth, Donald
+
+(1997). "1.2.11: Asymptotic Representations".
+
+Fundamental Algorithms
+
+. The Art of Computer Programming. Vol.
+
+1 (3rd
+
+ed.). Addison-Wesley.
+
+ISBN
+
+978-0-201-89683-1
+
+Sipser, Michael
+
+(1997).
+
+Introduction to the Theory of Computation
+
+. PWS Publishing. pp.
+
+226
+
+–228.
+
+ISBN
+
+978-0-534-94728-6
+
+Avigad, Jeremy; Donnelly, Kevin (2004).
+
+Formalizing O notation in Isabelle/HOL
+
+(PDF)
+
+. International Joint Conference on Automated Reasoning.
+
+doi
+
+10.1007/978-3-540-25984-8_27
+
+Black, Paul E. (11 March 2005). Black, Paul E. (ed.).
+
+"big-O notation"
+
+Dictionary of Algorithms and Data Structures
+
+. U.S. National Institute of Standards and Technology
+
+. Retrieved
+
+December 16,
+
+2006
+
+Black, Paul E. (17 December 2004). Black, Paul E. (ed.).
+
+"little-o notation"
+
+Dictionary of Algorithms and Data Structures
+
+. U.S. National Institute of Standards and Technology
+
+. Retrieved
+
+December 16,
+
+2006
+
+Black, Paul E. (17 December 2004). Black, Paul E. (ed.).
+
+"Ω"
+
+Dictionary of Algorithms and Data Structures
+
+. U.S. National Institute of Standards and Technology
+
+. Retrieved
+
+December 16,
+
+2006
+
+Black, Paul E. (17 December 2004). Black, Paul E. (ed.).
+
+"ω"
+
+Dictionary of Algorithms and Data Structures
+
+. U.S. National Institute of Standards and Technology
+
+. Retrieved
+
+December 16,
+
+2006
+
+Black, Paul E. (17 December 2004). Black, Paul E. (ed.).
+
+"Θ"
+
+Dictionary of Algorithms and Data Structures
+
+. U.S. National Institute of Standards and Technology
+
+. Retrieved
+
+December 16,
+
+2006
+
+External links
+
+The Wikibook
+
+Data Structures
+
+has a page on the topic of:
+
+Big-O Notation
+
+Wikiversity solved a
+
+MyOpenMath problem
+
+using
+
+Big-O Notation
+
+Growth of sequences — OEIS (Online Encyclopedia of Integer Sequences) Wiki
+
+Introduction to Asymptotic Notations
+
+Big-O Notation – What is it good for
+
+An example of Big O in accuracy of central divided difference scheme for first derivative
+
+A Gentle Introduction to Algorithm Complexity Analysis

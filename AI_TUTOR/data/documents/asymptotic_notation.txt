@@ -1,0 +1,770 @@
+# Wikibooks: Data Structures/Asymptotic Notation (CC BY-SA)
+# Source: https://en.wikibooks.org/wiki/Data_Structures/Asymptotic Notation
+
+Data Structures
+
+Introduction
+
+Asymptotic Notation
+
+Arrays
+
+List Structures & Iterators
+
+Stacks & Queues
+
+Trees
+
+Min & Max Heaps
+
+Graphs
+
+Hash Tables
+
+Sets
+
+Tradeoffs
+
+Asymptotic Notation
+
+Introduction
+
+There is no single data structure that offers optimal performance in every case. In order to choose the best structure for a particular task, we need to be able to judge how long a particular solution will take to run. Or, more accurately, you need to be able to judge how long two solutions will take to run, and choose the better of the two. We don't need to know how many minutes and seconds they will take, but we do need some way to compare algorithms against one another.
+
+Asymptotic complexity
+
+is a way of expressing the
+
+main component
+
+of the cost of an algorithm, using idealized (not comparable) units of computational work. Consider, for example, the algorithm for sorting a deck of cards, which proceeds by repeatedly searching through the deck for the lowest card. The asymptotic complexity of this algorithm is the
+
+square
+
+of the number of cards in the deck. This quadratic behavior is the main term in the complexity formula, it says, e.g., if you double the size of the deck, then the work is roughly quadrupled.
+
+The exact formula for the cost is more complex, and it contains more details than we need to understand the essential complexity of the algorithm. With our deck of cards, in the worst case, the deck would start out reverse-sorted, so our scans would have to go all the way to the end. The first scan would involve scanning
+
+52
+
+{\displaystyle 52}
+
+cards, the next would take
+
+51
+
+{\displaystyle 51}
+
+, etc. So the cost formula is
+
+52
+
+51
+
+{\displaystyle 52+51+\dots +2}
+
+. Generally, letting
+
+{\displaystyle N}
+
+be the number of cards, the formula is
+
+{\displaystyle 2+\dots +N}
+
+, which equals
+
+{\displaystyle N\times {\frac {N+1}{2}}-1={\frac {N^{2}+N}{2}}-1={\frac {1}{2}}\times N^{2}+{\frac {1}{2}}\times N-1}
+
+. But the
+
+{\displaystyle N^{2}}
+
+term dominates the expression, and this is what is key for comparing algorithm costs. (This is in fact an
+
+expensive
+
+algorithm; the best sorting algorithms run in sub-quadratic time.)
+
+Asymptotically speaking, in the limit as
+
+{\displaystyle N}
+
+tends towards infinity,
+
+{\displaystyle 2+3+\dots +N}
+
+gets closer and closer to the pure quadratic function
+
+{\displaystyle {\frac {1}{2}}\times N^{2}}
+
+. And what difference does the constant factor of
+
+{\displaystyle {\frac {1}{2}}}
+
+make, at this level of abstraction? So the behavior is said to be
+
+{\displaystyle O(n^{2})}
+
+Now let us consider how we would go about
+
+comparing
+
+the complexity of two algorithms. Let
+
+{\displaystyle f(n)}
+
+be the cost, in the worst case, of one algorithm, expressed as a function of the input size
+
+{\displaystyle n}
+
+, and
+
+{\displaystyle g(n)}
+
+be the cost function for the other algorithm. E.g., for sorting algorithms,
+
+10
+
+{\displaystyle f(10)}
+
+and
+
+10
+
+{\displaystyle g(10)}
+
+would be the maximum number of steps that the algorithms would take on a list of
+
+10
+
+{\displaystyle 10}
+
+items. If, for all values of
+
+{\displaystyle n\geq 0}
+
+{\displaystyle f(n)}
+
+is less than or equal to
+
+{\displaystyle g(n)}
+
+, then the algorithm with complexity function
+
+{\displaystyle f}
+
+is strictly faster. But, generally speaking, our concern for computational cost is for the cases with large inputs; so the comparison of
+
+{\displaystyle f(n)}
+
+and
+
+{\displaystyle g(n)}
+
+for small values of
+
+{\displaystyle n}
+
+is less significant than the "long term" comparison of
+
+{\displaystyle f(n)}
+
+and
+
+{\displaystyle g(n)}
+
+, for
+
+{\displaystyle n}
+
+larger than some threshold.
+
+Note that we have been speaking about
+
+bounds
+
+on the performance of algorithms, rather than giving exact speeds. The actual number of steps required to sort our deck of cards (with our naive quadratic algorithm) will depend upon the order in which the cards begin. The actual time to perform each of our steps will depend upon our processor speed, the condition of our processor cache, etc., etc. It's all very complicated in the concrete details, and moreover not relevant to the essence of the algorithm.
+
+The O Notation
+
+Definition
+
+The
+
+{\displaystyle O}
+
+(pronounced
+
+big-oh
+
+) is the formal method of expressing the upper bound of an algorithm's running time. It's a measure of the longest amount of time it could possibly take for the algorithm to complete. We can assume that it represents the "worst case scenario" of a program.
+
+More formally, for non-negative functions,
+
+{\displaystyle f(n)}
+
+and
+
+{\displaystyle g(n)}
+
+, if there exists an integer
+
+{\displaystyle n_{0}}
+
+and a constant
+
+{\displaystyle c>0}
+
+such that for all integers
+
+{\displaystyle n>n_{0}}
+
+{\displaystyle f(n)\leq cg(n)}
+
+, then
+
+{\displaystyle f(n)}
+
+is big O of
+
+{\displaystyle (g(n))}
+
+. This is denoted as
+
+{\displaystyle f(n)=O(g(n))}
+
+. If graphed,
+
+{\displaystyle g(n)}
+
+serves as an upper bound to the curve you are analyzing,
+
+{\displaystyle f(n)}
+
+Note that if
+
+{\displaystyle f}
+
+can take on finite values only (as it should happen normally) then this definition implies that there exists some constant
+
+{\displaystyle C}
+
+(potentially larger than
+
+{\displaystyle c}
+
+) such that for all values of
+
+{\displaystyle n}
+
+{\displaystyle f(n)\leq Cg(n)}
+
+. An appropriate value for
+
+{\displaystyle C}
+
+is the maximum of
+
+{\displaystyle c}
+
+and
+
+max
+
+{\displaystyle \max _{1\leq n\leq n_{0}}{\frac {f(n)}{g(n)}}}
+
+Theory Examples
+
+So, let's take an example of Big-O. Say that
+
+{\displaystyle f(n)=2n+8}
+
+, and
+
+{\displaystyle g(n)=n^{2}}
+
+. Can we find a constant
+
+{\displaystyle n_{0}}
+
+, so that
+
+{\displaystyle 2n+8\leq n^{2}}
+
+? The number
+
+{\displaystyle 4}
+
+works here, giving us
+
+16
+
+{\displaystyle 16\leq 16}
+
+. For any number
+
+{\displaystyle n}
+
+greater than
+
+{\displaystyle 4}
+
+, this will still work. Since we're trying to generalize this for large values of
+
+{\displaystyle n}
+
+, and small values
+
+{\displaystyle \{1,2,3\}}
+
+aren't that important, we can say that
+
+{\displaystyle f(n)}
+
+is generally faster than
+
+{\displaystyle g(n)}
+
+; that is,
+
+{\displaystyle f(n)}
+
+is bound by
+
+{\displaystyle g(n)}
+
+, and will always be less than it.
+
+It could then be said that
+
+{\displaystyle f(n)}
+
+runs in
+
+{\displaystyle O(n^{2})}
+
+time: "f-of-n runs in Big-O of n-squared time".
+
+To find the upper bound—the Big-O time—assuming we know that
+
+{\displaystyle f(n)}
+
+is equal to (exactly)
+
+{\displaystyle 2n+8}
+
+, we can take a few shortcuts. For example, we can remove all constants from the runtime; eventually, at some value of
+
+{\displaystyle n}
+
+, they become irrelevant. This makes
+
+{\displaystyle f(n)=2n}
+
+. Also, for convenience of comparison, we remove constant multipliers; in this case, the
+
+{\displaystyle 2}
+
+. This makes
+
+{\displaystyle f(n)=n}
+
+. It could also be said that
+
+{\displaystyle f(n)}
+
+runs in
+
+{\displaystyle O(n)}
+
+time; that lets us put a tighter (closer) upper bound onto the estimate.
+
+Practical Examples
+
+{\displaystyle O(n)}
+
+: printing a list of
+
+{\displaystyle n}
+
+items to the screen, looking at each item once.
+
+log
+
+{\displaystyle O(\log _{2}{n})}
+
+: taking a list of
+
+{\displaystyle n}
+
+items, cutting it in half repeatedly until there's only one item left.
+
+{\displaystyle O(n^{2})}
+
+: taking a list of
+
+{\displaystyle n}
+
+items, and comparing every item to every other item.
+
+Big-Omega Notation
+
+For non-negative functions,
+
+{\displaystyle f(n)}
+
+and
+
+{\displaystyle g(n)}
+
+, if there exists an integer
+
+{\displaystyle n_{0}}
+
+and a constant
+
+{\displaystyle c>0}
+
+such that for all integers
+
+{\displaystyle n>n_{0}}
+
+{\displaystyle f(n)\geq cg(n)}
+
+, then
+
+{\displaystyle f(n)}
+
+is
+
+{\displaystyle \Omega (g(n))}
+
+. This is denoted as
+
+{\displaystyle f(n)=\Omega (g(n))}
+
+This is almost the same definition as Big Oh, except that
+
+{\displaystyle f(n)\geq cg(n)}
+
+, this makes
+
+{\displaystyle g(n)}
+
+a lower bound function, instead of an upper bound function. It describes the
+
+best that can happen
+
+for a given data size.
+
+Theta Notation
+
+For non-negative functions,
+
+{\displaystyle f(n)}
+
+and
+
+{\displaystyle g(n)}
+
+{\displaystyle f(n)}
+
+is theta of
+
+{\displaystyle g(n)}
+
+if and only if
+
+{\displaystyle f(n)=O(g(n))}
+
+and
+
+{\displaystyle f(n)=\Omega (g(n))}
+
+. This is denoted as
+
+{\displaystyle f(n)=\Theta (g(n))}
+
+This is basically saying that the function,
+
+{\displaystyle f(n)}
+
+is bounded both from the top and bottom by the same function,
+
+{\displaystyle g(n)}
+
+The theta notation is denoted by Q.
+
+Little-O Notation
+
+For non-negative functions,
+
+{\displaystyle f(n)}
+
+and
+
+{\displaystyle g(n)}
+
+{\displaystyle f(n)}
+
+is little o of
+
+{\displaystyle g(n)}
+
+if and only if
+
+{\displaystyle f(n)=O(g(n))}
+
+, but
+
+{\displaystyle f(n)\neq \Theta (g(n))}
+
+. This is denoted as
+
+{\displaystyle f(n)=o(g(n))}
+
+This represents a loose bounding version of Big O.
+
+{\displaystyle g(n)}
+
+bounds from the top, but it does not bound the bottom.
+
+Little Omega Notation
+
+For non-negative functions,
+
+{\displaystyle f(n)}
+
+and
+
+{\displaystyle g(n)}
+
+{\displaystyle f(n)}
+
+is little omega of
+
+{\displaystyle g(n)}
+
+if and only if
+
+{\displaystyle f(n)=\Omega (g(n))}
+
+, but
+
+{\displaystyle f(n)\neq \Theta (g(n))}
+
+. This is denoted as
+
+{\displaystyle f(n)=\omega (g(n))}
+
+Much like Little Oh, this is the equivalent for Big Omega.
+
+{\displaystyle g(n)}
+
+is a loose lower boundary of the function
+
+{\displaystyle f(n)}
+
+; it bounds from the bottom, but not from the top.
+
+How asymptotic notation relates to analyzing complexity
+
+Temporal comparison is not the only issue in algorithms. There are space issues as well. Generally, a trade off between time and space is noticed in algorithms. Asymptotic notation empowers you to make that trade off. If you think of the amount of time and space your algorithm uses as a function of your data over time or space (time and space are usually analyzed separately), you can analyze how the time and space is handled when you introduce more data to your program.
+
+This is important in data structures because you want a structure that behaves efficiently as you increase the amount of data it handles. Keep in mind though that algorithms that are efficient with large amounts of data are not always simple and efficient for small amounts of data. So if you know you are working with only a small amount of data and you have concerns for speed and code space, a trade off can be made for a function that does not behave well for large amounts of data.
+
+A few examples of asymptotic notation
+
+Generally, we use asymptotic notation as a convenient way to examine what can happen in a function in the worst case or in the best case. For example, if you want to write a function that searches through an array of numbers and returns the smallest one:
+
+function
+
+find-min
+
+(array
+
+[1..
+
+])
+
+let
+
+:=
+
+{\displaystyle \infty }
+
+for
+
+:= 1 to
+
+:= min(
+
+])
+
+repeat
+
+return
+
+end
+
+Regardless of how big or small the array is, every time we run
+
+find-min
+
+, we have to initialize the
+
+and
+
+integer variables and return
+
+at the end. Therefore, we can just think of those parts of the function as constant and ignore them.
+
+So, how can we use asymptotic notation to discuss the
+
+find-min
+
+function? If we search through an array with 87 elements, then the
+
+for
+
+loop iterates 87 times, even if the very first element we hit turns out to be the minimum. Likewise, for
+
+{\displaystyle n}
+
+elements, the for loop iterates
+
+{\displaystyle n}
+
+times. Therefore we say the function runs in time
+
+{\displaystyle O(n)}
+
+What about this function:
+
+function
+
+find-min-plus-max
+
+(array
+
+[1..
+
+])
+
+// First, find the smallest element in the array
+
+let
+
+:=
+
+{\displaystyle \infty }
+
+for
+
+:= 1 to
+
+:= min(
+
+])
+
+repeat
+
+let
+
+minim
+
+:=
+
+// Now, find the biggest element, add it to the smallest and
+
+j :=
+
+{\displaystyle -\infty }
+
+for
+
+:= 1 to
+
+:= max(
+
+])
+
+repeat
+
+let
+
+maxim
+
+:=
+
+// return the sum of the two
+
+return
+
+minim
+
+maxim
+
+end
+
+What's the running time for
+
+find-min-plus-max
+
+? There are two
+
+for
+
+loops, that each iterate
+
+{\displaystyle n}
+
+times, so the running time is clearly
+
+{\displaystyle O(2n)}
+
+. Because
+
+{\displaystyle 2}
+
+is a constant, we throw it away and write the running time as
+
+{\displaystyle O(n)}
+
+. Why can you do this? If you recall the definition of Big-O notation, the function whose bound you're testing can be multiplied by some constant. If
+
+{\displaystyle f(x)=2x}
+
+, we can see that if
+
+{\displaystyle g(x)=x}
+
+, then the Big-O condition holds. Thus
+
+{\displaystyle O(2n)=O(n)}
+
+. This rule is general for the various asymptotic notations.
+
+Data Structures
+
+Introduction
+
+Asymptotic Notation
+
+Arrays
+
+List Structures & Iterators
+
+Stacks & Queues
+
+Trees
+
+Min & Max Heaps
+
+Graphs
+
+Hash Tables
+
+Sets
+
+Tradeoffs

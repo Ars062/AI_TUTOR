@@ -17,6 +17,9 @@ KG_RESULT_LIMIT = int(os.getenv("KG_RESULT_LIMIT", "15"))
 KG_EMBED_ANCHORS = os.getenv("KG_EMBED_ANCHORS", "true").lower() == "true"
 KG_ANCHOR_TOPK = int(os.getenv("KG_ANCHOR_TOPK", "5"))
 KG_ANCHOR_THRESHOLD = float(os.getenv("KG_ANCHOR_THRESHOLD", "0.35"))
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "1200"))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "150"))
+DOC_CONTEXT_MAX_CHARS = int(os.getenv("DOC_CONTEXT_MAX_CHARS", "8000"))
 USE_ENSEMBLE = os.getenv("USE_ENSEMBLE", "true").lower() == "true"
 USE_S2A = os.getenv("USE_S2A", "true").lower() == "true"
 MAX_HISTORY = int(os.getenv("MAX_HISTORY", "10"))

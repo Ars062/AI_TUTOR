@@ -60,3 +60,54 @@ Hash Tables,property,Key-Value Storage
 Graphs,includes,Directed Graph
 Graphs,includes,Undirected Graph
 Graphs,includes,Weighted Graph
+Linked Lists,consists_of,Nodes
+Node,references,Next Node
+Singly Linked List,type_of,Linked Lists
+Doubly Linked List,type_of,Linked Lists
+Linked Lists,supports,Sequential Access
+Stacks,supports,Push Operation
+Stacks,supports,Pop Operation
+Queues,supports,Enqueue Operation
+Queues,supports,Dequeue Operation
+DFS,uses,Stacks
+BFS,uses,Queues
+DFS,example_of,Recursion
+Hash Tables,use,Hash Function
+Hash Function,computes,Hash Value
+Collision,resolved_by,Chaining
+Load Factor,affects,Performance
+Min Heap,is_a,Heap
+Max Heap,is_a,Heap
+Heap,implements,Priority Queue
+Heapsort,uses,Heap
+Priority Queue,supports,Extract Max
+Graphs,consists_of,Vertices
+Edge,connects,Vertices
+Adjacency Matrix,represents,Graphs
+Adjacency List,represents,Graphs
+Shortest Path,problem_in,Graphs
+Dijkstra Algorithm,solves,Shortest Path
+Dijkstra Algorithm,uses,Priority Queue
+BFS,finds,Shortest Path
+Cycle Detection,applies_to,Graphs
+Binary Search,requires,Sorted Array
+Linear Search,complexity,O(n)
+Binary Search Tree,enables,Binary Search
+Dynamic Programming,requires,Overlapping Subproblems
+Dynamic Programming,requires,Optimal Substructure
+Memoization,technique_of,Dynamic Programming
+Tabulation,technique_of,Dynamic Programming
+Fibonacci,optimized_by,Dynamic Programming
+Knapsack Problem,example_of,Dynamic Programming
+Big O Notation,describes,Worst Case
+Omega Notation,describes,Best Case
+Theta Notation,describes,Tight Bound
+Space Complexity,measured_by,Big O Notation
+Constant Time,denoted,O(1)
+Logarithmic Time,denoted,O(log n)
+Merge Sort,guarantees,Stable Order
+Quick Sort,selects,Pivot Element
+Insertion Sort,efficient_for,Nearly Sorted Data
+Selection Sort,minimizes,Swap Count
+Sorting Algorithms,includes,Counting Sort
+Counting Sort,complexity,O(n+k)

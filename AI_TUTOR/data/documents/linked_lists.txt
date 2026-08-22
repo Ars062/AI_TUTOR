@@ -1,0 +1,154 @@
+# Wikibooks: Data Structures/LinkedLists (CC BY-SA)
+# Source: https://en.wikibooks.org/wiki/Data_Structures/LinkedLists
+
+A linked list is a simple way to store some unknown number of elements. There are two main functions for memory allocation malloc() and calloc() For example, you might need a program that will accept a bunch of numbers and then calculate the average.
+
+You could dynamically allocate the array like this:
+
+int i;
+
+scanf("enter size of array to create: %d.\n", &i);
+
+int *array = (int*)malloc(sizeof(int) * i);
+
+Or this in C++:
+
+int i;
+
+cout << "Enter the size of the array to create:";
+
+cin >> i;
+
+int *array = new int[i];
+
+However, it is often impossible to know beforehand how large the array needs to be. Resizing the array each time would require a memory allocation and a copy of all the elements, which is inefficient (although this can be negated through by resizing the array proportional to its current size, a technique used by the
+
+Standard Template Library
+
+Vector template)
+
+You could do something like create an array big enough to cover all expected situations:
+
+int array; /* oughtta cover all situations. */
+
+This is inefficient, since it will always consume the size of 10,000 ints, which could be anywhere from 19Kb to 39Kb.
+
+Enter the linked list. A linked list is a growable container that allows fast insertion and deletion operations. This allows items to be appended to the end of the list without re-allocating the entire structure.
+
+The structure of a linked list could be something like this
+
+typedef struct _ListItem {
+
+int data; //data to store here it is a integer
+
+struct _ListItem *next; //pointer to the next item's address in the list
+
+} ListItem;
+
+Since the data type could be something else, it would be inconvenient to rewrite this every time it is needed for a different type, so this is generally implemented as a templated class in C++, C# or other languages that support
+
+generics
+
+. Encapsulating the linked list in a class as an
+
+abstract data type
+
+allows the idea of the head and tail to be abstracted away from the programmer. This also allows the basic operations to modify the head or tail as needed.
+
+Doubly Linked Lists
+
+This is a specialized version of a linked list which allows traversal in two directions. A regular linked lists can only be traversed from head to tail. A doubly linked list allows the list to also be traversed from tail to head, at the expense of more memory and some slightly more expensive operations. With doubly linked lists, you need to keep track of the tail in addition to keeping track of the head.
+
+Operations
+
+There are several elemental operations used with linked lists. Many of these operations use a position as a parameter. This parameter is a pointer to a ListItem, since the ListItem represents an item in the chain (including the link to the next item). The singly-linked operations takes the position directly before the element we want to mutate (insert or delete) as the parameter. The reason we use the position immediately before is since with a singly linked list, there is no way to find the element directly before the position in order to update the link. If a generic function is required, this means that in order to mutate the first item, a dummy head item must be used. This is one example of the advantages of a doubly linked list, since we can use a pointer to the actual item we want to mutate, since there is a pointer to the previous item so we can update the links.
+
+Insert
+
+The insert operation takes a position and the new item to insert as parameters.
+
+Singly-linked list version
+
+void insert(unsigned int position, ListItem *item, ListItem **head){
+
+ListItem *current = *head;
+
+unsigned int cntr=0;
+
+while (current->next != NULL) {
+
+current = current->next;
+
+cntr++;
+
+if(position==0){
+
+item->next = *head;
+
+*head = item;
+
+else if(position>=cntr){
+
+current->next=item;
+
+current->next->next = NULL;
+
+else{
+
+current = *head;
+
+for(int i=0;i<position-1;i++){
+
+current=current->next;
+
+item->next=current->next;
+
+current->next=item;
+
+Doubly-linked list version
+
+void insert(ListItem *position, ListItem *item)
+
+item->next = position->next;
+
+position->next = item;
+
+item->prev=position;
+
+Delete
+
+The delete operation takes a position as a parameter and removes it.
+
+Singly-linked list version
+
+// position is immediately before the item we want to delete
+
+void delete(ListItem *position)
+
+if(0 == position->next) return;
+
+ListItem* temp = position->next->next;
+
+free(position->next);
+
+position->next = temp;
+
+Doubly-linked list version
+
+// position is the actual item we want to delete
+
+void delete(DL_ListItem *position)
+
+if(position->next)
+
+position->next->prev = position->prev;
+
+if(position->prev)
+
+position->prev->next = position->next;
+
+free(position);
+
+Remarks
+
+As you can see, the doubly linked versions of both operations is much more elegant.
