@@ -1,0 +1,13 @@
+{
+  "title": "AI Tutor Post-Session Survey",
+  "scale": "1 = Strongly disagree, 5 = Strongly agree",
+  "items": {
+    "trust": "I trusted the accuracy of the tutor's answers.",
+    "clarity": "The explanations were clear and easy to understand.",
+    "satisfaction": "I am satisfied with the tutoring session.",
+    "learning_gain": "I feel I learned more than with a standard chatbot.",
+    "reasoning_visible": "Seeing the tutor's step-by-step reasoning helped me understand.",
+    "no_bias": "The tutor's responses seemed fair and unbiased.",
+    "predictability": "The tutor produced consistent, predictable answers."
+  }
+}

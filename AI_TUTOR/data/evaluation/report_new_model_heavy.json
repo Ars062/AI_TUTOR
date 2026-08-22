@@ -1,0 +1,429 @@
+{
+  "report": {
+    "n": 12,
+    "samples": [
+      {
+        "similarity": 0.0057,
+        "extractive_coverage": 0.9524,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 398,
+        "bleu": 0.0351,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0916,
+            "recall": 1.0,
+            "fmeasure": 0.1679
+          },
+          "rouge2": {
+            "precision": 0.0656,
+            "recall": 0.7353,
+            "fmeasure": 0.1205
+          },
+          "rougeL": {
+            "precision": 0.0864,
+            "recall": 0.9429,
+            "fmeasure": 0.1583
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.6635,
+          "bertscore_recall": 0.8808,
+          "bertscore_f1": 0.7569
+        }
+      },
+      {
+        "similarity": 0.0119,
+        "extractive_coverage": 0.8889,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 419,
+        "bleu": 0.0301,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0854,
+            "recall": 0.9714,
+            "fmeasure": 0.157
+          },
+          "rouge2": {
+            "precision": 0.0605,
+            "recall": 0.7059,
+            "fmeasure": 0.1114
+          },
+          "rougeL": {
+            "precision": 0.0729,
+            "recall": 0.8286,
+            "fmeasure": 0.1339
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.6485,
+          "bertscore_recall": 0.8387,
+          "bertscore_f1": 0.7314
+        }
+      },
+      {
+        "similarity": 0.0269,
+        "extractive_coverage": 1.0,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 446,
+        "bleu": 0.0367,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.09,
+            "recall": 1.0,
+            "fmeasure": 0.1652
+          },
+          "rouge2": {
+            "precision": 0.061,
+            "recall": 0.6944,
+            "fmeasure": 0.1121
+          },
+          "rougeL": {
+            "precision": 0.0754,
+            "recall": 0.8378,
+            "fmeasure": 0.1384
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.7051,
+          "bertscore_recall": 0.853,
+          "bertscore_f1": 0.772
+        }
+      },
+      {
+        "similarity": 0.0176,
+        "extractive_coverage": 0.8824,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 557,
+        "bleu": 0.0308,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0753,
+            "recall": 0.913,
+            "fmeasure": 0.1391
+          },
+          "rouge2": {
+            "precision": 0.061,
+            "recall": 0.7556,
+            "fmeasure": 0.113
+          },
+          "rougeL": {
+            "precision": 0.0681,
+            "recall": 0.8261,
+            "fmeasure": 0.1258
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.6792,
+          "bertscore_recall": 0.8788,
+          "bertscore_f1": 0.7662
+        }
+      },
+      {
+        "similarity": 0.0896,
+        "extractive_coverage": 1.0,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 309,
+        "bleu": 0.0345,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0954,
+            "recall": 1.0,
+            "fmeasure": 0.1742
+          },
+          "rouge2": {
+            "precision": 0.0561,
+            "recall": 0.6071,
+            "fmeasure": 0.1027
+          },
+          "rougeL": {
+            "precision": 0.0822,
+            "recall": 0.8621,
+            "fmeasure": 0.1502
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.7018,
+          "bertscore_recall": 0.8743,
+          "bertscore_f1": 0.7786
+        }
+      },
+      {
+        "similarity": 0.0368,
+        "extractive_coverage": 0.9722,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 411,
+        "bleu": 0.0384,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0993,
+            "recall": 1.0,
+            "fmeasure": 0.1806
+          },
+          "rouge2": {
+            "precision": 0.0697,
+            "recall": 0.7179,
+            "fmeasure": 0.127
+          },
+          "rougeL": {
+            "precision": 0.0744,
+            "recall": 0.75,
+            "fmeasure": 0.1354
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.656,
+          "bertscore_recall": 0.8165,
+          "bertscore_f1": 0.7275
+        }
+      },
+      {
+        "similarity": 0.028,
+        "extractive_coverage": 0.8824,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 459,
+        "bleu": 0.0395,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0778,
+            "recall": 0.9167,
+            "fmeasure": 0.1435
+          },
+          "rouge2": {
+            "precision": 0.0567,
+            "recall": 0.6857,
+            "fmeasure": 0.1048
+          },
+          "rougeL": {
+            "precision": 0.0755,
+            "recall": 0.8889,
+            "fmeasure": 0.1391
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.6459,
+          "bertscore_recall": 0.8748,
+          "bertscore_f1": 0.7432
+        }
+      },
+      {
+        "similarity": 0.0134,
+        "extractive_coverage": 1.0,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 747,
+        "bleu": 0.0218,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0566,
+            "recall": 1.0,
+            "fmeasure": 0.1072
+          },
+          "rouge2": {
+            "precision": 0.036,
+            "recall": 0.65,
+            "fmeasure": 0.0682
+          },
+          "rougeL": {
+            "precision": 0.0539,
+            "recall": 0.9512,
+            "fmeasure": 0.102
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.6531,
+          "bertscore_recall": 0.8605,
+          "bertscore_f1": 0.7426
+        }
+      },
+      {
+        "similarity": 0.0756,
+        "extractive_coverage": 0.9583,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 568,
+        "bleu": 0.0377,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0648,
+            "recall": 1.0,
+            "fmeasure": 0.1217
+          },
+          "rouge2": {
+            "precision": 0.0482,
+            "recall": 0.7647,
+            "fmeasure": 0.0908
+          },
+          "rougeL": {
+            "precision": 0.0537,
+            "recall": 0.8286,
+            "fmeasure": 0.1009
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.7036,
+          "bertscore_recall": 0.8811,
+          "bertscore_f1": 0.7824
+        }
+      },
+      {
+        "similarity": 0.0375,
+        "extractive_coverage": 0.9412,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 476,
+        "bleu": 0.0332,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0883,
+            "recall": 1.0,
+            "fmeasure": 0.1623
+          },
+          "rouge2": {
+            "precision": 0.0597,
+            "recall": 0.6923,
+            "fmeasure": 0.11
+          },
+          "rougeL": {
+            "precision": 0.0728,
+            "recall": 0.825,
+            "fmeasure": 0.1339
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.6964,
+          "bertscore_recall": 0.8782,
+          "bertscore_f1": 0.7768
+        }
+      },
+      {
+        "similarity": 0.0897,
+        "extractive_coverage": 0.9412,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 365,
+        "bleu": 0.0,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.0765,
+            "recall": 0.963,
+            "fmeasure": 0.1417
+          },
+          "rouge2": {
+            "precision": 0.059,
+            "recall": 0.7692,
+            "fmeasure": 0.1096
+          },
+          "rougeL": {
+            "precision": 0.0735,
+            "recall": 0.9259,
+            "fmeasure": 0.1362
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.6543,
+          "bertscore_recall": 0.8088,
+          "bertscore_f1": 0.7234
+        }
+      },
+      {
+        "similarity": 0.0076,
+        "extractive_coverage": 0.8214,
+        "cot_analysis": {
+          "num_steps": 5,
+          "has_steps": true
+        },
+        "length": 304,
+        "bleu": 0.0294,
+        "rouge": {
+          "rouge1": {
+            "precision": 0.109,
+            "recall": 0.8718,
+            "fmeasure": 0.1937
+          },
+          "rouge2": {
+            "precision": 0.0611,
+            "recall": 0.5,
+            "fmeasure": 0.1089
+          },
+          "rougeL": {
+            "precision": 0.0801,
+            "recall": 0.641,
+            "fmeasure": 0.1425
+          }
+        },
+        "bertscore": {
+          "bertscore_precision": 0.6884,
+          "bertscore_recall": 0.8464,
+          "bertscore_f1": 0.7593
+        }
+      }
+    ],
+    "aggregate": {
+      "avg_bleu": 0.0306,
+      "avg_rouge1_f1": 0.1545,
+      "avg_rougeL_f1": 0.1331,
+      "avg_bertscore_f1": 0.755,
+      "avg_extractive_coverage": 0.9367,
+      "avg_similarity": 0.0367
+    },
+    "use_cot": true,
+    "avg_latency_s": 12.96
+  },
+  "predictions": [
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks, \u201cWhat is recursion?\u201d\u202fThey need a clear definition of recursion, an explanation of how it works, and the essential parts a recursive function must contain.\n\n**Step\u202f2 \u2013 Recall**  \nFrom the knowledge graph and the document we know:\n\n- **Recursion** is a programming technique **where a function calls itself**.  \n- A **recursive function** must have two components:  \n  1. **Base case** \u2013 a condition that stops the recursion.  \n  2. **Recursive case** \u2013 the part that calls the same function with a smaller / simpler input.  \n- The knowledge graph states:  \n  - *Recursion REQUIRES Base Case*  \n  - *Recursive Function NEEDS Base Case*  \n  - *Recursion CALLS Itself*  \n  - *Recursive Function CALLS Itself*  \n- Typical uses of recursion include **Factorial**, **Fibonacci**, and **Tree Traversal** (in\u2011order, pre\u2011order, post\u2011order).\n\n**Step\u202f3 \u2013 Reason**  \nPutting these pieces together:\n\n- Because the function calls itself, each call works on a reduced version of the original problem.  \n- Without a base case, the calls would continue forever, leading to a stack overflow.  \n- The base case provides a simple answer that can be returned directly, allowing the chain of calls to unwind and produce the final result.  \n- The recursive case moves the problem toward the base case (e.g., `n\u20111` for factorial).  \n\n**Step\u202f4 \u2013 Verify**  \nCheck against the sources:\n\n- The definition matches the opening sentence of the document: \u201cRecursion is a programming technique where a function calls itself.\u201d  \n- The requirement of a base case is explicitly listed in both the knowledge graph and the document (\u201cA recursive function must include: 1. Base case 2. Recursive case\u201d).  \n- Example uses (factorial, Fibonacci, tree traversal) are all mentioned in the KG and the document.  \n\nAll points are consistent.\n\n**Step\u202f5 \u2013 Conclude**  \n\n**Answer:**  \nRecursion is a programming technique in which a function **calls itself** to solve a problem. A proper recursive function always contains:\n\n1. **Base case** \u2013 a condition that stops further recursive calls and returns a simple, direct answer.  \n2. **Recursive case** \u2013 the part that calls the same function with a smaller or simpler input, moving the computation toward the base case.\n\nBecause each call works on a reduced sub\u2011problem, recursion is especially useful for tasks that can be broken down into identical smaller tasks, such as computing factorials, generating Fibonacci numbers, or traversing trees (in\u2011order, pre\u2011order, post\u2011order). Without a base case, recursion would never terminate.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: *\u201cWhat is a base case in recursion and why is it needed?\u201d*  \nSo we need to explain what a base case is, describe its role, and why a recursive function cannot work without one.\n\n---\n\n**Step\u202f2 \u2013 Recall**  \nFrom the supplied material and knowledge\u2011graph facts:\n\n* Recursion is a programming technique where a function **calls itself**.  \n* A **recursive function** must contain two parts:  \n  1. **Base case** \u2013 the condition that stops further recursive calls.  \n  2. **Recursive case** \u2013 the part that calls the function again with a smaller\u2011size problem.  \n* The knowledge graph explicitly states **\u201cRecursion REQUIRES Base Case\u201d** and **\u201cRecursive Function NEEDS Base Case.\u201d**  \n* Example (factorial):  \n\n```python\ndef factorial(n):\n    if n == 0:          # \u2190 base case\n        return 1\n    return n * factorial(n-1)   # \u2190 recursive case\n```\n\n---\n\n**Step\u202f3 \u2013 Reason**  \nWhy is the base case needed?\n\n1. **Termination** \u2013 Each recursive call reduces the problem size (e.g., `n\u20111`). Without a condition that eventually stops the calls, the function would keep invoking itself forever, leading to infinite recursion and a stack overflow.  \n2. **Correctness** \u2013 The base case also provides the known answer for the smallest sub\u2011problem. In the factorial example, we know `0! = 1`. The recursive case builds the final answer by combining the results of these smallest cases.  \n3. **Predictable behavior** \u2013 By defining a clear stopping point, we guarantee that every possible input will eventually hit that point, making the algorithm reliable.\n\n---\n\n**Step\u202f4 \u2013 Verify**  \nChecking against the documents:\n\n* The document says: \u201cA recursive function must include: 1. Base case 2. Recursive case.\u201d  \n* It also notes: \u201cEach call reduces the problem size.\u201d The base case is the point where reduction stops.  \n* The knowledge\u2011graph facts (\u201cRecursion REQUIRES Base Case\u201d) confirm that a base case is mandatory.\n\nAll statements align, so the reasoning is consistent with the provided knowledge.\n\n---\n\n**Step\u202f5 \u2013 Conclude**  \n\nA **base case** is the condition in a recursive function that stops further self\u2011calls and returns a direct answer for the simplest version of the problem. It is needed because:\n\n* It **prevents infinite recursion** (avoids stack overflow).  \n* It supplies the **known result** for the smallest sub\u2011problem, allowing the recursive case to build up the final answer.  \n* It ensures the algorithm **terminates** and works correctly for all inputs.\n\nIn short, without a base case, a recursive function would never finish; the base case is the essential \u201canchor\u201d that lets recursion solve problems safely.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: *\u201cGive an example of recursion.\u201d*  \nSo we need to show a concrete recursive function, explain why it is recursive, and point out the required parts (base case and recursive case).\n\n---\n\n**Step\u202f2 \u2013 Recall**  \nFrom the material we know:\n\n* Recursion is a technique where a function **calls itself**.  \n* A recursive function must contain:  \n  1. **Base case** \u2013 stops the infinite calling chain.  \n  2. **Recursive case** \u2013 reduces the problem size and calls the same function again.  \n* Common examples in the knowledge base are **factorial**, **Fibonacci**, and **tree traversal**.  \n* The factorial definition is:  \n\n\\[\n\\text{factorial}(n) = \n\\begin{cases}\n1 & \\text{if } n = 0 \\\\\nn \\times \\text{factorial}(n-1) & \\text{if } n > 0\n\\end{cases}\n\\]\n\n---\n\n**Step\u202f3 \u2013 Reason**  \nWe will present the factorial function because it is simple, clearly shows both the base and recursive cases, and matches the example given in the documents.\n\n```python\ndef factorial(n):\n    # Base case: when n reaches 0 we stop recursing\n    if n == 0:\n        return 1               # factorial(0) = 1\n\n    # Recursive case: reduce the problem size by 1\n    return n * factorial(n-1)  # calls itself with a smaller n\n```\n\nExplanation of the flow:\n\n1. **First call** \u2013 `factorial(5)`  \n   - `n` is not 0, so we go to the recursive case \u2192 `5 * factorial(4)`.\n2. **Second call** \u2013 `factorial(4)`  \n   - Again not 0 \u2192 `4 * factorial(3)`.\n3. This continues until `factorial(0)` is reached.\n4. **Base case** \u2013 `factorial(0)` returns `1`.  \n5. The call stack then unwinds, multiplying the returned values:  \n\n   `1 \u2192 1*1 = 1` \u2192 `2*1 = 2` \u2192 `3*2 = 6` \u2192 `4*6 = 24` \u2192 `5*24 = 120`.\n\nThus `factorial(5)` evaluates to `120`.\n\n---\n\n**Step\u202f4 \u2013 Verify**  \n* The function **calls itself** \u2192 satisfies \u201cRecursion CALLS Itself\u201d.  \n* It contains a **base case** (`if n == 0: return 1`) \u2192 satisfies \u201cRecursion REQUIRES Base Case\u201d.  \n* It reduces the problem size (`n-1`) \u2192 matches the definition that each call reduces the problem.  \n* The example is listed in the knowledge base under \u201cRecursion USED_IN Factorial\u201d.  \n\nAll points line up with the provided knowledge graph and document.\n\n---\n\n**Step\u202f5 \u2013 Conclude**  \nA classic example of recursion is the factorial function:\n\n```python\ndef factorial(n):\n    if n == 0:          # base case\n        return 1\n    return n * factorial(n-1)   # recursive case\n```\n\nThe function calls itself with a smaller argument until it reaches the base case, then the results are combined as the calls return. This illustrates the essential components of a recursive algorithm: a base case to stop recursion and a recursive case that moves toward that base case.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: *\u201cWhat is a binary search tree?\u201d*  \nSo they need a clear definition of a binary search tree (BST) and its essential characteristics (how the nodes are organized, what makes it different from a generic binary tree, and why it is useful).\n\n**Step\u202f2 \u2013 Recall**  \nRelevant facts from the supplied material:\n\n- A **binary tree** is a hierarchical structure where each node has 0,\u202f1, or\u202f2 children.  \n- A **binary search tree (BST)** is a special kind of binary tree with ordering constraints:  \n  - All values in the left subtree of a node are **less** than the node\u2019s value.  \n  - All values in the right subtree are **greater** than the node\u2019s value.  \n- Because of this ordering, an **in\u2011order traversal** (left \u2192 root \u2192 right) visits the nodes in **sorted (ascending) order**.  \n- Typical operation complexities:  \n  - Search, insert, delete are **O(log\u202fn)** on average (when the tree is balanced).  \n  - In the worst case (e.g., a completely unbalanced tree that looks like a linked list) they degrade to **O(n)**.  \n\n**Step\u202f3 \u2013 Reason**  \nTo answer the question we should:\n\n1. State that a BST is a binary tree with a specific ordering rule.  \n2. Explain the rule for left and right sub\u2011trees.  \n3. Mention the consequence for traversal (sorted order) and typical operation costs.  \n4. Optionally note that the performance depends on the tree\u2019s balance (balanced BSTs such as AVL or Red\u2011Black trees keep the height low).  \n\n**Step\u202f4 \u2013 Verify**  \nChecking against the knowledge graph and documents:\n\n- The graph says \u201cBinary Search Tree (BST): Left subtree contains only nodes with lesser values; Right subtree contains only nodes with greater values; In-order traversal yields sorted order; Operations: O(log n) average, O(n) worst\u2011case.\u201d  \n- The document repeats the same points.  \n\nAll elements we plan to include are present and correct.\n\n**Step\u202f5 \u2013 Conclude**  \n\n---\n\n### What is a Binary Search Tree?\n\nA **binary search tree (BST)** is a type of binary tree that maintains a specific ordering property:\n\n- **Left\u2011subtree rule:** Every node in the left subtree of a given node has a value **less than** the node\u2019s value.  \n- **Right\u2011subtree rule:** Every node in the right subtree has a value **greater than** the node\u2019s value.\n\nBecause of this ordering:\n\n- An **in\u2011order traversal** (visit left child, then the node, then the right child) will visit the nodes in **ascending sorted order**.\n- Common operations such as **search, insertion, and deletion** can be performed by following the ordering down the tree.  \n  - When the tree is roughly balanced, the height is\u202f\u2248\u202flog\u202fn, giving **O(log\u202fn)** average\u2011case time for these operations.  \n  - If the tree becomes highly unbalanced (e.g., all nodes inserted in sorted order), the height can grow to n, and the operations degrade to **O(n)** worst\u2011case time.\n\nIn practice, self\u2011balancing BSTs (like AVL trees or Red\u2011Black trees) are used to keep the height close to log\u202fn, preserving the efficient performance.\n\n--- \n\n**Key take\u2011aways**\n\n- A BST is a binary tree with a **left\u2011less / right\u2011greater** ordering rule.  \n- This ordering makes in\u2011order traversal produce a **sorted list** of the stored keys.  \n- Average\u2011case operation cost is **O(log\u202fn)**, but it can worsen to **O(n)** if the tree is not balanced.  \n\nThat is the essential definition and why a binary search tree is useful.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student is asking: *\u201cWhat is the time complexity of binary search?\u201d*  \nIn other words, they want to know how the running time of the binary\u2011search algorithm grows as the size of the input array (\u202fn\u202f) increases.\n\n**Step\u202f2 \u2013 Recall**  \nFrom the provided material we know:\n\n- **Binary Search** is listed under the \u201cBig O Notation (worst case)\u201d section as an example of an **O(log\u202fn)** algorithm.  \n- Binary search repeatedly halves the search interval, which is a classic logarithmic\u2011time pattern.  \n- It can be implemented recursively (it *CAN_USE Recursion*), and each recursive call reduces the problem size by a factor of 2.\n\n**Step\u202f3 \u2013 Reason**  \nWhen binary search starts, the whole array of size\u202fn\u202fis considered. Each comparison eliminates half of the remaining elements:\n\n1. After 1 step, the search space is\u202fn/2.  \n2. After 2 steps, it is\u202fn/4.  \n3. After\u202fk\u202fsteps, it is\u202fn / 2\u1d4f.\n\nThe algorithm stops when the remaining segment has size\u202f1 (or when the element is found). So we need\u202fk\u202fsuch that  \n\n\u2003\u2003n / 2\u1d4f \u2264 1\u2003\u2192\u20032\u1d4f \u2265 n\u2003\u2192\u2003k \u2265 log\u2082\u202fn.\n\nThus the number of steps (and therefore the number of comparisons) grows proportionally to\u202flog\u202fn. Constant factors (like the base of the logarithm) are dropped in Big\u2011O notation, so the complexity is **O(log\u202fn)**.\n\n**Step\u202f4 \u2013 Verify**  \nThe knowledge graph explicitly states \u201cBinary Search CAN_USE Recursion\u201d and the document lists \u201cO(log\u202fn): Logarithmic (binary search)\u201d. Both sources agree with the derived reasoning.\n\n**Step\u202f5 \u2013 Conclude**  \nThe time complexity of binary search is **O(log\u202fn)** in the worst case (and also average case). This means that the number of operations grows only logarithmically with the size of the input array, making binary search much faster than linear\u2011time scans for large, sorted datasets.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: *\u201cWhat is a hash table?\u201d*  \nThey need a clear definition of a hash table, its purpose, how it works (hash function, buckets), and its typical performance characteristics.\n\n**Step\u202f2 \u2013 Recall**  \nFrom the knowledge provided:\n\n- A hash table is a *key\u2011value storage* data structure.  \n- It offers **O(1) average\u2011case** access time.  \n- A **hash function** maps each key to a *bucket* (or index) in an underlying array.  \n- When two keys map to the same bucket, that is a **collision**, which can be resolved by **chaining** (linked list of entries per bucket) or **open addressing** (probing for another slot).  \n\n**Step\u202f3 \u2013 Reason**  \nPutting the pieces together:\n\n1. **Purpose** \u2013 Store pairs of (key, value) so you can quickly retrieve, insert, or delete a value given its key.  \n2. **Mechanism** \u2013  \n   - Compute `hash(key)` \u2192 integer.  \n   - Reduce the integer modulo the table size to get a bucket index.  \n   - Place the (key, value) in that bucket.  \n3. **Collisions** \u2013 Because different keys can produce the same index, we need a strategy:  \n   - *Chaining*: each bucket holds a linked list (or another collection) of all entries that hash to it.  \n   - *Open addressing*: if a bucket is occupied, probe (e.g., linear, quadratic, double hashing) to find the next free slot.  \n4. **Performance** \u2013 When the table is kept reasonably full (load factor <\u202f\u2248\u202f0.7) and the hash function distributes keys uniformly, the expected number of probes or list length is constant, giving **O(1) average** time for `get`, `put`, and `remove`. In the worst case (all keys collide), operations degrade to **O(n)**.\n\n**Step\u202f4 \u2013 Verify**  \nThe answer aligns with the KG fact: \u201cHash Tables: Key-value storage with O(1) average access \u2013 Hash function maps key to bucket \u2013 Collisions resolved by chaining or open addressing.\u201d All points are covered and no contradictions appear.\n\n**Step\u202f5 \u2013 Conclude**  \n**Answer:**  \nA **hash table** is a data structure that stores data as *key\u2011value* pairs. It uses a **hash function** to convert each key into an index (a bucket) in an underlying array. The value is placed in that bucket, and when two keys map to the same bucket a **collision\u2011resolution** method\u2014typically **chaining** (a linked list of entries) or **open addressing** (probing for another slot)\u2014is used. Because the hash function distributes keys uniformly, most operations (lookup, insertion, deletion) run in **O(1) average time**, making hash tables an efficient way to retrieve data by a unique key.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: *\u201cWhat is the difference between a stack and a queue?\u201d*  \nThey need a clear explanation of how these two abstract data structures behave, what operations they support, and how their ordering rules differ.\n\n**Step\u202f2 \u2013 Recall**  \nFrom the supplied material we have the following relevant facts:\n\n- **Stack** \u2013 a *LIFO* (Last\u2011In, First\u2011Out) structure. Main operations: `push` (add to top), `pop` (remove from top), `peek` (look at top without removing).  \n- **Queue** \u2013 a *FIFO* (First\u2011In, First\u2011Out) structure. Main operations: `enqueue` (add to rear), `dequeue` (remove from front), `front` (inspect the front element).  \n\nBoth are linear collections, but their ordering rules are opposite.\n\n**Step\u202f3 \u2013 Reason**  \nTo contrast them, consider how elements are added and removed:\n\n| Aspect | Stack | Queue |\n|--------|-------|-------|\n| **Ordering principle** | LIFO \u2013 the most recently added element is the first removed. | FIFO \u2013 the earliest added element is the first removed. |\n| **Typical use\u2011case metaphor** | A stack of plates: you place a new plate on top and take the top plate off first. | A line of people at a ticket window: the person who arrived first is served first. |\n| **Core operations** | `push` (add on top), `pop` (remove from top), `peek` (view top). | `enqueue` (add at rear), `dequeue` (remove from front), `front` (view front). |\n| **Access pattern** | Only the \u201ctop\u201d element is directly accessible. | Only the \u201cfront\u201d element is directly accessible; new items go to the rear. |\n| **Typical applications** | Function call stack, back\u2011tracking, undo mechanisms, expression evaluation. | Scheduling tasks, breadth\u2011first search, buffering streams, printer queues. |\n| **Implementation hints** | Often built on an array or linked list with a pointer to the top. | Often built on a circular array or linked list with pointers to both front and rear. |\n\n**Step\u202f4 \u2013 Verify**  \nThe answer aligns with the document\u2019s definitions:\n\n- The document states *\u201cStacks: LIFO (Last In, First Out). Operations: push, pop, peek\u201d* and *\u201cQueues: FIFO (First In, First Out). Operations: enqueue, dequeue, front.\u201d*  \n- No contradictory information appears in the knowledge graph, so the explanation is accurate.\n\n**Step\u202f5 \u2013 Conclude**  \nA **stack** and a **queue** are both linear data structures, but they differ in the order in which elements are removed:\n\n- **Stack (LIFO):** The last element added is the first one removed. Operations are `push`, `pop`, and `peek`. Think of a pile of plates.  \n- **Queue (FIFO):** The first element added is the first one removed. Operations are `enqueue`, `dequeue`, and `front`. Think of a line of people waiting for service.\n\nUnderstanding this ordering distinction helps you choose the right structure for problems such as back\u2011tracking (stack) versus task scheduling (queue).",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: *\u201cExplain merge sort.\u201d*  \nSo we need to describe what merge sort is, how it works, its key properties (divide\u2011and\u2011conquer, recursion, time and space complexity), and give an intuitive walk\u2011through of the algorithm.\n\n---\n\n**Step\u202f2 \u2013 Recall**  \n\nRelevant facts from the knowledge base:\n\n| Concept | Details |\n|---------|---------|\n| **Merge Sort** | A sorting algorithm that *uses divide and conquer*; it *splits the array into halves, sorts each half, and merges* the sorted halves. |\n| **Divide and Conquer** | A strategy that *recursively breaks a problem into smaller sub\u2011problems*, solves each sub\u2011problem, then combines the results. |\n| **Recursion** | Requires a *base case* and *calls itself*. Merge sort can *use recursion* and therefore needs a base case (a sub\u2011array of size\u202f1). |\n| **Time Complexity** | Merge sort runs in **O(n\u202flog\u202fn)** in the worst, average and best cases. |\n| **Space Complexity** | It is *out\u2011of\u2011place*: it needs **O(n)** extra space for the temporary arrays used during merging. |\n| **Base Case** | For merge sort, the base case is when the sub\u2011array has only one element \u2013 it is already sorted. |\n\n---\n\n**Step\u202f3 \u2013 Reason (Explain the algorithm step by step)**  \n\n1. **High\u2011level idea**  \n   - Merge sort follows the *divide\u2011and\u2011conquer* paradigm.  \n   - It repeatedly *divides* the input array into two halves until each piece contains a single element (the *base case*).  \n   - Then it *conquers* by *merging* two already\u2011sorted halves to produce a larger sorted segment.  \n\n2. **Detailed procedure**  \n\n   1. **Divide**  \n      - Given an array `A[l \u2026 r]`, compute the middle index `m = \u230a(l + r) / 2\u230b`.  \n      - Recursively call merge\u2011sort on the left half `A[l \u2026 m]`.  \n      - Recursively call merge\u2011sort on the right half `A[m+1 \u2026 r]`.  \n\n   2. **Base case**  \n      - If `l >= r` (the segment has 0 or 1 element), return immediately \u2013 it is already sorted.  \n\n   3. **Merge**  \n      - After the two recursive calls return, both halves are sorted.  \n      - Create a temporary array (size `r\u2011l+1`).  \n      - Use two pointers, one for each half, and repeatedly copy the smaller of the pointed elements into the temporary array.  \n      - When one half is exhausted, copy the remaining elements of the other half.  \n      - Finally, copy the temporary array back into `A[l \u2026 r]`.  \n\n3. **Why it works**  \n   - *Induction*:  \n     - **Base**: A single\u2011element array is trivially sorted.  \n     - **Inductive step**: Assuming the recursive calls correctly sort the left and right halves, the merge step combines two sorted lists into a single sorted list, which is a well\u2011known linear\u2011time operation. Hence the whole array becomes sorted.  \n\n4. **Complexity analysis**  \n\n   - **Time**:  \n     - The array is split log\u202fn times (height of the recursion tree).  \n     - At each level we merge all n elements once, costing O(n).  \n     - Total = O(n\u202flog\u202fn).  \n\n   - **Space**:  \n     - Each merge needs a temporary array of size proportional to the segment being merged.  \n     - The straightforward implementation allocates O(n) extra space overall (or O(n\u202flog\u202fn) if a new array is created at every recursive call, but the usual textbook version reuses a single auxiliary array).  \n\n5. **Comparison with other sorts** (brief, for context)  \n\n   - Unlike *in\u2011place* sorts such as bubble, insertion, selection, and quick sort, merge sort is *out\u2011of\u2011place* because it requires extra memory.  \n   - Its advantage is the guaranteed **O(n\u202flog\u202fn)** time even in the worst case, whereas quick sort can degrade to O(n\u00b2) on pathological inputs.  \n\n---\n\n**Step\u202f4 \u2013 Verify**  \n\n- The description matches the knowledge graph: *Merge Sort USES Divide and Conquer* and *CAN_USE Recursion*; recursion *REQUIRES a Base Case*, which we identified (size\u202f1).  \n- Time complexity (O(n\u202flog\u202fn)) and space complexity (O(n) extra) align with the document context.  \n- The merge step correctly reflects the \u201csplits array into halves, sorts, and merges\u201d phrasing.  \n\nAll statements are consistent with the provided facts.\n\n---\n\n**Step\u202f5 \u2013 Conclude**  \n\n**Merge sort** is a recursive, divide\u2011and\u2011conquer sorting algorithm:\n\n1. **Divide** the array repeatedly into two halves until each sub\u2011array has one element (the base case).  \n2. **Conquer** by merging each pair of sorted sub\u2011arrays back together, producing larger sorted sections until the whole array is sorted.  \n\nIt always runs in **O(n\u202flog\u202fn)** time and needs **O(n)** extra space for the temporary array used during merging. Because it relies on recursion and a clear base case, it is a classic example of applying recursion to a problem that can be broken into identical smaller sub\u2011problems.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: *\u201cWhat is Big O notation?\u201d*  \nSo I need to restate the concept in my own words and explain what the student needs to know: a definition of Big\u202fO, why we use it, what it measures (how runtime or space grows with input size), and the common classes (O(1), O(log\u202fn), O(n), O(n\u202flog\u202fn), O(n\u00b2), O(2\u207f), O(n!)). I should also mention the rules for simplifying expressions (drop constants, drop lower\u2011order terms).\n\n---\n\n**Step\u202f2 \u2013 Recall**  \nFrom the knowledge graph and document:\n\n- **Big O Notation** is used to describe the *worst\u2011case* time (or space) complexity of an algorithm.  \n- It expresses how the runtime grows as the input size\u202f*n* becomes large.  \n- Rules for simplifying:  \n  - Drop constant factors (e.g., O(2\u202fn) \u2192 O(n)).  \n  - Drop non\u2011dominant terms (e.g., O(n\u00b2\u202f+\u202fn) \u2192 O(n\u00b2)).  \n- Common Big\u202fO classes listed in the document:  \n  - O(1) \u2013 constant time  \n  - O(log\u202fn) \u2013 logarithmic time  \n  - O(n) \u2013 linear time  \n  - O(n\u202flog\u202fn) \u2013 linearithmic time (typical for efficient sorts like Merge Sort and Quick Sort)  \n  - O(n\u00b2) \u2013 quadratic time  \n  - O(2\u207f) \u2013 exponential time  \n  - O(n!) \u2013 factorial time  \n\n---\n\n**Step\u202f3 \u2013 Reason**  \nTo answer the question, I will combine the definition with the purpose and the simplification rules, then give a few examples to make it concrete. I will also note that Big\u202fO is a *upper bound* on growth, focusing on the worst\u2011case scenario, and that it abstracts away machine\u2011dependent constants to let us compare algorithms theoretically.\n\n---\n\n**Step\u202f4 \u2013 Verify**  \nChecking against the provided material: the definition I gave matches the \u201cTime complexity describes how runtime grows with input size n\u201d and \u201cBig O Notation (worst case)\u201d sections. The examples of classes (O(1) \u2026 O(n!)) are exactly those listed. The simplification rules (drop constants, drop non\u2011dominant terms) are also included. No contradictions are present.\n\n---\n\n**Step\u202f5 \u2013 Conclude**  \n\n### What is Big\u202fO notation?\n\nBig\u202fO notation is a mathematical way to describe **how the running time (or space usage) of an algorithm grows as the size of its input\u202f*n* increases**. It gives an *upper bound* on the growth rate, focusing on the worst\u2011case scenario, and it ignores constant factors and lower\u2011order terms so that we can compare algorithms independently of hardware or implementation details.\n\n#### Key points\n- **Purpose:** Allows us to talk about algorithm efficiency in a language\u2011independent way.  \n- **Form:** Written as\u202fO(f(n)), where\u202ff(n)\u202fis a function that captures the dominant term of the growth.  \n- **Simplification rules:**  \n  - Drop constant multipliers (e.g., O(2\u202fn) \u2192 O(n)).  \n  - Keep only the fastest\u2011growing term (e.g., O(n\u00b2\u202f+\u202fn) \u2192 O(n\u00b2)).  \n- **Common classes:**  \n\n| Class | Typical name | Example use |\n|-------|--------------|-------------|\n| O(1) | Constant | Accessing an array element by index |\n| O(log\u202fn) | Logarithmic | Binary search |\n| O(n) | Linear | Simple loop over an array |\n| O(n\u202flog\u202fn) | Linearithmic | Merge Sort, Quick Sort (average case) |\n| O(n\u00b2) | Quadratic | Bubble Sort, Insertion Sort |\n| O(2\u207f) | Exponential | Unoptimized recursive algorithms |\n| O(n!) | Factorial | Generating all permutations |\n\nIn short, **Big\u202fO notation tells you the shape of an algorithm\u2019s performance curve as the problem size grows**, letting you decide which algorithms are practical for large inputs.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: \u201cWhat is a linked list?\u201d\u202fThey need a clear definition of a linked list, its main characteristics, and how it differs from other structures such as arrays.\n\n**Step\u202f2 \u2013 Recall**  \nFrom the knowledge graph and document context we have:\n\n- \u201cLinked Lists\u201d is a data structure that **has the property \u201cDynamic Size.\u201d**  \n- A linked list is composed of **nodes** where each node contains a data element and one or more **pointers** (references) to other nodes.  \n- Variants mentioned: **singly linked** (pointer to next), **doubly linked** (pointers to next and previous), **circular** (last node points back to the first).  \n- Compared with arrays: arrays use **contiguous memory** and give O(1) index access but have a fixed size; linked lists give **dynamic size** but O(n) access by position.\n\n**Step\u202f3 \u2013 Reason**  \nUsing these facts, we can describe a linked list as a collection of nodes linked together via pointers. Because each node is allocated separately, the list can grow or shrink at runtime without needing a contiguous block of memory. The trade\u2011off is that random access is slower (you must traverse from the head to reach a given position), while insertion or deletion at the head (or at a known node) is O(1).\n\n**Step\u202f4 \u2013 Verify**  \nThe answer must include:\n- Definition (nodes + pointers).  \n- Property \u201cDynamic Size.\u201d  \n- Mention of the three common forms (singly, doubly, circular).  \n- Contrast with arrays (contiguous memory, O(1) access, fixed size).  \nAll of these points appear in the provided knowledge, so the answer is consistent.\n\n**Step\u202f5 \u2013 Conclude**  \n\n**Answer:**  \n\nA **linked list** is a linear data structure made up of *nodes* where each node stores a data value and a reference (pointer) to the next node in the sequence. Because the nodes are linked by pointers rather than stored in a contiguous block of memory, a linked list can grow or shrink dynamically\u2014its size is not fixed at creation.  \n\nCommon variants are:  \n\n- **Singly linked list:** each node points only to the next node.  \n- **Doubly linked list:** each node has two pointers, one to the next node and one to the previous node, allowing traversal in both directions.  \n- **Circular linked list:** the last node\u2019s next pointer links back to the first node, forming a circle.\n\n**Key characteristics**\n\n| Feature | Linked List | Array |\n|---------|-------------|-------|\n| Memory layout | Nodes allocated separately (non\u2011contiguous) | Contiguous block |\n| Size flexibility | Dynamic (can insert/delete at runtime) | Fixed after creation |\n| Access time by index | O(n) (must traverse) | O(1) |\n| Insertion/deletion at head (or known node) | O(1) | O(n) (may require shifting) |\n\nThus, a linked list is useful when you need a collection that can change size frequently and where fast insertions/removals are more important than fast random access.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: \u201cWhat are the tree traversal methods?\u201d\u202fThey want a list of the standard ways to visit every node in a tree, together with a brief description of the order in which nodes are visited.\n\n**Step\u202f2 \u2013 Recall**  \nFrom the provided material the relevant facts are:\n\n- Trees can be traversed recursively (the KG states *Recursion\u202fUSED_IN\u202fTree\u202fTraversal*).  \n- The common traversal orders listed are:  \n  * In\u2011order: left \u2192 root \u2192 right  \n  * Pre\u2011order: root \u2192 left \u2192 right  \n  * Post\u2011order: left \u2192 right \u2192 root  \n  * Level\u2011order: breadth\u2011first search (visit nodes level by level)\n\nThese are the standard traversal methods for binary trees (and they extend to general trees with slight modifications).\n\n**Step\u202f3 \u2013 Reason**  \nTo answer the question we simply enumerate each method and explain the visitation sequence:\n\n1. **Pre\u2011order traversal** \u2013 Visit the current node first, then recursively traverse the left subtree, then the right subtree.  \n2. **In\u2011order traversal** \u2013 Recursively traverse the left subtree, visit the current node, then traverse the right subtree. (For a binary search tree this yields the keys in sorted order.)  \n3. **Post\u2011order traversal** \u2013 Recursively traverse the left subtree, then the right subtree, and finally visit the current node.  \n4. **Level\u2011order traversal** \u2013 Visit nodes level by level from top to bottom and from left to right within each level; this is implemented with a queue (BFS) rather than recursion.\n\nAll four can be implemented recursively (except level\u2011order, which is usually iterative with a queue), satisfying the requirement that recursion *CALLS\u202fItself* and needs a *Base\u202fCase*.\n\n**Step\u202f4 \u2013 Verify**  \nThe answer matches the document\u2019s \u201cTree Traversals\u201d section and the knowledge\u2011graph fact that recursion is used in tree traversal. No contradictions are found.\n\n**Step\u202f5 \u2013 Conclude**  \n**Tree traversal methods**\n\n| Traversal | Order of visiting nodes |\n|-----------|--------------------------|\n| **Pre\u2011order** | root \u2192 left \u2192 right |\n| **In\u2011order**  | left \u2192 root \u2192 right |\n| **Post\u2011order**| left \u2192 right \u2192 root |\n| **Level\u2011order** (BFS) | visit nodes level by level, left to right |\n\nThese four techniques cover the standard ways to systematically visit every node in a binary (or general) tree.",
+    "**Step\u202f1 \u2013 Understand**  \nThe student asks: *\u201cWhat is the difference between merge sort and bubble sort in terms of time complexity?\u201d*  \nSo we need to explain how the running\u2011time growth of each algorithm compares, using Big\u2011O notation.\n\n**Step\u202f2 \u2013 Recall**  \nFrom the provided material we know:\n\n- **Merge Sort**  \n  *Uses the divide\u2011and\u2011conquer strategy.*  \n  Its worst\u2011case (and average\u2011case) time complexity is **O(n\u202flog\u202fn)**.\n\n- **Bubble Sort**  \n  *Repeatedly swaps adjacent out\u2011of\u2011order elements.*  \n  Its worst\u2011case (and average\u2011case) time complexity is **O(n\u00b2)**.  \n  (Best case can be O(n) if the list is already sorted, but the question asks generally.)\n\n**Step\u202f3 \u2013 Reason**  \nBoth algorithms sort an array of *n* elements, but they do so in very different ways:\n\n- **Merge Sort** splits the array repeatedly in half (log\u202fn splits) and merges the sorted halves in linear time (O(n) work per level). Multiplying the two gives O(n\u202flog\u202fn). This grows much more slowly than a quadratic function as *n* becomes large.\n\n- **Bubble Sort** repeatedly scans the whole array, swapping adjacent items when needed. In the worst case it must make about *n* passes, each scanning up to *n* elements, leading to roughly n\u202f\u00d7\u202fn = n\u00b2 operations \u2192 O(n\u00b2).\n\nThus, for large inputs, Merge Sort is asymptotically faster than Bubble Sort.\n\n**Step\u202f4 \u2013 Verify**  \nThe knowledge graph states:\n- \u201cMerge Sort \u2026 O(n log n)\u201d\n- \u201cBubble, Insertion, Selection: O(n\u00b2)\u201d\n\nThe document also confirms these complexities. Our reasoning matches the sources.\n\n**Step\u202f5 \u2013 Conclude**  \n- **Merge Sort:**\u202fO(n\u202flog\u202fn) time (both worst\u2011case and average\u2011case).  \n- **Bubble Sort:**\u202fO(n\u00b2) time (worst\u2011case and average\u2011case).\n\nTherefore, Merge Sort has a significantly better (lower) time\u2011complexity growth than Bubble Sort; it scales roughly as *n\u202flog\u202fn* while Bubble Sort scales as *n\u00b2*. This makes Merge Sort far more efficient for large data sets."
+  ],
+  "references": [
+    "Recursion is a programming technique where a function calls itself. A recursive function must include a base case to stop the recursion and a recursive case where the function calls itself with a smaller input.",
+    "A base case is a condition in a recursive function that stops further recursive calls. It is needed to prevent infinite recursion and to provide a stopping point where the function returns a result directly.",
+    "A classic example is the factorial function. factorial(0) = 1 is the base case, and factorial(n) = n * factorial(n-1) is the recursive case. Each call reduces the problem size until the base case is reached.",
+    "A binary search tree (BST) is a tree data structure where each node has at most two children. The left subtree contains only nodes with lesser values and the right subtree contains only nodes with greater values. In-order traversal of a BST yields sorted order.",
+    "Binary search has a time complexity of O(log n). Each step halves the search space, so the number of steps is logarithmic in the size of the input.",
+    "A hash table is a data structure that stores key-value pairs. It uses a hash function to map keys to buckets, providing O(1) average time for insertion, lookup, and deletion. Collisions are resolved by chaining or open addressing.",
+    "A stack follows LIFO (Last In, First Out) ordering where the last element added is the first removed. A queue follows FIFO (First In, First Out) ordering where the first element added is the first removed.",
+    "Merge sort is a divide and conquer sorting algorithm. It splits the array into halves, recursively sorts each half, and then merges the sorted halves. It has a time complexity of O(n log n) and requires O(n) extra space.",
+    "Big O notation describes how an algorithm's runtime or space usage grows with input size n. Common classes include O(1), O(log n), O(n), O(n log n), and O(n^2).",
+    "A linked list is a data structure made of nodes where each node contains data and a pointer to the next node. It allows dynamic size and O(1) insertion/deletion at known positions, but O(n) access by index.",
+    "The main tree traversals are in-order (left, root, right), pre-order (root, left, right), post-order (left, right, root), and level-order (breadth-first by level).",
+    "Merge sort has O(n log n) time complexity in all cases, while bubble sort has O(n^2) time complexity in the average and worst cases. Merge sort is more efficient for large inputs but requires extra space."
+  ]
+}

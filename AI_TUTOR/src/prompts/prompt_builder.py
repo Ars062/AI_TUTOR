@@ -135,10 +135,7 @@ Step 1 - Understand: Restate the question in your own words and identify what th
 Step 2 - Recall: List the relevant concepts, definitions, or procedures from the provided knowledge.
 Step 3 - Reason: Apply the concepts to answer the question, showing your work.
 Step 4 - Verify: Check your answer against the knowledge graph and documents for accuracy.
-Step 5 - Explain: Present the final answer in a clear, educational way appropriate for the student.
-
-## Final Answer
-After your chain-of-thought, provide a clear final answer.
+Step 5 - Conclude: Present the final answer clearly and concisely, summarizing the key points the student needs to understand.
 """
 
     return prompt

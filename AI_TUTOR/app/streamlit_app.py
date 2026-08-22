@@ -10,6 +10,27 @@ st.set_page_config(page_title="AI Tutor", layout="wide")
 st.title("AI Tutor")
 st.caption("Knowledge-Grounded + Chain-of-Thought Tutoring System")
 
+import json
+import time
+
+_FEEDBACK_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "evaluation", "feedback.jsonl")
+
+
+def _log_feedback(question, answer, rating, debug_info):
+    debug_info = debug_info or {}
+    record = {
+        "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "question": question,
+        "rating": int(rating),
+        "kg_context": debug_info.get("kg_context", "")[:2000],
+        "doc_context": debug_info.get("doc_context", "")[:2000],
+        "entities": debug_info.get("entities", []),
+        "grounded_fraction": (debug_info.get("cot_validation") or {}).get("grounded_fraction"),
+        "answer_length": len(answer.split()),
+    }
+    with open(os.path.abspath(_FEEDBACK_PATH), "a", encoding="utf-8") as f:
+        f.write(json.dumps(record) + "\n")
+
 if "initialized" not in st.session_state:
     with st.spinner("Loading vector index..."):
         from src.rag.embed_documents import load_index, build_vector_index, save_index
@@ -33,6 +54,7 @@ if "initialized" not in st.session_state:
 
 with st.sidebar:
     st.header("Settings")
+    show_cot = st.checkbox("Show Chain-of-Thought", value=True)
     use_cot = st.checkbox("Chain-of-Thought reasoning", value=True)
     show_debug = st.checkbox("Show debug info", value=False)
 
@@ -91,6 +113,29 @@ if question and question.strip():
                 )
                 st.markdown(answer)
 
+                cot_steps = (debug_info or {}).get("cot_steps") or []
+                if show_cot and cot_steps:
+                    with st.expander(f"Chain-of-Thought ({len(cot_steps)} steps)"):
+                        for s in cot_steps:
+                            label = s["label"].removeprefix("**").removesuffix("**")
+                            st.markdown(f"### {label}")
+                            st.markdown(s["text"])
+                        validation = (debug_info or {}).get("cot_validation") or {}
+                        if validation.get("validated"):
+                            st.caption(
+                                f"KG grounding: {validation['grounded_fraction']:.0%} of steps "
+                                f"reference the knowledge graph."
+                                + (
+                                    f" Not grounded: {', '.join(validation['ungrounded_steps'])}"
+                                    if validation["ungrounded_steps"]
+                                    else ""
+                                )
+                            )
+
+                rating = st.feedback("thumbs", key=f"rating_{len(st.session_state.messages)}")
+                if rating is not None:
+                    _log_feedback(question, answer, rating, debug_info)
+
                 if show_debug:
                     with st.expander("Debug Info"):
                         debug_display = {
@@ -100,6 +145,8 @@ if question and question.strip():
                             "entities_found": debug_info["entities"][:10],
                             "history_count": len(debug_info["memory"]["history"]),
                             "topics_covered": debug_info["memory"]["topics_covered"][:10],
+                            "cot_validation": debug_info.get("cot_validation"),
+                            "content_safety": debug_info.get("content_safety"),
                         }
                         st.json(debug_display)
 

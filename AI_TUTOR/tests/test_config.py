@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 def test_config_defaults():
     from src.config import (
-        GEMINI_API_KEY,
+        GROQ_API_KEY,
         NEO4J_URI,
         NEO4J_USER,
         NEO4J_PASSWORD,

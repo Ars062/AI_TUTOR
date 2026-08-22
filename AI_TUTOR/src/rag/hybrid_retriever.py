@@ -3,15 +3,15 @@ from src.kg.kg_query import query_kg, query_kg_entities
 from src.config import TOP_K_DOCS
 
 
-def hybrid_retrieve(question, index, documents, k=None, kg_keyword=None):
+def hybrid_retrieve(question, index, documents, k=None, kg_keyword=None, use_kg=True):
     if k is None:
         k = TOP_K_DOCS
 
-    kg_context = query_kg(kg_keyword or question)
+    kg_context = query_kg(kg_keyword or question) if use_kg else ""
 
     doc_context = search_docs(question, index, documents, k=k)
 
-    entities = query_kg_entities(kg_keyword or question)
+    entities = query_kg_entities(kg_keyword or question) if use_kg else set()
     kg_guided_docs = ""
     if entities and documents:
         kg_entity_text = " ".join(entities)

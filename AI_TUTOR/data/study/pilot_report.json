@@ -1,0 +1,12 @@
+{
+  "report": {
+    "pre_mean": 77.72,
+    "post_mean": 77.72,
+    "absolute_gain": 0.0,
+    "relative_gain_pct": 0.0,
+    "n": 5,
+    "paired_t": NaN,
+    "p_value": NaN,
+    "significant": false
+  }
+}

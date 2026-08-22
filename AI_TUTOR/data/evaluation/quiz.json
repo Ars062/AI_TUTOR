@@ -1,0 +1,88 @@
+{
+  "quiz": [
+    {
+      "id": 1,
+      "question": "What is recursion?",
+      "reference": "Recursion is a programming technique where a function calls itself. A recursive function must include a base case to stop the recursion and a recursive case where the function calls itself with a smaller input.",
+      "concepts": ["Recursion", "Base Case", "Function", "Recursive Case"],
+      "topic": "recursion"
+    },
+    {
+      "id": 2,
+      "question": "What is a base case in recursion and why is it needed?",
+      "reference": "A base case is a condition in a recursive function that stops further recursive calls. It is needed to prevent infinite recursion and to provide a stopping point where the function returns a result directly.",
+      "concepts": ["Base Case", "Recursion", "Infinite Loop"],
+      "topic": "recursion"
+    },
+    {
+      "id": 3,
+      "question": "Give an example of recursion.",
+      "reference": "A classic example is the factorial function. factorial(0) = 1 is the base case, and factorial(n) = n * factorial(n-1) is the recursive case. Each call reduces the problem size until the base case is reached.",
+      "concepts": ["Factorial", "Recursion", "Base Case"],
+      "topic": "recursion"
+    },
+    {
+      "id": 4,
+      "question": "What is a binary search tree?",
+      "reference": "A binary search tree (BST) is a tree data structure where each node has at most two children. The left subtree contains only nodes with lesser values and the right subtree contains only nodes with greater values. In-order traversal of a BST yields sorted order.",
+      "concepts": ["Binary Search Tree", "Tree", "Left Subtree", "Right Subtree"],
+      "topic": "trees"
+    },
+    {
+      "id": 5,
+      "question": "What is the time complexity of binary search?",
+      "reference": "Binary search has a time complexity of O(log n). Each step halves the search space, so the number of steps is logarithmic in the size of the input.",
+      "concepts": ["Binary Search", "O(log n)", "Time Complexity"],
+      "topic": "time_complexity"
+    },
+    {
+      "id": 6,
+      "question": "What is a hash table?",
+      "reference": "A hash table is a data structure that stores key-value pairs. It uses a hash function to map keys to buckets, providing O(1) average time for insertion, lookup, and deletion. Collisions are resolved by chaining or open addressing.",
+      "concepts": ["Hash Table", "Key-Value Storage", "Hash Function", "Collision"],
+      "topic": "data_structures"
+    },
+    {
+      "id": 7,
+      "question": "What is the difference between a stack and a queue?",
+      "reference": "A stack follows LIFO (Last In, First Out) ordering where the last element added is the first removed. A queue follows FIFO (First In, First Out) ordering where the first element added is the first removed.",
+      "concepts": ["Stack", "Queue", "LIFO", "FIFO"],
+      "topic": "data_structures"
+    },
+    {
+      "id": 8,
+      "question": "Explain merge sort.",
+      "reference": "Merge sort is a divide and conquer sorting algorithm. It splits the array into halves, recursively sorts each half, and then merges the sorted halves. It has a time complexity of O(n log n) and requires O(n) extra space.",
+      "concepts": ["Merge Sort", "Divide and Conquer", "Sorting", "O(n log n)"],
+      "topic": "sorting"
+    },
+    {
+      "id": 9,
+      "question": "What is Big O notation?",
+      "reference": "Big O notation describes how an algorithm's runtime or space usage grows with input size n. Common classes include O(1), O(log n), O(n), O(n log n), and O(n^2).",
+      "concepts": ["Big O", "Time Complexity", "O(1)", "O(n)"],
+      "topic": "time_complexity"
+    },
+    {
+      "id": 10,
+      "question": "What is a linked list?",
+      "reference": "A linked list is a data structure made of nodes where each node contains data and a pointer to the next node. It allows dynamic size and O(1) insertion/deletion at known positions, but O(n) access by index.",
+      "concepts": ["Linked List", "Node", "Pointer", "Dynamic Size"],
+      "topic": "data_structures"
+    },
+    {
+      "id": 11,
+      "question": "What are the tree traversal methods?",
+      "reference": "The main tree traversals are in-order (left, root, right), pre-order (root, left, right), post-order (left, right, root), and level-order (breadth-first by level).",
+      "concepts": ["In-order", "Pre-order", "Post-order", "Level-order", "Tree Traversal"],
+      "topic": "trees"
+    },
+    {
+      "id": 12,
+      "question": "What is the difference between merge sort and bubble sort in terms of time complexity?",
+      "reference": "Merge sort has O(n log n) time complexity in all cases, while bubble sort has O(n^2) time complexity in the average and worst cases. Merge sort is more efficient for large inputs but requires extra space.",
+      "concepts": ["Merge Sort", "Bubble Sort", "O(n log n)", "O(n^2)"],
+      "topic": "sorting"
+    }
+  ]
+}

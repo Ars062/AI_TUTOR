@@ -1,14 +1,30 @@
 import os
+import re
+import time
 from groq import Groq
 from dotenv import load_dotenv
 
 from src.rag.hybrid_retriever import hybrid_retrieve
 from src.prompts.prompt_builder import build_prompt, build_cot_prompt, build_ensemble_prompts
+from src.evaluation.evaluation_metrics import extract_cot_steps, validate_cot_steps_against_kg
 from src.config import GROQ_API_KEY, LLM_MODEL, USE_ENSEMBLE, MAX_HISTORY
 
 load_dotenv()
 
 client = Groq(api_key=GROQ_API_KEY)
+
+
+# Content-safety guard (9.1): block clearly harmful / off-topic-for-tutoring intents
+_UNSAFE_PATTERNS = [
+    r"(?i)\bhow (to|do i) (build|make|create) (a|an)?\s*(bomb|weapon|explosive)\b",
+    r"(?i)\b(suicide|self[- ]harm|harm myself)\b",
+    r"(?i)\bhow (to )?(kill|murder|assault|hurt) \w+\b",
+    r"(?i)\b(drugs? recipe|synthesize\s+\w+ (drug|narcotic))\b",
+]
+
+
+def _is_unsafe(question):
+    return any(p for p in _UNSAFE_PATTERNS if p and __import__("re").search(p, question))
 
 
 class ConversationMemory:
@@ -49,20 +65,55 @@ def _get_memory(session_id="default"):
     return _memory_store[session_id]
 
 
-def _call_llm(prompt):
-    response = client.chat.completions.create(
-        model=LLM_MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.7,
-        max_tokens=2048,
-    )
-    return response.choices[0].message.content
+def _call_llm(prompt, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model=LLM_MODEL,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=2048,
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            wait = None
+            msg = str(e)
+            if "rate_limit_exceeded" in msg:
+                wait = _parse_retry_seconds(msg)
+                wait = max(5, min(wait, 600))
+            if attempt == max_retries - 1 or wait is None:
+                raise
+            print(f"  rate limited, waiting {wait}s (attempt {attempt+1}/{max_retries})...")
+            time.sleep(wait)
+    raise RuntimeError("unreachable")
 
 
-def ask_tutor(question, index, documents, filenames=None, session_id="default", use_cot=True):
+def _parse_retry_seconds(msg):
+    """Extract seconds from Groq's 'try again in 14m11.04s' message."""
+    try:
+        m = re.search(r"try again in (\d+)m(\d+\.?\d*)s", msg)
+        if m:
+            return int(m.group(1)) * 60 + float(m.group(2))
+        m = re.search(r"try again in (\d+\.?\d*)s", msg)
+        if m:
+            return float(m.group(1))
+    except Exception:
+        pass
+    return 30
+
+
+def ask_tutor(question, index, documents, filenames=None, session_id="default", use_cot=True, use_kg=True):
+    from src.config import ENABLE_CONTENT_SAFETY
+
+    if ENABLE_CONTENT_SAFETY and _is_unsafe(question):
+        refusal = ("I'm your tutor, but this request is outside the scope of safe tutoring. "
+                   "I can't help with that. If you're trying to learn computer science, "
+                   "just ask me about the topic!")
+        return refusal, {"content_safety": "blocked", "memory": _get_memory(session_id).to_dict()}
+
     memory = _get_memory(session_id)
 
-    retrieval = hybrid_retrieve(question, index, documents)
+    retrieval = hybrid_retrieve(question, index, documents, use_kg=use_kg)
 
     if use_cot:
         prompt = build_cot_prompt(
@@ -115,12 +166,20 @@ def ask_tutor(question, index, documents, filenames=None, session_id="default", 
     for ent in retrieval.get("entities", set()):
         memory.topics_covered.add(ent)
 
+    cot_steps = extract_cot_steps(final_response)
+    kg_validation = validate_cot_steps_against_kg(cot_steps, retrieval["kg_context"])
+
     return final_response, {
         "kg_context": retrieval["kg_context"],
         "doc_context": retrieval["doc_context"],
         "kg_guided_docs": retrieval["kg_guided_docs"],
         "entities": list(retrieval.get("entities", set())),
         "memory": memory.to_dict(),
+        "cot_steps": cot_steps,
+        "cot_validation": kg_validation,
+        "content_safety": "passed",
+        "use_cot": use_cot,
+        "use_kg": use_kg,
     }
 
 

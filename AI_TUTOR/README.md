@@ -43,7 +43,16 @@ Answer + Debug Info
    load_kg("data/knowledge_graph/knowledge_triples.csv")
    ```
 
-5. Run the app:
+5. Start Neo4j (optional but recommended for KG-RAG):
+   ```bash
+   C:\Users\akju0\.neo4j\start-neo4j.cmd
+   ```
+
+6. Run the app:
+   ```bash
+   run-app.cmd
+   ```
+   Or manually:
    ```bash
    streamlit run app/streamlit_app.py
    ```

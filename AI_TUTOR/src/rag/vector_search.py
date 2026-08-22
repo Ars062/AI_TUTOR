@@ -1,9 +1,7 @@
-from sentence_transformers import SentenceTransformer
 import numpy as np
 
 from src.config import TOP_K_DOCS
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
+from src.rag.embeddings import get_embedder
 
 
 def search_docs(query, index, documents, k=None):
@@ -13,7 +11,7 @@ def search_docs(query, index, documents, k=None):
     if index.ntotal == 0 or not documents:
         return ""
 
-    q_embed = model.encode([query])
+    q_embed = get_embedder().encode([query])
     D, I = index.search(np.array(q_embed), min(k, index.ntotal))
 
     results = []
