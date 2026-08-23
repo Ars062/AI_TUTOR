@@ -7,6 +7,25 @@ import streamlit as st
 
 st.set_page_config(page_title="AI Tutor", layout="wide")
 
+st.markdown(
+    """
+    <style>
+    .stMarkdown table { border-collapse: collapse; margin: 8px 0; }
+    .stMarkdown th {
+        background: rgba(120, 140, 180, 0.25);
+        border: 1px solid rgba(128, 140, 160, 0.6);
+        padding: 6px 12px; text-align: left;
+    }
+    .stMarkdown td {
+        background: rgba(128, 140, 160, 0.08);
+        border: 1px solid rgba(128, 140, 160, 0.5);
+        padding: 6px 12px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("AI Tutor")
 st.caption("Knowledge-Grounded + Chain-of-Thought Tutoring System")
 
