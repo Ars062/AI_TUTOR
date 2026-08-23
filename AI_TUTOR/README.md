@@ -1,6 +1,10 @@
 # AI Tutor
 
-A knowledge-grounded, chain-of-thought AI tutoring system built with Gemini, Neo4j, FAISS, and Streamlit.
+A knowledge-grounded, chain-of-thought AI tutoring system built with Groq (gpt-oss-120b), Neo4j, FAISS, and Streamlit.
+
+## Demo
+
+Watch the full walkthrough: **[AI Tutor Demo Video](https://drive.google.com/file/d/1NQ0cUV9mRu-4I7QimHJu6_ES6BcyN2ZM/view?usp=sharing)**
 
 ## Architecture
 
@@ -11,7 +15,7 @@ Hybrid Retriever (KG + Vector Search)
        |
 Prompt Builder (CoT + Ensemble + S2A)
        |
-Gemini 1.5 Pro
+Groq LLM (gpt-oss-120b)
        |
 Answer + Debug Info
 ```
@@ -34,7 +38,7 @@ Answer + Debug Info
    pip install -r requirements.txt
    ```
 3. Copy `.env.template` to `.env` and fill in:
-   - `GEMINI_API_KEY` (required)
+   - `GROQ_API_KEY` (required)
    - `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` (if using Neo4j)
 
 4. (Optional) Load the knowledge graph:
