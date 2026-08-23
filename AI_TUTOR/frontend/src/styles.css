@@ -177,6 +177,31 @@ body {
   font-size: 12px;
 }
 
+.cot {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.cot summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.cot ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.cot li {
+  margin-bottom: 4px;
+}
+
+.cot .caption {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .debug pre {
   max-height: 320px;
   overflow: auto;

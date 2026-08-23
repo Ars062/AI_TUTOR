@@ -2,12 +2,52 @@ import { useEffect, useRef, useState } from "react";
 
 const GREETING = "Hello! What would you like to learn today?";
 
+function CotVisualizer({ debug }) {
+  const steps = debug?.cot_steps || [];
+  const validation = debug?.cot_validation || {};
+  if (!steps.length) return null;
+  const perStep = {};
+  for (const p of validation.per_step || []) perStep[p.label] = p;
+  const pct = Math.round((validation.grounded_fraction ?? 0) * 100);
+  return (
+    <details className="cot">
+      <summary>
+        CoT Visualizer ({steps.length} steps
+        {validation.validated ? `, ${pct}% KG-grounded` : ""})
+      </summary>
+      <ul>
+        {steps.map((s) => {
+          const v = perStep[s.label];
+          return (
+            <li key={s.label}>
+              {v ? (v.grounded ? "✅" : "⚠️") : "•"}{" "}
+              <strong>{s.label}</strong>
+              {v?.matched?.length
+                ? ` — grounded in KG (${v.matched.slice(0, 6).join(", ")})`
+                : ""}
+            </li>
+          );
+        })}
+      </ul>
+      {validation.validated && (
+        <p className="caption">
+          KG grounding: {pct}% of steps reference the knowledge graph.
+          {validation.ungrounded_steps?.length
+            ? ` Not grounded: ${validation.ungrounded_steps.join(", ")}`
+            : ""}
+        </p>
+      )}
+    </details>
+  );
+}
+
 export default function App() {
   const [messages, setMessages] = useState([
     { role: "tutor", text: GREETING, debug: null },
   ]);
   const [input, setInput] = useState("");
   const [useCot, setUseCot] = useState(true);
+  const [showCot, setShowCot] = useState(true);
   const [showDebug, setShowDebug] = useState(false);
   const [learnerLevel, setLearnerLevel] = useState("beginner");
   const [busy, setBusy] = useState(false);
@@ -65,6 +105,14 @@ export default function App() {
 
         <section className="panel">
           <h2>Settings</h2>
+          <label className="row">
+            <input
+              type="checkbox"
+              checked={showCot}
+              onChange={(e) => setShowCot(e.target.checked)}
+            />
+            Show Chain-of-Thought
+          </label>
           <label className="row">
             <input
               type="checkbox"
@@ -132,6 +180,9 @@ export default function App() {
           {messages.map((msg, i) => (
             <div key={i} className={`bubble ${msg.role}`}>
               <div className="text">{msg.text}</div>
+              {msg.role === "tutor" && showCot && (
+                <CotVisualizer debug={msg.debug} />
+              )}
               {msg.role === "tutor" && showDebug && msg.debug && (
                 <details className="debug">
                   <summary>Debug Info</summary>
