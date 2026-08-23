@@ -100,6 +100,10 @@ function CotVisualizer({ debug }) {
   );
 }
 
+function cleanForSpeech(text) {
+  return text.replace(/[*#`>|_]/g, " ").replace(/\s+/g, " ").trim();
+}
+
 export default function App() {
   const [messages, setMessages] = useState([
     { role: "tutor", text: GREETING, debug: null },
@@ -113,8 +117,24 @@ export default function App() {
   const [health, setHealth] = useState(null);
   const [view, setView] = useState("chat");
   const [recording, setRecording] = useState(false);
+  const [autoSpeak, setAutoSpeak] = useState(false);
   const recorderRef = useRef(null);
   const bottomRef = useRef(null);
+
+  async function speak(text) {
+    try {
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: cleanForSpeech(text).slice(0, 2000) }),
+      });
+      if (!res.ok) return;
+      const blob = await res.blob();
+      new Audio(URL.createObjectURL(blob)).play();
+    } catch {
+      /* audio unavailable - stay silent */
+    }
+  }
 
   useEffect(() => {
     fetch("/api/health")
@@ -145,10 +165,12 @@ export default function App() {
         }),
       });
       const data = await res.json();
+      const answer = data.answer || "Error";
       setMessages((m) => [
         ...m,
-        { role: "tutor", text: data.answer || "Error", debug: data.debug },
+        { role: "tutor", text: answer, debug: data.debug },
       ]);
+      if (autoSpeak && data.answer) speak(answer);
     } catch (err) {
       setMessages((m) => [
         ...m,
@@ -247,6 +269,14 @@ export default function App() {
             Show debug info
           </label>
           <label className="row">
+            <input
+              type="checkbox"
+              checked={autoSpeak}
+              onChange={(e) => setAutoSpeak(e.target.checked)}
+            />
+            Speak answers (TTS)
+          </label>
+          <label className="row">
             Learner level
             <select
               value={learnerLevel}
@@ -297,6 +327,17 @@ export default function App() {
         <div className="messages">
           {messages.map((msg, i) => (
             <div key={i} className={`bubble ${msg.role}`}>
+              {msg.role === "tutor" && msg.text !== GREETING && (
+                <div className="bubble-actions">
+                  <button
+                    className="speak-btn"
+                    title="Hear this answer"
+                    onClick={() => speak(msg.text)}
+                  >
+                    🔊
+                  </button>
+                </div>
+              )}
               <div className="text">{msg.text}</div>
               {msg.role === "tutor" && showCot && (
                 <CotVisualizer debug={msg.debug} />

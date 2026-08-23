@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
 from src.rag.embed_documents import load_index
@@ -22,6 +23,7 @@ from src.tutor.tutor_engine import ask_tutor, get_memory
 from src.prompts.prompt_builder import LEARNER_LEVELS
 from backend.realtime import router as realtime_router
 from realtime.stt import transcribe_file
+from realtime.tts import synthesize as tts_synthesize
 
 app = FastAPI(title="AI Tutor Backend", version="2.0")
 
@@ -52,6 +54,10 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     answer: str
     debug: dict
+
+
+class SpeakRequest(BaseModel):
+    text: str = Field(min_length=1)
 
 
 @app.on_event("startup")
@@ -103,3 +109,12 @@ async def speech_to_text(file: UploadFile = File(...)):
         return {"text": transcribe_file(path)}
     finally:
         os.unlink(path)
+
+
+@app.post("/api/tts")
+async def text_to_speech(req: SpeakRequest):
+    """Milestone 4: answer text -> spoken WAV (offline voice)."""
+    wav = await tts_synthesize(req.text[:2000])
+    if not wav:
+        return Response(status_code=500)
+    return Response(content=wav, media_type="audio/wav")

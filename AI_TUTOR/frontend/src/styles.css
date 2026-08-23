@@ -173,6 +173,26 @@ body {
   line-height: 1.55;
   white-space: pre-wrap;
   word-wrap: break-word;
+  position: relative;
+}
+
+.bubble-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+.speak-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.speak-btn:hover {
+  opacity: 1;
 }
 
 .bubble.user {
