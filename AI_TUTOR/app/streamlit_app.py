@@ -119,6 +119,7 @@ with st.sidebar:
     show_cot = st.checkbox("Show Chain-of-Thought", value=True)
     use_cot = st.checkbox("Chain-of-Thought reasoning", value=True)
     show_debug = st.checkbox("Show debug info", value=False)
+    learner_level = st.selectbox("Learner level", ["Beginner", "Intermediate", "Advanced"]).lower()
 
     if st.button("Clear conversation"):
         from src.tutor.tutor_engine import clear_memory
@@ -132,6 +133,7 @@ with st.sidebar:
     st.text(f"FAISS index size: {st.session_state.index.ntotal}")
     from src.tutor.tutor_engine import get_memory
     mem = get_memory()
+    st.text(f"Learner level: {mem.student_level}")
     if mem.topics_covered:
         st.text(f"Topics covered: {', '.join(list(mem.topics_covered)[:5])}")
 
@@ -168,6 +170,7 @@ if question and question.strip():
                     filenames=st.session_state.filenames,
                     session_id="default",
                     use_cot=use_cot,
+                    learner_level=learner_level,
                 )
                 _render_assistant_message(answer, debug_info, show_cot)
 

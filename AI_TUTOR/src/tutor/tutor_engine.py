@@ -5,7 +5,7 @@ from groq import Groq
 from dotenv import load_dotenv
 
 from src.rag.hybrid_retriever import hybrid_retrieve
-from src.prompts.prompt_builder import build_prompt, build_cot_prompt, build_ensemble_prompts
+from src.prompts.prompt_builder import build_prompt, build_cot_prompt, build_ensemble_prompts, LEARNER_LEVELS
 from src.evaluation.evaluation_metrics import extract_cot_steps, validate_cot_steps_against_kg
 from src.config import GROQ_API_KEY, LLM_MODEL, USE_ENSEMBLE, MAX_HISTORY
 
@@ -102,7 +102,7 @@ def _parse_retry_seconds(msg):
     return 30
 
 
-def ask_tutor(question, index, documents, filenames=None, session_id="default", use_cot=True, use_kg=True):
+def ask_tutor(question, index, documents, filenames=None, session_id="default", use_cot=True, use_kg=True, learner_level=None):
     from src.config import ENABLE_CONTENT_SAFETY
 
     if ENABLE_CONTENT_SAFETY and _is_unsafe(question):
@@ -112,6 +112,8 @@ def ask_tutor(question, index, documents, filenames=None, session_id="default", 
         return refusal, {"content_safety": "blocked", "memory": _get_memory(session_id).to_dict()}
 
     memory = _get_memory(session_id)
+    if learner_level and str(learner_level).strip().lower() in LEARNER_LEVELS:
+        memory.student_level = str(learner_level).strip().lower()
 
     retrieval = hybrid_retrieve(question, index, documents, use_kg=use_kg)
 
@@ -121,12 +123,14 @@ def ask_tutor(question, index, documents, filenames=None, session_id="default", 
             kg_context=retrieval["kg_context"],
             doc_context=retrieval["doc_context"],
             kg_guided_docs=retrieval["kg_guided_docs"],
+            learner_level=memory.student_level,
         )
     else:
         prompt = build_prompt(
             question=question,
             kg_context=retrieval["kg_context"],
             doc_context=retrieval["doc_context"],
+            learner_level=memory.student_level,
         )
         prompt += (
             "\n\n## Response Style\n"

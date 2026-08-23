@@ -30,9 +30,42 @@ def _s2a_filter(question):
     return cleaned
 
 
-def build_prompt(question, kg_context, doc_context, cot_steps=None):
+LEARNER_LEVELS = ("beginner", "intermediate", "advanced")
+
+_LEVEL_GUIDES = {
+    "beginner": (
+        "Assume no prior knowledge of this topic. Use simple language and everyday "
+        "analogies, define every technical term the first time it appears, and keep "
+        "each reasoning step short and friendly."
+    ),
+    "intermediate": (
+        "Assume basic computer-science familiarity. Balance intuition with correct "
+        "terminology, and briefly define only genuinely advanced terms."
+    ),
+    "advanced": (
+        "Assume a solid CS background. Skip elementary definitions, go deeper into "
+        "underlying mechanics, edge cases, correctness arguments and complexity "
+        "analysis, using precise terminology throughout."
+    ),
+}
+
+
+def _level_block(learner_level):
+    """Adaptive-depth directive per proposal 4.2 ('vary CoT length and detail
+    based on learner level'). Returns '' for unknown/absent levels."""
+    if not learner_level:
+        return ""
+    key = str(learner_level).strip().lower()
+    guide = _LEVEL_GUIDES.get(key)
+    if not guide:
+        return ""
+    return f"\n## Learner Level: {key.capitalize()}\n{guide}\n"
+
+
+def build_prompt(question, kg_context, doc_context, cot_steps=None, learner_level=None):
     qtype = _classify_question(question)
     cleaned_q = _s2a_filter(question)
+    level = _level_block(learner_level)
 
     cot_instruction = ""
     if cot_steps:
@@ -68,8 +101,8 @@ Please think step-by-step and show your reasoning clearly. Break down your answe
 
 ## Question Type: {qtype.capitalize()}
 {guide}
-
-## Student Question
+{level}
+## Question
 {cleaned_q}
 
 ## Instructions
@@ -109,8 +142,9 @@ First, identify what the student needs to know. Then explain it clearly with exa
     return [base, prompt_v2, prompt_v3]
 
 
-def build_cot_prompt(question, kg_context, doc_context, kg_guided_docs=None):
+def build_cot_prompt(question, kg_context, doc_context, kg_guided_docs=None, learner_level=None):
     cleaned_q = _s2a_filter(question)
+    level = _level_block(learner_level)
 
     extra_context = ""
     if kg_guided_docs:
@@ -127,7 +161,7 @@ def build_cot_prompt(question, kg_context, doc_context, kg_guided_docs=None):
 
 ## Question
 {cleaned_q}
-
+{level}
 ## Style Rule
 Address the learner directly using "you". NEVER refer to "the student" in your answer.
 
