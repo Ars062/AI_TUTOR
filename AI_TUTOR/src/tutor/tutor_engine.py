@@ -128,6 +128,11 @@ def ask_tutor(question, index, documents, filenames=None, session_id="default", 
             kg_context=retrieval["kg_context"],
             doc_context=retrieval["doc_context"],
         )
+        prompt += (
+            "\n\n## Response Style\n"
+            "Answer the student directly and concisely in a short paragraph. "
+            "Do NOT write step-by-step sections, numbered procedures, or tables."
+        )
 
     conv_context = memory.get_context()
     if conv_context:
