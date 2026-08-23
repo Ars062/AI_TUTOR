@@ -139,7 +139,10 @@ if question and question.strip():
 
                 cot_steps = (debug_info or {}).get("cot_steps") or []
                 if show_cot and (cot_steps or reasoning_text):
-                    with st.expander(f"Chain-of-Thought ({len(cot_steps) if cot_steps else '?'} steps)"):
+                    with st.expander(
+                        f"Chain-of-Thought ({len(cot_steps) if cot_steps else '?'} steps)",
+                        expanded=bool(reasoning_text),
+                    ):
                         if reasoning_text:
                             st.markdown(reasoning_text)
                         elif cot_steps:
