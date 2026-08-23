@@ -16,6 +16,29 @@ import time
 _FEEDBACK_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "evaluation", "feedback.jsonl")
 
 
+def _split_final(answer):
+    """Split model output into (reasoning_steps_text, clean_final_answer).
+
+    Chat shows only the clean final answer; the CoT expander holds the
+    reasoning trace so the two never duplicate each other."""
+    marker = None
+    lowered = answer.lower()
+    for m in ["## final answer", "### final answer", "**final answer", "final answer:"]:
+        idx = lowered.rfind(m)
+        if idx != -1:
+            marker = idx
+            break
+    if marker is None:
+        return answer, ""
+    reasoning = answer[:marker].strip()
+    final = answer[marker:].strip()
+    for m in ["## final answer", "### final answer"]:
+        if final.lower().startswith(m):
+            final = final[len(m):].lstrip(" #:").strip()
+            break
+    return reasoning, final
+
+
 def _log_feedback(question, answer, rating, debug_info):
     debug_info = debug_info or {}
     record = {
@@ -111,15 +134,19 @@ if question and question.strip():
                     session_id="default",
                     use_cot=use_cot,
                 )
-                st.markdown(answer)
+                reasoning_text, final_answer = _split_final(answer)
+                st.markdown(final_answer or answer)
 
                 cot_steps = (debug_info or {}).get("cot_steps") or []
-                if show_cot and cot_steps:
-                    with st.expander(f"Chain-of-Thought ({len(cot_steps)} steps)"):
-                        for s in cot_steps:
-                            label = s["label"].removeprefix("**").removesuffix("**")
-                            st.markdown(f"### {label}")
-                            st.markdown(s["text"])
+                if show_cot and (cot_steps or reasoning_text):
+                    with st.expander(f"Chain-of-Thought ({len(cot_steps) if cot_steps else '?'} steps)"):
+                        if reasoning_text:
+                            st.markdown(reasoning_text)
+                        elif cot_steps:
+                            for s in cot_steps:
+                                label = s["label"].removeprefix("**").removesuffix("**")
+                                st.markdown(f"### {label}")
+                                st.markdown(s["text"])
                         validation = (debug_info or {}).get("cot_validation") or {}
                         if validation.get("validated"):
                             st.caption(
