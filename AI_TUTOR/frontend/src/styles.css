@@ -125,6 +125,22 @@ body {
   color: var(--muted);
 }
 
+.upload-btn {
+  width: 100%;
+  padding: 8px;
+  background: var(--accent-soft);
+  color: var(--text);
+  border: 1px dashed var(--accent);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ---------- chat area ---------- */
 .chat {
   display: flex;

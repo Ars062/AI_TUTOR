@@ -4,6 +4,61 @@ import "@livekit/components-styles";
 
 const GREETING = "Hello! What would you like to learn today?";
 
+function cleanForSpeech(text) {
+  return text.replace(/[*#`>|_]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function UploadPanel() {
+  const [uploading, setUploading] = useState(false);
+  const [result, setResult] = useState(null);
+  const inputRef = useRef(null);
+
+  async function handleUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setResult(null);
+    const form = new FormData();
+    form.append("file", file);
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      const data = await res.json();
+      setResult(data);
+    } catch (err) {
+      setResult({ error: String(err) });
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".pdf,.txt,.md"
+        onChange={handleUpload}
+        style={{ display: "none" }}
+      />
+      <button
+        className="upload-btn"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+      >
+        {uploading ? "Uploading…" : "📄 Upload PDF / TXT"}
+      </button>
+      {result && (
+        <p className="note">
+          {result.error
+            ? `Error: ${result.error}`
+            : `✅ ${result.chunks} chunks added (${result.total_docs} total)`}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function LiveSession() {
   const [identity] = useState(
     () => "student-" + Math.random().toString(36).slice(2, 7)
@@ -100,10 +155,6 @@ function CotVisualizer({ debug }) {
   );
 }
 
-function cleanForSpeech(text) {
-  return text.replace(/[*#`>|_]/g, " ").replace(/\s+/g, " ").trim();
-}
-
 export default function App() {
   const [messages, setMessages] = useState([
     { role: "tutor", text: GREETING, debug: null },
@@ -118,8 +169,42 @@ export default function App() {
   const [view, setView] = useState("chat");
   const [recording, setRecording] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(false);
+  const [visionOn, setVisionOn] = useState(false);
+  const [lastVision, setLastVision] = useState("");
   const recorderRef = useRef(null);
+  const videoRef = useRef(null);
   const bottomRef = useRef(null);
+
+  useEffect(() => {
+    if (!visionOn) return;
+    let stream, interval;
+    async function start() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        if (videoRef.current) videoRef.current.srcObject = stream;
+        interval = setInterval(() => {
+          if (!videoRef.current) return;
+          const canvas = document.createElement("canvas");
+          canvas.width = videoRef.current.videoWidth || 320;
+          canvas.height = videoRef.current.videoHeight || 240;
+          canvas.getContext("2d").drawImage(videoRef.current, 0, 0);
+          const b64 = canvas.toDataURL("image/jpeg", 0.6).split(",")[1];
+          const desc = `User webcam captured at ${new Date().toLocaleTimeString()}`;
+          setLastVision(desc);
+          fetch("/api/vision", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ description: desc, confidence: 0.8, frame_b64: b64 }),
+          }).catch(() => {});
+        }, 3000);
+      } catch {}
+    }
+    start();
+    return () => {
+      clearInterval(interval);
+      stream?.getTracks().forEach((t) => t.stop());
+    };
+  }, [visionOn]);
 
   async function speak(text) {
     try {
@@ -277,6 +362,19 @@ export default function App() {
             Speak answers (TTS)
           </label>
           <label className="row">
+            <input
+              type="checkbox"
+              checked={visionOn}
+              onChange={(e) => setVisionOn(e.target.checked)}
+            />
+            📷 Enable vision (webcam)
+          </label>
+          {visionOn && (
+            <p className="note">
+              {lastVision || "Capturing frames every 3s…"}
+            </p>
+          )}
+          <label className="row">
             Learner level
             <select
               value={learnerLevel}
@@ -303,6 +401,11 @@ export default function App() {
             <span>Learner level</span>
             <span>{health ? health.learner_level : "…"}</span>
           </div>
+        </section>
+
+        <section className="panel">
+          <h2>Knowledge Upload</h2>
+          <UploadPanel />
         </section>
 
         <section className="panel">
@@ -374,6 +477,7 @@ export default function App() {
             Send
           </button>
         </form>
+        <video ref={videoRef} autoPlay muted playsInline style={{ display: "none" }} />
         </main>
       ) : (
         <LiveSession />
