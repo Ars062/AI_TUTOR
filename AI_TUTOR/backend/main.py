@@ -9,10 +9,11 @@ outputs around the same `ask_tutor` call.
 """
 import os
 import sys
+import tempfile
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -20,6 +21,7 @@ from src.rag.embed_documents import load_index
 from src.tutor.tutor_engine import ask_tutor, get_memory
 from src.prompts.prompt_builder import LEARNER_LEVELS
 from backend.realtime import router as realtime_router
+from realtime.stt import transcribe_file
 
 app = FastAPI(title="AI Tutor Backend", version="2.0")
 
@@ -85,3 +87,19 @@ def chat(req: ChatRequest):
         learner_level=req.learner_level,
     )
     return {"answer": answer, "debug": debug}
+
+
+@app.post("/api/stt")
+async def speech_to_text(file: UploadFile = File(...)):
+    """Milestone 2: mic audio -> faster-whisper -> transcript text."""
+    ext = os.path.splitext(file.filename or "audio.webm")[1] or ".webm"
+    data = await file.read()
+    if not data:
+        return {"text": ""}
+    fd, path = tempfile.mkstemp(suffix=ext)
+    try:
+        with os.fdopen(fd, "wb") as f:
+            f.write(data)
+        return {"text": transcribe_file(path)}
+    finally:
+        os.unlink(path)

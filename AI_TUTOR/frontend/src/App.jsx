@@ -112,6 +112,8 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [health, setHealth] = useState(null);
   const [view, setView] = useState("chat");
+  const [recording, setRecording] = useState(false);
+  const recorderRef = useRef(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -155,6 +157,43 @@ export default function App() {
     } finally {
       setBusy(false);
     }
+  }
+
+  async function toggleRecord() {
+    if (recording) {
+      recorderRef.current?.stop();
+      return;
+    }
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch {
+      alert("Microphone permission denied.");
+      return;
+    }
+    const chunks = [];
+    const rec = new MediaRecorder(stream);
+    rec.ondataavailable = (e) => chunks.push(e.data);
+    rec.onstop = async () => {
+      stream.getTracks().forEach((t) => t.stop());
+      setRecording(false);
+      const blob = new Blob(chunks, { type: rec.mimeType || "audio/webm" });
+      const form = new FormData();
+      form.append("file", blob, "speech.webm");
+      setBusy(true);
+      try {
+        const res = await fetch("/api/stt", { method: "POST", body: form });
+        const data = await res.json();
+        if (data.text) {
+          setInput((v) => (v ? v + " " : "") + data.text);
+        }
+      } finally {
+        setBusy(false);
+      }
+    };
+    rec.start();
+    recorderRef.current = rec;
+    setRecording(true);
   }
 
   return (
@@ -275,6 +314,15 @@ export default function App() {
         </div>
 
         <form className="composer" onSubmit={send}>
+          <button
+            type="button"
+            className={recording ? "mic recording" : "mic"}
+            onClick={toggleRecord}
+            disabled={busy}
+            title={recording ? "Stop recording" : "Speak your question"}
+          >
+            {recording ? "⏹" : "🎤"}
+          </button>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}

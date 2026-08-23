@@ -272,6 +272,28 @@ body {
   cursor: not-allowed;
 }
 
+.composer .mic {
+  width: 48px;
+  padding: 12px 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.composer .mic.recording {
+  background: #b3261e;
+  border-color: #b3261e;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
 /* ---------- live room ---------- */
 .live-join {
   display: flex;
