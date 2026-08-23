@@ -1,6 +1,65 @@
 import { useEffect, useRef, useState } from "react";
+import { LiveKitRoom, VideoConference } from "@livekit/components-react";
+import "@livekit/components-styles";
 
 const GREETING = "Hello! What would you like to learn today?";
+
+function LiveSession() {
+  const [identity] = useState(
+    () => "student-" + Math.random().toString(36).slice(2, 7)
+  );
+  const [conn, setConn] = useState(null);
+  const [error, setError] = useState("");
+
+  async function connect() {
+    setError("");
+    try {
+      const res = await fetch("/api/session/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identity, room: "tutor-room" }),
+      });
+      if (!res.ok) throw new Error(`token request failed (${res.status})`);
+      setConn(await res.json());
+    } catch (err) {
+      setError(String(err));
+    }
+  }
+
+  if (!conn) {
+    return (
+      <main className="live-join">
+        <div className="avatar-face big">🧑‍🏫</div>
+        <h2>Live tutoring room</h2>
+        <p>
+          Identity: <strong>{identity}</strong> · Room: <strong>tutor-room</strong>
+        </p>
+        <button onClick={connect}>🎙️ Join (mic + camera)</button>
+        <p className="note">
+          The browser will ask for microphone and camera permission. Milestone
+          1 verifies the realtime connection; the AI avatar joins this same
+          room in a later phase.
+        </p>
+        {error && <p className="note error">{error}</p>}
+      </main>
+    );
+  }
+
+  return (
+    <main className="live-room">
+      <LiveKitRoom
+        serverUrl={conn.url}
+        token={conn.token}
+        connect
+        audio
+        video
+        style={{ height: "100%", width: "100%" }}
+      >
+        <VideoConference />
+      </LiveKitRoom>
+    </main>
+  );
+}
 
 function CotVisualizer({ debug }) {
   const steps = debug?.cot_steps || [];
@@ -52,6 +111,7 @@ export default function App() {
   const [learnerLevel, setLearnerLevel] = useState("beginner");
   const [busy, setBusy] = useState(false);
   const [health, setHealth] = useState(null);
+  const [view, setView] = useState("chat");
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -102,6 +162,24 @@ export default function App() {
       <aside className="sidebar">
         <h1>AI Tutor</h1>
         <p className="tagline">Knowledge-Grounded + Chain-of-Thought Tutoring</p>
+
+        <section className="panel">
+          <h2>Interface</h2>
+          <div className="tabs">
+            <button
+              className={view === "chat" ? "tab active" : "tab"}
+              onClick={() => setView("chat")}
+            >
+              💬 Text Chat
+            </button>
+            <button
+              className={view === "room" ? "tab active" : "tab"}
+              onClick={() => setView("room")}
+            >
+              🎥 Live Room
+            </button>
+          </div>
+        </section>
 
         <section className="panel">
           <h2>Settings</h2>
@@ -170,8 +248,9 @@ export default function App() {
         </section>
       </aside>
 
-      <main className="chat">
-        <div className="avatar-banner">
+      {view === "chat" ? (
+        <main className="chat">
+          <div className="avatar-banner">
           <div className="avatar-face">🧑‍🏫</div>
           <p>{GREETING}</p>
         </div>
@@ -206,7 +285,10 @@ export default function App() {
             Send
           </button>
         </form>
-      </main>
+        </main>
+      ) : (
+        <LiveSession />
+      )}
     </div>
   );
 }

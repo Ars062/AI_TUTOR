@@ -17,3 +17,5 @@ frontend/dist/
 *.pth
 *.onnx
 *.safetensors
+tools/
+frontend/node_modules_bak/

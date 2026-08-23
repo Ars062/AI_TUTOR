@@ -19,8 +19,11 @@ from pydantic import BaseModel, Field
 from src.rag.embed_documents import load_index
 from src.tutor.tutor_engine import ask_tutor, get_memory
 from src.prompts.prompt_builder import LEARNER_LEVELS
+from backend.realtime import router as realtime_router
 
 app = FastAPI(title="AI Tutor Backend", version="2.0")
+
+app.include_router(realtime_router)
 
 app.add_middleware(
     CORSMiddleware,

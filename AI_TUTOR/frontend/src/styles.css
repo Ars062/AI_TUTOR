@@ -58,6 +58,28 @@ body {
   color: var(--muted);
 }
 
+.tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px 6px;
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.tab.active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
 .row {
   display: flex;
   align-items: center;
@@ -248,4 +270,39 @@ body {
 .composer button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+/* ---------- live room ---------- */
+.live-join {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 40px;
+}
+
+.live-join .big {
+  width: 96px;
+  height: 96px;
+  font-size: 52px;
+}
+
+.live-join button {
+  padding: 12px 26px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.live-join .error {
+  color: #ff7b7b;
+}
+
+.live-room {
+  height: 100vh;
 }

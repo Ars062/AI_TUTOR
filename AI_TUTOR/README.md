@@ -30,6 +30,21 @@ cd frontend && npm install && npm run dev
 
 GPU rule: everything above runs on CPU; only realtime avatar inference (LiveTalking/MuseTalk) needs an NVIDIA GPU later.
 
+### Milestone 1 — Live realtime room (done)
+
+Browser connects over WebRTC through a self-hosted [LiveKit](https://github.com/livekit/livekit-server) server:
+
+```bash
+# terminal 3 - realtime media server (or use docker compose up livekit)
+tools\livekit\livekit-server.exe --dev
+```
+
+In the web UI, switch the sidebar to **🎥 Live Room → Join**. Grant mic/camera
+permissions; your stream publishes into the `tutor-room`. Session tokens are
+issued server-side by `POST /api/session/token` so LiveKit secrets never
+reach the browser. Later milestones attach STT/vision/avatar participants to
+the same room.
+
 ## Architecture
 
 ```
