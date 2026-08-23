@@ -4,7 +4,7 @@ A knowledge-grounded, chain-of-thought AI tutoring system built with Groq (gpt-o
 
 ## Demo
 
-Watch the full walkthrough: **[AI Tutor Demo Video](https://drive.google.com/file/d/1NQ0cUV9mRu-4I7QimHJu6_ES6BcyN2ZM/view?usp=sharing)**
+Watch the full walkthrough: **[AI Tutor Demo Video](https://drive.google.com/file/d/1nVzWK7juqBpJq6PGKZ3S71qMdaXFhziV/view?usp=sharing)**
 
 ## Architecture
 
