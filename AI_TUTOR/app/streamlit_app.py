@@ -135,13 +135,6 @@ with st.sidebar:
     if mem.topics_covered:
         st.text(f"Topics covered: {', '.join(list(mem.topics_covered)[:5])}")
 
-    st.divider()
-    st.subheader("Quick Questions")
-    if st.button("What is recursion?"):
-        st.session_state.input_question = "What is recursion?"
-    if st.button("Explain binary search"):
-        st.session_state.input_question = "Explain binary search"
-
 question = st.chat_input("Ask a question about computer science...")
 
 if "input_question" in st.session_state:

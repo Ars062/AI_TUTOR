@@ -75,7 +75,7 @@ Please think step-by-step and show your reasoning clearly. Break down your answe
 ## Instructions
 - Base your answer on the provided context.
 - If the context is insufficient, state what additional information would be needed.
-- Use clear, educational language appropriate for a student.
+- Use clear, educational language and address the learner directly as "you"; never refer to "the student".
 - {cot_instruction.strip()}
 """
 
@@ -125,17 +125,20 @@ def build_cot_prompt(question, kg_context, doc_context, kg_guided_docs=None):
 {doc_context if doc_context else "(No document context available)"}
 {extra_context}
 
-## Student Question
+## Question
 {cleaned_q}
+
+## Style Rule
+Address the learner directly using "you". NEVER refer to "the student" in your answer.
 
 ## Chain-of-Thought Instructions
 Please work through this problem step by step:
 
-Step 1 - Understand: Restate the question in your own words and identify what the student needs to know.
-Step 2 - Recall: List the relevant concepts, definitions, or procedures from the provided knowledge.
+Step 1 - Understand: Restate the question in your own words and identify what needs to be explained.
+Step 2 - Recall: List the relevant concepts, definitions, or procedures from the provided knowledge. Present them as a markdown table with EXACTLY two columns and header row "| Concept | What it means |", one concept per row.
 Step 3 - Reason: Apply the concepts to answer the question, showing your work.
 Step 4 - Verify: Check your answer against the knowledge graph and documents for accuracy.
-Step 5 - Conclude: Present the final answer clearly and concisely, summarizing the key points the student needs to understand.
+Step 5 - Conclude: Present the final answer clearly and concisely, summarizing the key points you need to understand.
 """
 
     return prompt
