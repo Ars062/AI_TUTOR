@@ -139,6 +139,11 @@ if question and question.strip():
                 if show_debug:
                     with st.expander("Debug Info"):
                         debug_display = {
+                            "kg_facts": [
+                                line
+                                for line in (debug_info.get("kg_context") or "").splitlines()
+                                if line.strip()
+                            ][:12],
                             "kg_context_length": len(debug_info["kg_context"]),
                             "doc_context_length": len(debug_info["doc_context"]),
                             "kg_guided_docs_length": len(debug_info["kg_guided_docs"]),
