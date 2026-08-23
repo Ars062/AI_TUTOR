@@ -7,3 +7,5 @@ streamlit
 pandas
 numpy
 requests
+fastapi
+uvicorn[standard]

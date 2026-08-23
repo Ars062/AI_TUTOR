@@ -6,6 +6,30 @@ A knowledge-grounded, chain-of-thought AI tutoring system built with Groq (gpt-o
 
 Watch the full walkthrough: **[AI Tutor Demo Video](https://drive.google.com/file/d/1nVzWK7juqBpJq6PGKZ3S71qMdaXFhziV/view?usp=sharing)**
 
+## Multimodal v2 (`multimodal` branch)
+
+The KG-RAG research core in `src/` is unchanged. New presentation layers are built around it:
+
+```text
+frontend/   React (Vite) chat UI          <- replaces Streamlit
+backend/    FastAPI wrapper around ask_tutor
+realtime/   Phase 2+: Pipecat + LiveKit, faster-whisper STT, TTS, vision
+avatar/     GPU machine only: LiveTalking + MuseTalk lip-sync adapter
+```
+
+Run the v2 stack locally:
+
+```bash
+# terminal 1 - API server
+.venv\Scripts\python.exe -m uvicorn backend.main:app --port 8000
+
+# terminal 2 - web UI
+cd frontend && npm install && npm run dev
+# open http://localhost:5173
+```
+
+GPU rule: everything above runs on CPU; only realtime avatar inference (LiveTalking/MuseTalk) needs an NVIDIA GPU later.
+
 ## Architecture
 
 ```
