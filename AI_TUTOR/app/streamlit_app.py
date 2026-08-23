@@ -10,16 +10,19 @@ st.set_page_config(page_title="AI Tutor", layout="wide")
 st.markdown(
     """
     <style>
-    .stMarkdown table { border-collapse: collapse; margin: 8px 0; }
-    .stMarkdown th {
-        background: rgba(120, 140, 180, 0.25);
-        border: 1px solid rgba(128, 140, 160, 0.6);
-        padding: 6px 12px; text-align: left;
+    .stMarkdown table, [data-testid="stMarkdownContainer"] table {
+        border-collapse: collapse; margin: 8px 0;
     }
-    .stMarkdown td {
-        background: rgba(128, 140, 160, 0.08);
-        border: 1px solid rgba(128, 140, 160, 0.5);
-        padding: 6px 12px;
+    .stMarkdown th, [data-testid="stMarkdownContainer"] th {
+        background: rgba(130, 150, 190, 0.35) !important;
+        border: 1px solid rgba(150, 160, 180, 0.9) !important;
+        padding: 6px 12px !important; text-align: left;
+    }
+    .stMarkdown td, [data-testid="stMarkdownContainer"] td {
+        background: rgba(130, 150, 190, 0.12) !important;
+        border: 1px solid rgba(150, 160, 180, 0.7) !important;
+        color: inherit !important;
+        padding: 6px 12px !important;
     }
     </style>
     """,
@@ -30,32 +33,67 @@ st.title("AI Tutor")
 st.caption("Knowledge-Grounded + Chain-of-Thought Tutoring System")
 
 import json
+import re
 import time
 
 _FEEDBACK_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "evaluation", "feedback.jsonl")
 
 
 def _split_final(answer):
-    """Split model output into (reasoning_steps_text, clean_final_answer).
+    """Split a CoT response into (reasoning_work, final_conclusion).
 
-    Chat shows only the clean final answer; the CoT expander holds the
-    reasoning trace so the two never duplicate each other."""
-    marker = None
-    lowered = answer.lower()
-    for m in ["## final answer", "### final answer", "**final answer", "final answer:"]:
-        idx = lowered.rfind(m)
-        if idx != -1:
-            marker = idx
-            break
-    if marker is None:
-        return answer, ""
-    reasoning = answer[:marker].strip()
-    final = answer[marker:].strip()
-    for m in ["## final answer", "### final answer"]:
-        if final.lower().startswith(m):
-            final = final[len(m):].lstrip(" #:").strip()
-            break
-    return reasoning, final
+    Model output has no separate 'Final Answer' header: per the CoT prompt
+    template the conclusion is the body of the last step ('Step 5 - Conclude').
+    So reuse the exact parser used everywhere else (evaluation_metrics).
+    Returns ("", full_answer) when no steps are found."""
+    try:
+        from src.evaluation.evaluation_metrics import extract_cot_steps
+        steps = extract_cot_steps(answer)
+    except Exception:
+        steps = []
+    if not steps:
+        return "", answer.strip()
+    m = re.search(r"(?m)^\s*\*{0,2}\s*Step\s+1\b", answer, re.IGNORECASE)
+    preamble = answer[: m.start()].strip() if m else ""
+    parts = [preamble] if preamble else []
+    parts += [f"**{s['label']}**\n\n{s['text']}" for s in steps[:-1]]
+    work = "\n\n".join(parts)
+    last = steps[-1]
+    final = last["text"].strip()
+    if not final:
+        # conclusion written inline on the label line ("Step 5 - Conclude: ...")
+        title = re.sub(r"(?i)^(conclude|conclusion|answer)\s*[:\-–]\s*", "", last["label"].removeprefix(f"Step {len(steps)} - "))
+        final = title.strip()
+    return work, final
+
+
+def _render_assistant_message(content, debug_info=None, show_cot=True):
+    """Single rendering path for assistant messages (live and history),
+    so reasoning and final answer never duplicate each other."""
+    work, final = _split_final(content)
+    st.markdown(final)
+
+    cot_steps = (debug_info or {}).get("cot_steps") or []
+    if show_cot and (work or cot_steps):
+        label = f"Chain-of-Thought ({len(cot_steps)} steps)" if cot_steps else "Chain-of-Thought"
+        with st.expander(label, expanded=bool(work)):
+            if work:
+                st.markdown(work)
+            elif cot_steps:
+                for s in cot_steps:
+                    st.markdown(f"### {s['label'].removeprefix('**').removesuffix('**')}")
+                    st.markdown(s["text"])
+            validation = (debug_info or {}).get("cot_validation") or {}
+            if validation.get("validated"):
+                st.caption(
+                    f"KG grounding: {validation['grounded_fraction']:.0%} of steps "
+                    f"reference the knowledge graph."
+                    + (
+                        f" Not grounded: {', '.join(validation['ungrounded_steps'])}"
+                        if validation["ungrounded_steps"]
+                        else ""
+                    )
+                )
 
 
 def _log_feedback(question, answer, rating, debug_info):
@@ -130,7 +168,10 @@ if "input_question" in st.session_state:
 
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+        if msg["role"] == "assistant":
+            _render_assistant_message(msg["content"], msg.get("debug"), show_cot)
+        else:
+            st.markdown(msg["content"])
         if msg.get("debug") and show_debug:
             with st.expander("Debug Info"):
                 st.json(msg["debug"])
@@ -153,33 +194,7 @@ if question and question.strip():
                     session_id="default",
                     use_cot=use_cot,
                 )
-                reasoning_text, final_answer = _split_final(answer)
-                st.markdown(final_answer or answer)
-
-                cot_steps = (debug_info or {}).get("cot_steps") or []
-                if show_cot and (cot_steps or reasoning_text):
-                    with st.expander(
-                        f"Chain-of-Thought ({len(cot_steps) if cot_steps else '?'} steps)",
-                        expanded=bool(reasoning_text),
-                    ):
-                        if reasoning_text:
-                            st.markdown(reasoning_text)
-                        elif cot_steps:
-                            for s in cot_steps:
-                                label = s["label"].removeprefix("**").removesuffix("**")
-                                st.markdown(f"### {label}")
-                                st.markdown(s["text"])
-                        validation = (debug_info or {}).get("cot_validation") or {}
-                        if validation.get("validated"):
-                            st.caption(
-                                f"KG grounding: {validation['grounded_fraction']:.0%} of steps "
-                                f"reference the knowledge graph."
-                                + (
-                                    f" Not grounded: {', '.join(validation['ungrounded_steps'])}"
-                                    if validation["ungrounded_steps"]
-                                    else ""
-                                )
-                            )
+                _render_assistant_message(answer, debug_info, show_cot)
 
                 rating = st.feedback("thumbs", key=f"rating_{len(st.session_state.messages)}")
                 if rating is not None:
