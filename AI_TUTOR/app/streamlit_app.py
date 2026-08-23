@@ -39,51 +39,33 @@ import time
 _FEEDBACK_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "evaluation", "feedback.jsonl")
 
 
-def _split_final(answer):
-    """Split a CoT response into (reasoning_work, final_conclusion).
-
-    Model output has no separate 'Final Answer' header: per the CoT prompt
-    template the conclusion is the body of the last step ('Step 5 - Conclude').
-    So reuse the exact parser used everywhere else (evaluation_metrics).
-    Returns ("", full_answer) when no steps are found."""
-    try:
-        from src.evaluation.evaluation_metrics import extract_cot_steps
-        steps = extract_cot_steps(answer)
-    except Exception:
-        steps = []
-    if not steps:
-        return "", answer.strip()
-    m = re.search(r"(?m)^\s*\*{0,2}\s*Step\s+1\b", answer, re.IGNORECASE)
-    preamble = answer[: m.start()].strip() if m else ""
-    parts = [preamble] if preamble else []
-    parts += [f"**{s['label']}**\n\n{s['text']}" for s in steps[:-1]]
-    work = "\n\n".join(parts)
-    last = steps[-1]
-    final = last["text"].strip()
-    if not final:
-        # conclusion written inline on the label line ("Step 5 - Conclude: ...")
-        title = re.sub(r"(?i)^(conclude|conclusion|answer)\s*[:\-–]\s*", "", last["label"].removeprefix(f"Step {len(steps)} - "))
-        final = title.strip()
-    return work, final
-
-
 def _render_assistant_message(content, debug_info=None, show_cot=True):
-    """Single rendering path for assistant messages (live and history),
-    so reasoning and final answer never duplicate each other."""
-    work, final = _split_final(content)
-    st.markdown(final)
+    """Render assistant messages per proposal section 4.2: the CoT response
+    is ONE inline answer - reasoning steps first, final conclusion last.
+    The CoT Visualizer expander implements the proposal's 'Planned
+    Enhancement': let students interactively inspect per-step KG grounding."""
+    st.markdown(content)
 
     cot_steps = (debug_info or {}).get("cot_steps") or []
-    if show_cot and (work or cot_steps):
-        label = f"Chain-of-Thought ({len(cot_steps)} steps)" if cot_steps else "Chain-of-Thought"
-        with st.expander(label, expanded=bool(work)):
-            if work:
-                st.markdown(work)
-            elif cot_steps:
-                for s in cot_steps:
-                    st.markdown(f"### {s['label'].removeprefix('**').removesuffix('**')}")
-                    st.markdown(s["text"])
-            validation = (debug_info or {}).get("cot_validation") or {}
+    validation = (debug_info or {}).get("cot_validation") or {}
+    if show_cot and cot_steps:
+        per_step = {p["label"]: p for p in validation.get("per_step", [])}
+        lines = []
+        for s in cot_steps:
+            v = per_step.get(s["label"])
+            if v is None:
+                lines.append(f"- **{s['label']}**")
+            elif v.get("grounded"):
+                matched = ", ".join(v.get("matched", [])[:6])
+                lines.append(f"- \u2705 **{s['label']}** — grounded in KG ({matched})")
+            else:
+                lines.append(f"- ⚠️ **{s['label']}** — not grounded in KG")
+        with st.expander(
+            f"CoT Visualizer ({len(cot_steps)} steps, "
+            f"{(validation.get('grounded_fraction') or 0):.0%} KG-grounded)",
+            expanded=False,
+        ):
+            st.markdown("\n".join(lines))
             if validation.get("validated"):
                 st.caption(
                     f"KG grounding: {validation['grounded_fraction']:.0%} of steps "
