@@ -1,12 +1,34 @@
+# === Core KG-RAG tutor ===
 groq
 python-dotenv
 neo4j
 sentence-transformers
 faiss-cpu
-streamlit
-pandas
-numpy
-requests
+pypdf
+
+# === Web framework ===
 fastapi
 uvicorn[standard]
+python-multipart
+
+# === Frontend build ===
+# (Node.js + npm handled separately, see frontend/package.json)
+
+# === Multimodal: STT / TTS / Vision / Realtime ===
 faster-whisper
+pyttsx3
+pywin32
+numpy
+Pillow
+
+# === Pipecat voice agent (LiveKit transport + pipeline) ===
+pipecat-ai[livekit]
+
+# === Database (optional, degrades gracefully) ===
+sqlalchemy
+# psycopg2-binary  # uncomment when PostgreSQL is available
+
+# === Streamlit UI (main branch) ===
+streamlit
+pandas
+requests

@@ -1,122 +1,139 @@
-# AI Tutor
+# AI Tutor — Multimodal Voice Chatbot
 
-A knowledge-grounded, chain-of-thought AI tutoring system built with Groq (gpt-oss-120b), Neo4j, FAISS, and Streamlit.
+Knowledge-grounded AI tutoring with real-time voice conversation.
 
-## Demo
+## What's Built (all working)
 
-Watch the full walkthrough: **[AI Tutor Demo Video](https://drive.google.com/file/d/1nVzWK7juqBpJq6PGKZ3S71qMdaXFhziV/view?usp=sharing)**
+| Feature | Status | How it works |
+|---------|--------|-------------|
+| **KG-RAG tutor** | ✅ | Neo4j + FAISS + Groq (gpt-oss-120b) |
+| **Chain-of-Thought** | ✅ | Steps-first, inline, §4.2 compliant |
+| **STT (speech→text)** | ✅ | faster-whisper (base, CPU, int8) |
+| **TTS (text→speech)** | ✅ | Windows System.Speech (offline) |
+| **LiveKit WebRTC** | ✅ | mic/camera room, server-issued tokens |
+| **Vision capture** | ✅ | webcam frames → visual context |
+| **RAG upload** | ✅ | PDF/TXT → chunk → embed → tutor learns |
+| **PostgreSQL memory** | ✅ | session persistence (optional, degrades gracefully) |
+| **Tools/function calling** | ✅ | get_current_time, calculate, search_kb |
+| **Pipecat voice agent** | ✅ | LiveKit + STT + KG-RAG + TTS pipeline |
+| **Streamlit UI** | ✅ | main branch, full KG-RAG interface |
+| **React frontend** | ✅ | chat + live room + upload + vision toggle |
 
-## Multimodal v2 (`multimodal` branch)
-
-The KG-RAG research core in `src/` is unchanged. New presentation layers are built around it:
-
-```text
-frontend/   React (Vite) chat UI          <- replaces Streamlit
-backend/    FastAPI wrapper around ask_tutor
-realtime/   Phase 2+: Pipecat + LiveKit, faster-whisper STT, TTS, vision
-avatar/     GPU machine only: LiveTalking + MuseTalk lip-sync adapter
-```
-
-Run the v2 stack locally:
-
-```bash
-# terminal 1 - API server
-.venv\Scripts\python.exe -m uvicorn backend.main:app --port 8000
-
-# terminal 2 - web UI
-cd frontend && npm install && npm run dev
-# open http://localhost:5173
-```
-
-GPU rule: everything above runs on CPU; only realtime avatar inference (LiveTalking/MuseTalk) needs an NVIDIA GPU later.
-
-### Milestone 1 — Live realtime room (done)
-
-Browser connects over WebRTC through a self-hosted [LiveKit](https://github.com/livekit/livekit-server) server:
+## Quick Start (CPU laptop)
 
 ```bash
-# terminal 3 - realtime media server (or use docker compose up livekit)
-tools\livekit\livekit-server.exe --dev
+# 1. Clone and setup
+git checkout multimodal
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+pip install -r requirements.txt
+
+# 2. Start services
+tools/livekit/livekit-server.exe --dev          # LiveKit on :7880
+python -m uvicorn backend.main:app --port 8000  # Backend on :8000
+cd frontend && npm install && npm run dev       # Frontend on :5173
+
+# 3. (Optional) Start the voice agent
+python -m realtime.agent --room tutor-room
+
+# 4. Open http://localhost:5173
 ```
 
-In the web UI, switch the sidebar to **🎥 Live Room → Join**. Grant mic/camera
-permissions; your stream publishes into the `tutor-room`. Session tokens are
-issued server-side by `POST /api/session/token` so LiveKit secrets never
-reach the browser. Later milestones attach STT/vision/avatar participants to
-the same room.
+## Quick Start (GPU laptop — avatar phase)
+
+Same as above, plus:
+```bash
+# Install MuseTalk / avatar pipeline (GPU-only)
+pip install musetalk   # or whatever avatar framework
+
+# Start with avatar enabled
+python -m realtime.agent --room tutor-room --avatar musetalk
+```
 
 ## Architecture
 
+```text
+┌─────────────────────────────────────────────────────┐
+│  React Frontend (:5173)                             │
+│  ├─ Chat view (text + mic + TTS + upload)           │
+│  └─ Live Room (LiveKit WebRTC mic/camera)           │
+└──────────────────────┬──────────────────────────────┘
+                       │ HTTP / WebSocket
+┌──────────────────────▼──────────────────────────────┐
+│  FastAPI Backend (:8000)                            │
+│  ├─ /api/chat     — KG-RAG Q&A                     │
+│  ├─ /api/stt      — speech → text                   │
+│  ├─ /api/tts      — text → speech                   │
+│  ├─ /api/upload   — document → FAISS                │
+│  ├─ /api/vision   — webcam frame context            │
+│  ├─ /api/tools    — function calling                │
+│  └─ /api/session/token — LiveKit JWT                │
+└──────────────────────┬──────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────┐
+│  KG-RAG Engine (unchanged from main branch)         │
+│  Neo4j (KG) + FAISS (vectors) + Groq (LLM)         │
+└─────────────────────────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────┐
+│  Pipecat Voice Agent (realtime/agent.py)            │
+│  LiveKit ←→ faster-whisper STT ←→ tutor ←→ TTS     │
+└─────────────────────────────────────────────────────┘
 ```
-Student Question
-       |
-Hybrid Retriever (KG + Vector Search)
-       |
-Prompt Builder (CoT + Ensemble + S2A)
-       |
-Groq LLM (gpt-oss-120b)
-       |
-Answer + Debug Info
-```
 
-### Components
-| Module | Purpose |
-|---|---|
-| `src/kg/` | Neo4j knowledge graph: load CSV triples, query by keyword/entity |
-| `src/rag/` | FAISS vector index: embed documents, search, hybrid KG-RAG retriever |
-| `src/prompts/` | Prompt engineering: CoT templates, ensemble prompts, S2A filtering |
-| `src/tutor/` | Orchestrator: conversation memory, ensemble aggregation |
-| `src/evaluation/` | Metrics: similarity, concept coverage, CoT analysis |
-| `app/` | Streamlit web UI with debug panel |
-
-## Setup
-
-1. Clone the repo
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Copy `.env.template` to `.env` and fill in:
-   - `GROQ_API_KEY` (required)
-   - `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` (if using Neo4j)
-
-4. (Optional) Load the knowledge graph:
-   ```python
-   from src.kg.kg_loader import load_kg
-   load_kg("data/knowledge_graph/knowledge_triples.csv")
-   ```
-
-5. Start Neo4j (optional but recommended for KG-RAG):
-   ```bash
-   C:\Users\akju0\.neo4j\start-neo4j.cmd
-   ```
-
-6. Run the app:
-   ```bash
-   run-app.cmd
-   ```
-   Or manually:
-   ```bash
-   streamlit run app/streamlit_app.py
-   ```
-
-## Configuration
-
-See `.env.template` for all config options:
-- `DOCUMENTS_DIR` — folder with `.txt`/`.md` documents
-- `FAISS_INDEX_PATH` — where to cache the vector index
-- `TOP_K_DOCS` — number of documents to retrieve (default: 5)
-- `KG_MAX_HOPS` — graph expansion depth (default: 2)
-- `USE_ENSEMBLE` — enable ensemble prompting (default: true)
-- `USE_S2A` — enable S2A context filtering (default: true)
-- `MAX_HISTORY` — conversation memory length (default: 10)
-
-## Testing
+## Config (.env)
 
 ```bash
-python tests/run_all.py
+cp .env.example .env
+# Fill in:
+GROQ_API_KEY=your_key
+NEO4J_PASSWORD=your_password
+# LiveKit defaults work for local dev (key=devkey, secret=secret)
 ```
 
-## Domain Data
+## File Map
 
-Add `.txt` or `.md` files to `data/documents/` and triples to `data/knowledge_graph/knowledge_triples.csv`.
+```
+AI_TUTOR/
+├── src/                        # KG-RAG engine (unchanged)
+│   ├── tutor/tutor_engine.py   # ask_tutor() — core
+│   ├── rag/                    # hybrid retrieval + FAISS
+│   ├── prompts/                # prompt templates + learner levels
+│   └── evaluation/             # CoT validation
+├── backend/
+│   ├── main.py                 # FastAPI app (all endpoints)
+│   ├── upload.py               # document upload + chunking
+│   ├── memory.py               # PostgreSQL session memory
+│   ├── tools.py                # function calling registry
+│   └── realtime.py             # LiveKit token generation
+├── realtime/
+│   ├── agent.py                # Pipecat voice agent ★
+│   ├── stt.py                  # faster-whisper STT
+│   ├── tts.py                  # Windows System.Speech TTS
+│   ├── vision.py               # webcam frame capture
+│   └── pipeline.py             # HTTP-based realtime (fallback)
+├── frontend/
+│   └── src/App.jsx             # React UI (chat + live room)
+├── app/streamlit_app.py        # Streamlit UI (main branch)
+├── tools/livekit/              # LiveKit server binary
+├── requirements.txt
+├── docker-compose.yml          # PostgreSQL + LiveKit containers
+└── .env.example
+```
+
+## What to do on the GPU laptop
+
+1. **Pull this branch** — all code is here
+2. **Install deps** — `pip install -r requirements.txt`
+3. **Start LiveKit + backend + frontend** — same as CPU
+4. **Add avatar** — plug in MuseTalk or LiveTalking
+   - Create `realtime/avatar.py` with a `AvatarProcessor(FrameProcessor)`
+   - Takes `OutputAudioRawFrame` + camera → generates lip-synced video
+   - Inserts into pipeline: `... → tts → avatar → transport.output(video)`
+5. **Upgrade TTS** — swap Windows SAPI for Piper/Coqui (neural voice)
+6. **Upgrade STT** — swap faster-whisper base for large-v3 (GPU)
+
+## Only remaining
+
+- 🎭 **Avatar (MuseTalk/LiveTalking)** — GPU only, plug in when ready
+- 🗣️ **Neural TTS** — Piper or Coqui on GPU (optional, SAPI works fine for demo)
