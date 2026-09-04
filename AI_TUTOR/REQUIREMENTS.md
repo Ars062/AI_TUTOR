@@ -88,7 +88,7 @@ Edit `.env` and fill in:
 # REQUIRED — get from https://console.groq.com/keys
 GROQ_API_KEY=gsk_your_key_here
 
-# Neo4j (optional — system works without it, just no knowledge graph)
+# REQUIRED — Neo4j password (set any password you want)
 NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
 NEO4J_PASSWORD=your_password
@@ -104,10 +104,11 @@ TTS_PROVIDER=sapi
 
 ---
 
-## 5. Neo4j (Optional but Recommended)
+## 5. Neo4j (REQUIRED — the Knowledge Graph)
 
-The tutor works WITHOUT Neo4j (FAISS vector search only), but KG grounding
-gives better answers. Two options:
+Neo4j is REQUIRED. The KG-RAG system uses Neo4j to store and query the
+knowledge graph of CS concepts. Without it, the tutor loses its knowledge
+grounding and becomes a basic RAG chatbot.
 
 ### Option A: Docker (recommended)
 ```bash
@@ -118,14 +119,21 @@ docker run -d --name neo4j \
   neo4j:5
 ```
 
-Then open http://localhost:7474 in browser, login, and import your KG:
-```bash
-# Import knowledge triples (run once)
-python -c "from src.kg.kg_import import import_csv; import_csv()"
-```
+Verify: open http://localhost:7474 in browser, login with neo4j/your_password
 
-### Option B: Skip it
-Just leave `NEO4J_PASSWORD=` empty in `.env`. The tutor will use FAISS only.
+### Option B: Neo4j Desktop
+Download from: https://neo4j.com/download/
+Create a database, set password, start it.
+
+### Import Knowledge Graph (required after Neo4j starts)
+```bash
+# Import 112 knowledge triples (CS concepts: recursion, trees, sorting, etc.)
+python -c "from src.kg.kg_import import import_csv; import_csv()"
+
+# Verify: open http://localhost:7474, run:
+# MATCH (n) RETURN count(n)
+# Should show ~150+ nodes
+```
 
 ---
 
@@ -363,13 +371,15 @@ AI_TUTOR/
 ## What Depends on What
 
 ```
-GROQ_API_KEY ──────────→ backend (LLM calls)
-Neo4j ─────────────────→ backend (knowledge graph queries)
-                           └── optional, degrades to FAISS-only
-LiveKit server ────────→ voice agent + frontend (WebRTC)
-                           └── required for voice mode
-Python venv ───────────→ backend + voice agent
-Node.js ───────────────→ frontend (React build)
-Windows audio ─────────→ TTS (System.Speech)
-Webcam + mic ──────────→ STT + vision (browser)
+GROQ_API_KEY ──────────→ backend (LLM calls)              REQUIRED
+Neo4j ─────────────────→ backend (knowledge graph)         REQUIRED
+                           └── the "KG" in KG-RAG
+LiveKit server ────────→ voice agent + frontend (WebRTC)   REQUIRED
+                           └── for voice/realtime mode
+Python venv ───────────→ backend + voice agent             REQUIRED
+Node.js ───────────────→ frontend (React build)            REQUIRED
+Windows audio ─────────→ TTS (System.Speech)               REQUIRED
+Webcam + mic ──────────→ STT + vision (browser)            REQUIRED
+Docker Desktop ────────→ Neo4j + LiveKit containers        REQUIRED
+GPU (CUDA) ────────────→ Avatar (MuseTalk)                 GPU LAPTOP ONLY
 ```

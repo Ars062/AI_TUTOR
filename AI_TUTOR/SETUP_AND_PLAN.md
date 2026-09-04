@@ -119,6 +119,7 @@ You need:
   - Python 3.10 or 3.11
   - Node.js 18+
   - Git
+  - Docker Desktop (for Neo4j and LiveKit)
   - A Groq API key (free from console.groq.com)
 
 STEP 1: Clone the repo
@@ -148,11 +149,43 @@ STEP 3: Environment variables
 
   Edit .env and set:
     GROQ_API_KEY=gsk_your_key_here    <-- REQUIRED, get from console.groq.com
+    NEO4J_PASSWORD=your_password       <-- REQUIRED, set a password for Neo4j
 
-  Everything else has working defaults. Neo4j is optional (system works without it).
   LiveKit defaults: ws://127.0.0.1:7880, key=devkey, secret=secret
 
-STEP 4: Start LiveKit server
+STEP 4: Start Neo4j (REQUIRED — the Knowledge Graph)
+------------------------------------------------------
+  The KG-RAG system REQUIRES Neo4j. Without it, the tutor loses its
+  knowledge graph grounding and becomes a regular RAG chatbot.
+
+  Option A — Docker (recommended):
+    docker run -d --name neo4j \
+      -p 7474:7474 -p 7687:7687 \
+      -e NEO4J_AUTH=neo4j/your_password \
+      -e NEO4J_PLUGINS='["apoc"]' \
+      neo4j:5
+
+  Option B — Neo4j Desktop:
+    Download from: https://neo4j.com/download/
+    Create a database, set password, start it.
+
+  Verify: open http://localhost:7474 in browser
+    Login with: neo4j / your_password
+
+STEP 5: Import Knowledge Graph into Neo4j
+------------------------------------------
+  After Neo4j is running, import the 112 knowledge triples:
+
+  cd AI_TUTOR
+  python -c "from src.kg.kg_import import import_csv; import_csv()"
+
+  This loads all CS concept relationships (recursion, trees, sorting, etc.)
+  into Neo4j. Takes ~5 seconds.
+
+  Verify: open http://localhost:7474, run: MATCH (n) RETURN count(n)
+  Should show ~150+ nodes.
+
+STEP 6: Start LiveKit server
 -----------------------------
   Option A — binary (if tools/livekit/livekit-server.exe exists):
     tools/livekit/livekit-server.exe --dev
@@ -166,7 +199,7 @@ STEP 4: Start LiveKit server
 
   Verify: open http://127.0.0.1:7880 in browser (should show something or refuse = OK)
 
-STEP 5: Start the backend (Terminal 1)
+STEP 7: Start the backend (Terminal 1)
 ---------------------------------------
   cd AI_TUTOR
   python -m uvicorn backend.main:app --port 8000
@@ -174,7 +207,7 @@ STEP 5: Start the backend (Terminal 1)
   Wait for: "Uvicorn running on http://0.0.0.0:8000"
   First run takes ~30 seconds (builds FAISS index from documents).
 
-STEP 6: Start the frontend (Terminal 2)
+STEP 8: Start the frontend (Terminal 2)
 ----------------------------------------
   cd AI_TUTOR/frontend
   npm install        (first time only)
@@ -182,14 +215,14 @@ STEP 6: Start the frontend (Terminal 2)
 
   Opens at: http://localhost:5173
 
-STEP 7: Start the voice agent (Terminal 3)
+STEP 9: Start the voice agent (Terminal 3)
 -------------------------------------------
   cd AI_TUTOR
   python -m realtime.agent --room tutor-room
 
   Wait for: "[agent] Connecting to ws://127.0.0.1:7880 room=tutor-room"
 
-STEP 8: Test it
+STEP 10: Test it
 ----------------
   1. Open http://localhost:5173 in Chrome or Edge
   2. CHAT VIEW: Type "What is recursion?" -> get answer
@@ -200,10 +233,32 @@ STEP 8: Test it
 
 
 ================================================================================
-PART 4 — WHAT TO ADD ON THE GPU LAPTOP
+PART 4 — WHAT WORKS NOW vs WHAT NEEDS THE GPU LAPTOP
 ================================================================================
 
-The CPU laptop has the full working system. The GPU laptop adds:
+WHAT WORKS NOW (CPU laptop, no GPU needed):
+  - Full KG-RAG tutor (Neo4j + FAISS + Groq)
+  - Chain-of-Thought reasoning with KG validation
+  - Text chat in browser
+  - Voice: mic -> STT -> tutor -> TTS -> hear reply (Windows SAPI voice)
+  - LiveKit room with mic + camera
+  - Document upload (PDF/TXT -> tutor learns from it)
+  - Vision capture (webcam frames as context)
+  - All of this is FULLY WORKING NOW
+
+WHAT DOES NOT WORK WITHOUT GPU:
+  - Visual avatar (lip-synced face) — REQUIRES MuseTalk/LiveTalking + CUDA
+  - Neural TTS (Piper/Coqui) — optional upgrade, SAPI works fine
+  - Large Whisper model — optional upgrade, base model works on CPU
+
+The visual avatar is the ONLY thing that needs the GPU. Everything else
+works on a regular CPU laptop. The GPU laptop setup below adds the avatar
+and optional upgrades.
+
+
+================================================================================
+PART 5 — GPU LAPTOP ADDITIONS (avatar + upgrades)
+================================================================================
 
 A) NEURAL TTS (better voice than Windows SAPI)
 ----------------------------------------------
@@ -261,7 +316,7 @@ D) GPU DEPENDENCIES
 
 
 ================================================================================
-PART 5 — THE PROPOSAL (what the project is about)
+PART 6 — THE PROPOSAL (what the project is about)
 ================================================================================
 
 TITLE: "A Knowledge-Grounded and Self-Prompting LLM Framework for
@@ -320,12 +375,12 @@ WHAT WE BUILT vs WHAT THE PROPOSAL ASKED FOR:
   Evaluation Metrics           | BERTScore, BLEU, ROUGE     | DONE
   Content Safety Guard         | Regex-based filter          | DONE
   Multimodal (voice + vision)  | STT + TTS + LiveKit + Vision| DONE
-  Avatar (MuseTalk)            | Placeholder (GPU needed)    | TODO
+  Avatar (MuseTalk)            | GPU only, not on CPU laptop  | TODO (GPU)
   PostgreSQL Memory            | Session persistence         | DONE (optional)
 
 
 ================================================================================
-PART 6 — HOW EVERYTHING CONNECTS (data flow)
+PART 7 — HOW EVERYTHING CONNECTS (data flow)
 ================================================================================
 
 STUDENT ASKS A QUESTION (text):
@@ -371,7 +426,7 @@ LIVE ROOM (full realtime via Pipecat):
 
 
 ================================================================================
-PART 7 — FILE MAP (what everything is)
+PART 8 — FILE MAP (what everything is)
 ================================================================================
 
 AI_TUTOR/
@@ -424,7 +479,7 @@ AI_TUTOR/
 
 
 ================================================================================
-PART 8 — QUICK REFERENCE (all commands)
+PART 9 — QUICK REFERENCE (all commands)
 ================================================================================
 
 # ONE-TIME SETUP:
@@ -435,7 +490,12 @@ PART 8 — QUICK REFERENCE (all commands)
   .venv\Scripts\activate
   pip install -r requirements.txt
   copy .env.example .env
-  # Edit .env -> set GROQ_API_KEY
+  # Edit .env -> set GROQ_API_KEY and NEO4J_PASSWORD
+
+# START NEO4J (required):
+  docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/password neo4j:5
+  # Then import knowledge graph:
+  python -c "from src.kg.kg_import import import_csv; import_csv()"
 
 # START SERVICES (3 terminals):
   # Terminal 1 - Backend:

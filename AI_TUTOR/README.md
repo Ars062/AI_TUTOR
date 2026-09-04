@@ -19,7 +19,7 @@ Knowledge-grounded AI tutoring with real-time voice conversation.
 | **Streamlit UI** | ✅ | main branch, full KG-RAG interface |
 | **React frontend** | ✅ | chat + live room + upload + vision toggle |
 
-## Quick Start (CPU laptop)
+## Quick Start (CPU laptop — everything works)
 
 ```bash
 # 1. Clone and setup
@@ -27,27 +27,38 @@ git checkout multimodal
 python -m venv .venv
 .venv\Scripts\activate          # Windows
 pip install -r requirements.txt
+copy .env.example .env         # Edit .env -> set GROQ_API_KEY and NEO4J_PASSWORD
 
-# 2. Start services
-tools/livekit/livekit-server.exe --dev          # LiveKit on :7880
-python -m uvicorn backend.main:app --port 8000  # Backend on :8000
-cd frontend && npm install && npm run dev       # Frontend on :5173
+# 2. Start Neo4j (REQUIRED — the Knowledge Graph)
+docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/your_password neo4j:5
+python -c "from src.kg.kg_import import import_csv; import_csv()"  # Import KG
 
-# 3. (Optional) Start the voice agent
+# 3. Start LiveKit
+tools/livekit/livekit-server.exe --dev
+
+# 4. Start Backend
+python -m uvicorn backend.main:app --port 8000
+
+# 5. Start Frontend
+cd frontend && npm install && npm run dev
+
+# 6. Start Voice Agent
 python -m realtime.agent --room tutor-room
 
-# 4. Open http://localhost:5173
+# 7. Open http://localhost:5173
 ```
 
-## Quick Start (GPU laptop — avatar phase)
+## Quick Start (GPU laptop — adds visual avatar)
 
 Same as above, plus:
 ```bash
-# Install MuseTalk / avatar pipeline (GPU-only)
-pip install musetalk   # or whatever avatar framework
+# Install MuseTalk / avatar pipeline (GPU-only, REQUIRES CUDA)
+git clone https://github.com/TMElyralab/MuseTalk.git
+cd MuseTalk && pip install -r requirements.txt
+# Download models from MuseTalk README
 
-# Start with avatar enabled
-python -m realtime.agent --room tutor-room --avatar musetalk
+# The avatar takes TTS audio + face image -> lip-synced video
+# This is the ONLY part that needs a GPU
 ```
 
 ## Architecture
@@ -125,13 +136,34 @@ AI_TUTOR/
 
 1. **Pull this branch** — all code is here
 2. **Install deps** — `pip install -r requirements.txt`
-3. **Start LiveKit + backend + frontend** — same as CPU
-4. **Add avatar** — plug in MuseTalk or LiveTalking
+3. **Start Neo4j** — `docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/password neo4j:5`
+4. **Import KG** — `python -c "from src.kg.kg_import import import_csv; import_csv()"`
+5. **Start LiveKit + backend + frontend** — same as CPU
+6. **Add avatar** — plug in MuseTalk or LiveTalking (THIS IS THE GPU PART)
    - Create `realtime/avatar.py` with a `AvatarProcessor(FrameProcessor)`
    - Takes `OutputAudioRawFrame` + camera → generates lip-synced video
    - Inserts into pipeline: `... → tts → avatar → transport.output(video)`
-5. **Upgrade TTS** — swap Windows SAPI for Piper/Coqui (neural voice)
-6. **Upgrade STT** — swap faster-whisper base for large-v3 (GPU)
+7. **Optional upgrades:**
+   - TTS: swap Windows SAPI for Piper/Coqui (neural voice)
+   - STT: swap faster-whisper base for large-v3 (GPU)
+
+## What needs GPU vs what works on CPU
+
+```
+CPU LAPTOP (works now, no GPU needed):
+  ✅ KG-RAG tutor (Neo4j + FAISS + Groq)
+  ✅ Chain-of-Thought reasoning
+  ✅ Text chat in browser
+  ✅ Voice: mic → STT → tutor → TTS → hear reply
+  ✅ LiveKit room with mic + camera
+  ✅ Document upload
+  ✅ Vision capture
+
+GPU LAPTOP ONLY:
+  ❌ Visual avatar (lip-synced face) — requires MuseTalk + CUDA
+  ⬆️ Neural TTS (Piper/Coqui) — optional upgrade
+  ⬆️ Large Whisper model — optional upgrade
+```
 
 ## Only remaining
 
