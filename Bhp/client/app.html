@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bangalore Home Price Prediction</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="img"></div>
+<div class="container">
+    <h1 class="main-title">Bangalore Home Price Predictor</h1>
+    <p class="subtitle">Get instant price estimates with investment risk analysis</p>
+
+    <div class="form-section">
+        <h2>Area (Square Feet)</h2>
+        <input class="area" type="text" id="uiSqft" name="Squareft" value="1000">
+
+        <h2>BHK</h2>
+        <div class="switch-field">
+            <input type="radio" id="radio-bhk-1" name="uiBHK" value="1"/>
+            <label for="radio-bhk-1">1</label>
+            <input type="radio" id="radio-bhk-2" name="uiBHK" value="2" checked/>
+            <label for="radio-bhk-2">2</label>
+            <input type="radio" id="radio-bhk-3" name="uiBHK" value="3"/>
+            <label for="radio-bhk-3">3</label>
+            <input type="radio" id="radio-bhk-4" name="uiBHK" value="4"/>
+            <label for="radio-bhk-4">4</label>
+            <input type="radio" id="radio-bhk-5" name="uiBHK" value="5"/>
+            <label for="radio-bhk-5">5</label>
+        </div>
+
+        <h2>Bath</h2>
+        <div class="switch-field">
+            <input type="radio" id="radio-bath-1" name="uiBathrooms" value="1"/>
+            <label for="radio-bath-1">1</label>
+            <input type="radio" id="radio-bath-2" name="uiBathrooms" value="2" checked/>
+            <label for="radio-bath-2">2</label>
+            <input type="radio" id="radio-bath-3" name="uiBathrooms" value="3"/>
+            <label for="radio-bath-3">3</label>
+            <input type="radio" id="radio-bath-4" name="uiBathrooms" value="4"/>
+            <label for="radio-bath-4">4</label>
+            <input type="radio" id="radio-bath-5" name="uiBathrooms" value="5"/>
+            <label for="radio-bath-5">5</label>
+        </div>
+
+        <h2>Location</h2>
+        <div>
+            <select class="location" name="" id="uiLocations">
+                <option value="" disabled="disabled" selected="selected">Choose a Location</option>
+            </select>
+        </div>
+
+        <h2>Expected Price (Lakhs)</h2>
+        <input class="area" type="text" id="uiPrice" name="Price" value="80" placeholder="Enter expected price in Lakhs">
+
+        <div class="button-group">
+            <button class="submit" onclick="onClickedEstimatePrice()" type="button">Estimate Price</button>
+            <button class="submit risk-btn" onclick="onClickedGetRiskReport()" type="button">Get Risk Report</button>
+        </div>
+
+        <div id="uiEstimatedPrice" class="result">
+            <h2></h2>
+        </div>
+    </div>
+
+    <div id="riskReport" class="risk-report hidden">
+        <h2 class="risk-title">Investment Risk Report</h2>
+
+        <div class="risk-grid">
+            <div class="risk-card risk-score-card">
+                <h3>Investment Risk Score</h3>
+                <div id="riskScore" class="risk-gauge">
+                    <span class="score-value">-</span>
+                    <span class="score-label">/ 10</span>
+                </div>
+                <div id="riskLevel" class="risk-level">-</div>
+                <div id="riskReasons" class="risk-reasons"></div>
+            </div>
+
+            <div class="risk-card overpricing-card">
+                <h3>Price Analysis</h3>
+                <div id="overpricingStatus" class="status-badge">-</div>
+                <div id="overpricingDeviation" class="deviation">-</div>
+                <div id="overpricingMessage" class="detail-message">-</div>
+                <div id="priceComparison" class="price-comparison">
+                    <div class="price-item">
+                        <span class="price-label">Your Rate</span>
+                        <span id="yourRate" class="price-value">-</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="price-label">Market Rate</span>
+                        <span id="marketRate" class="price-value">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="risk-card location-card">
+                <h3>Location Rating</h3>
+                <div id="locationGrade" class="grade-badge">-</div>
+                <div id="locationDesc" class="detail-message">-</div>
+                <div class="location-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Safety</span>
+                        <span id="safetyScore" class="breakdown-value">-</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Flood Risk</span>
+                        <span id="floodRisk" class="breakdown-value">-</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Infrastructure</span>
+                        <span id="infraScore" class="breakdown-value">-</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Liquidity</span>
+                        <span id="liquidityLevel" class="breakdown-value">-</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">Crime</span>
+                        <span id="crimeLevel" class="breakdown-value">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="risk-card roi-card">
+                <h3>ROI Estimate</h3>
+                <div class="roi-grid">
+                    <div class="roi-item">
+                        <span class="roi-label">Monthly Rent</span>
+                        <span id="monthlyRent" class="roi-value">-</span>
+                    </div>
+                    <div class="roi-item">
+                        <span class="roi-label">Rental Yield</span>
+                        <span id="rentalYield" class="roi-value">-</span>
+                    </div>
+                    <div class="roi-item">
+                        <span class="roi-label">Appreciation</span>
+                        <span id="appreciation" class="roi-value">-</span>
+                    </div>
+                    <div class="roi-item highlight">
+                        <span class="roi-label">Total ROI</span>
+                        <span id="totalRoi" class="roi-value">-</span>
+                    </div>
+                    <div class="roi-item">
+                        <span class="roi-label">Payback Period</span>
+                        <span id="paybackYears" class="roi-value">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 4: Probability x Impact Risk Matrix -->
+        <div id="piSection" class="pi-section">
+            <h3 class="pi-title">Risk Priority Matrix (Probability × Impact)</h3>
+            <p class="pi-subtitle">Each risk is assessed by likelihood (1-5) and severity (1-5). Score = P × I.</p>
+
+            <div class="pi-overall">
+                <div class="pi-overall-item">
+                    <span class="pi-overall-label">Overall Probability</span>
+                    <span id="piOverallProb" class="pi-overall-value">-</span>
+                </div>
+                <div class="pi-overall-item">
+                    <span class="pi-overall-label">×</span>
+                </div>
+                <div class="pi-overall-item">
+                    <span class="pi-overall-label">Overall Impact</span>
+                    <span id="piOverallImpact" class="pi-overall-value">-</span>
+                </div>
+                <div class="pi-overall-item">
+                    <span class="pi-overall-label">=</span>
+                </div>
+                <div class="pi-overall-item">
+                    <span class="pi-overall-label">Risk Score</span>
+                    <span id="piOverallScore" class="pi-overall-value">-</span>
+                </div>
+                <div class="pi-overall-item">
+                    <span id="piOverallLevel" class="pi-level-badge">-</span>
+                </div>
+            </div>
+
+            <div class="pi-grid">
+                <div class="pi-row pi-header">
+                    <div class="pi-cell pi-cat">Category</div>
+                    <div class="pi-cell pi-num">P</div>
+                    <div class="pi-cell pi-desc">Probability</div>
+                    <div class="pi-cell pi-num">I</div>
+                    <div class="pi-cell pi-desc">Impact</div>
+                    <div class="pi-cell pi-num">Score</div>
+                    <div class="pi-cell pi-level">Level</div>
+                </div>
+                <div id="piRows" class="pi-rows"></div>
+            </div>
+        </div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+# House Price Prediction - Bangalore
+
+A machine learning project to predict house prices in Bangalore based on various features like location, square footage, number of bedrooms, etc.
+
+## Project Structure
+
+```
+Bhp/
+├── client/          # Frontend (HTML, CSS, JS)
+├── model/           # Trained ML model & data
+├── picture/         # Screenshots & Demo images
+├── server/          # Backend API (Python Flask)
+│   ├── artifacts/   # Model artifacts
+│   ├── server.py    # Flask server
+│   └── util.py      # Utility functions
+```
+
+## Screenshots
+
+![Screenshot 1](Bhp/picture/1r.png)
+![Screenshot 2](Bhp/picture/2r.png)
+![Screenshot 3](Bhp/picture/3r.png)
+![Screenshot 4](Bhp/picture/4r.png)
+
+## Demo Video
+
+[![Demo Video](Bhp/picture/1r.png)](https://drive.google.com/file/d/12pGAufd9-9NH9LOzVIzQ3PdseM4OdhXK/view?usp=drive_link)
+
+> Click the image above or [watch the demo video here](https://drive.google.com/file/d/12pGAufd9-9NH9LOzVIzQ3PdseM4OdhXK/view?usp=drive_link)
+
+## How to Run
+
+1. Install dependencies: `pip install -r requirements.txt`
+2. Start the server: `python Bhp/server/server.py`
+3. Open `Bhp/client/app.html` in your browser
+
+## Technologies Used
+
+- Python, Flask
+- Scikit-learn
+- HTML, CSS, JavaScript
