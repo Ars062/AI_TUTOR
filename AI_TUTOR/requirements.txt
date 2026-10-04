@@ -15,9 +15,9 @@ python-multipart
 # (Node.js + npm handled separately, see frontend/package.json)
 
 # === Multimodal: STT / TTS / Vision / Realtime ===
+# TTS uses Windows System.Speech via a PowerShell bridge (subprocess), so no
+# pyttsx3/pywin32 needed. Swap TTS_PROVIDER=piper on the GPU machine later.
 faster-whisper
-pyttsx3
-pywin32
 numpy
 Pillow
 
@@ -26,9 +26,16 @@ pipecat-ai[livekit]
 
 # === Database (optional, degrades gracefully) ===
 sqlalchemy
-# psycopg2-binary  # uncomment when PostgreSQL is available
+# Install this ONLY if you want PostgreSQL chat history (docker-compose.yml).
+# Without it the app logs "[memory] PostgreSQL unavailable" and still runs.
+# psycopg2-binary
 
 # === Streamlit UI (main branch) ===
 streamlit
 pandas
 requests
+
+# === Evaluation / study harness ===
+# Heavy extras (torch, datasets, scipy) - kept out of the base install so
+# setup stays fast. Needed for scripts/run_evaluation.py and scripts/run_study.py:
+#     pip install -r requirements-eval.txt

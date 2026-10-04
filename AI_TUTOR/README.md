@@ -31,7 +31,7 @@ copy .env.example .env         # Edit .env -> set GROQ_API_KEY and NEO4J_PASSWOR
 
 # 2. Start Neo4j (REQUIRED — the Knowledge Graph)
 docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/your_password neo4j:5
-python -c "from src.kg.kg_import import import_csv; import_csv()"  # Import KG
+python -c "from src.kg.kg_loader import load_kg; load_kg()"  # Import KG
 
 # 3. Start LiveKit
 tools/livekit/livekit-server.exe --dev
@@ -136,8 +136,8 @@ AI_TUTOR/
 
 1. **Pull this branch** — all code is here
 2. **Install deps** — `pip install -r requirements.txt`
-3. **Start Neo4j** — `docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/password neo4j:5`
-4. **Import KG** — `python -c "from src.kg.kg_import import import_csv; import_csv()"`
+3. **Start Neo4j** — `docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/your_password neo4j:5`
+4. **Import KG** — `python -c "from src.kg.kg_loader import load_kg; load_kg()"`
 5. **Start LiveKit + backend + frontend** — same as CPU
 6. **Add avatar** — plug in MuseTalk or LiveTalking (THIS IS THE GPU PART)
    - Create `realtime/avatar.py` with a `AvatarProcessor(FrameProcessor)`

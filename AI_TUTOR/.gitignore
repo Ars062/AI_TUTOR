@@ -4,3 +4,10 @@
 __pycache__/
 *.pyc
 .vscode/
+
+# Node / frontend build artifacts
+node_modules/
+frontend/dist/
+
+# LiveKit server binary (downloaded in START_HERE.md step 2)
+tools/

@@ -65,6 +65,9 @@ Proposal: `D:\AI_TUTOR\Proposal (1).docx`
 
 ## How to Run
 
+> **On a new machine, follow `START_HERE.md` instead** — the paths below are
+> specific to the original dev laptop.
+
 1. Start Neo4j (keep window open):
    ```
    C:\Users\akju0\.neo4j\start-neo4j.cmd

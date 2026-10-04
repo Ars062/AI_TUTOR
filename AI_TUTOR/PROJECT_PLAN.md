@@ -414,7 +414,7 @@ src/                        THE BRAIN
   rag/vector_search.py      FAISS similarity search
   rag/embed_documents.py    Build/load FAISS index
   kg/kg_query.py            Neo4j graph queries
-  kg/kg_import.py           Import CSV triples into Neo4j
+  kg/kg_loader.py           Import CSV triples into Neo4j
   prompts/prompt_builder.py Build prompts with CoT + context
   evaluation/               CoT validation, BERTScore, BLEU
 

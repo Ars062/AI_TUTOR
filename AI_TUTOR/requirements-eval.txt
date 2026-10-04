@@ -1,0 +1,24 @@
+# Evaluation + study harness extras (optional)
+#
+# The app, chat, voice and LiveKit features do NOT need these.
+# Install only if you want to reproduce the proposal's metrics tables:
+#     pip install -r requirements-eval.txt
+#
+# Then:
+#     python scripts/run_evaluation.py --compare --fast
+#     python scripts/run_study.py --pilot
+
+# BLEU / ROUGE via HuggingFace evaluate
+evaluate
+rouge-score
+
+# BERTScore (semantic similarity). Pulls torch + transformers, which are
+# already installed for sentence-transformers, so mostly a disk-space cost.
+bert-score
+
+# Paired t-test for the learning-gain study analysis
+scipy
+
+# Web scraping for scripts/fetch_education_content.py
+beautifulsoup4
+requests

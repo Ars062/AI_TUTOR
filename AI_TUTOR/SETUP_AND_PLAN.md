@@ -177,7 +177,7 @@ STEP 5: Import Knowledge Graph into Neo4j
   After Neo4j is running, import the 112 knowledge triples:
 
   cd AI_TUTOR
-  python -c "from src.kg.kg_import import import_csv; import_csv()"
+  python -c "from src.kg.kg_loader import load_kg; load_kg()"
 
   This loads all CS concept relationships (recursion, trees, sorting, etc.)
   into Neo4j. Takes ~5 seconds.
@@ -440,11 +440,15 @@ AI_TUTOR/
 |   |   |-- embed_documents.py    Build/load FAISS index
 |   |-- kg/
 |   |   |-- kg_query.py           Neo4j graph queries
-|   |   |-- kg_import.py          Import CSV triples into Neo4j
+|   |   |-- kg_loader.py          Import CSV triples into Neo4j
 |   |-- prompts/
 |   |   |-- prompt_builder.py     Build prompts with CoT + context
 |   |-- evaluation/
 |       |-- evaluation_metrics.py CoT validation, BERTScore, BLEU
+|       |-- study_harness.py     Pre/post quiz + t-test learning gain
+|
+|-- app/                          LEGACY UI (Streamlit, main branch)
+|   |-- streamlit_app.py          Original Streamlit interface
 |
 |-- backend/                      THE SERVER (FastAPI)
 |   |-- main.py                   All API endpoints
@@ -460,22 +464,40 @@ AI_TUTOR/
 |   |-- vision.py                 Webcam frame capture
 |   |-- pipeline.py               HTTP-based fallback pipeline
 |
+|-- avatar/                       GPU avatar adapter (NOT implemented yet)
+|   |-- README.md                 MuseTalk/LiveTalking plan + FPS figures
+|
 |-- frontend/                     THE UI (React)
-|   |-- src/App.jsx               Chat + Live Room + Upload
+|   |-- src/App.jsx               Chat + Live Room + Upload + CoT Visualizer
 |   |-- src/styles.css            Styling
 |   |-- package.json              Node dependencies
+|
+|-- scripts/                      Utilities
+|   |-- run_evaluation.py         Batch eval + BLEU/ROUGE/BERTScore report
+|   |-- run_study.py              Human study runner (--pilot for demo)
+|   |-- fetch_education_content.py  Scrape CS reference material
+|
+|-- tests/                        26 tests - python tests\run_all.py
 |
 |-- data/                         THE KNOWLEDGE BASE
 |   |-- documents/                24 CS text files (recursion, trees, etc.)
 |   |-- knowledge_graph/          knowledge_triples.csv (112 triples)
 |
-|-- tools/livekit/                LiveKit server binary (gitignored)
-|-- .env.example                  Environment template
-|-- requirements.txt              Python dependencies
+|-- tools/livekit/                LiveKit server binary (GITIGNORED - download it)
+|-- .env.example                  Environment template (copy to .env)
+|-- .env.template                 Identical to .env.example
+|-- requirements.txt              Core Python dependencies
+|-- requirements-eval.txt         Optional heavy extras for the eval harness
 |-- docker-compose.yml            PostgreSQL + LiveKit containers
+|-- start_windows.bat             One-click Neo4j + Streamlit launcher
+|-- run-app.cmd                   Streamlit only
+|
+|-- START_HERE.md                 THIS: fastest path to a running app
+|-- PROJECT_PLAN.md               What we build, which models, why
 |-- README.md                     Project overview
 |-- REQUIREMENTS.md               Setup guide (step by step)
 |-- SETUP_AND_PLAN.md             THIS FILE
+|-- STATUS.md                     Work log
 
 
 ================================================================================
@@ -493,9 +515,9 @@ PART 9 — QUICK REFERENCE (all commands)
   # Edit .env -> set GROQ_API_KEY and NEO4J_PASSWORD
 
 # START NEO4J (required):
-  docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/password neo4j:5
+  docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/your_password neo4j:5
   # Then import knowledge graph:
-  python -c "from src.kg.kg_import import import_csv; import_csv()"
+  python -c "from src.kg.kg_loader import load_kg; load_kg()"
 
 # START SERVICES (3 terminals):
   # Terminal 1 - Backend:

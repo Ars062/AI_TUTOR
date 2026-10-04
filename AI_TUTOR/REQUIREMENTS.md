@@ -128,7 +128,7 @@ Create a database, set password, start it.
 ### Import Knowledge Graph (required after Neo4j starts)
 ```bash
 # Import 112 knowledge triples (CS concepts: recursion, trees, sorting, etc.)
-python -c "from src.kg.kg_import import import_csv; import_csv()"
+python -c "from src.kg.kg_loader import load_kg; load_kg()"
 
 # Verify: open http://localhost:7474, run:
 # MATCH (n) RETURN count(n)

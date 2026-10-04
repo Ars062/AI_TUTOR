@@ -158,7 +158,11 @@ async def run_agent(room_name: str = "tutor-room"):
         ),
     )
 
-    stt = WhisperSTTService(model="base", device="cpu", compute_type="int8")
+    stt = WhisperSTTService(
+        model=os.environ.get("STT_MODEL", "base"),
+        device=os.environ.get("STT_DEVICE", "cpu"),
+        compute_type="int8",
+    )
     tutor = TutorProcessor()
     tts = WindowsTTSProcessor()
 
