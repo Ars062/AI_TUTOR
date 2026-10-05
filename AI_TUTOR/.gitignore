@@ -11,3 +11,5 @@ frontend/dist/
 
 # LiveKit server binary (downloaded in START_HERE.md step 2)
 tools/
+# Local model weights (piper voice etc)
+models/

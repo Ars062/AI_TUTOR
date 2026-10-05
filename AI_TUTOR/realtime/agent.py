@@ -1,123 +1,176 @@
-"""Pipecat voice agent: LiveKit transport + faster-whisper STT + KG-RAG tutor + Windows TTS.
-
-Runs as a standalone process alongside the FastAPI backend.
-Joins a LiveKit room, listens for user speech, routes through the tutor,
-and speaks the reply back.
-
-Usage:
-    python -m realtime.agent                      # auto-configure from env
-    python -m realtime.agent --room tutor-room    # specify room
-
-Env vars (from .env):
-    LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET
-    GROQ_API_KEY, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
-"""
+import triton
 import asyncio
 import io
 import os
-import struct
-import sys
+import threading
 import wave
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from typing import Optional
 
 from dotenv import load_dotenv
-
-load_dotenv()
-
+from loguru import logger
+from pipecat.audio.vad.silero import SileroVADAnalyzer
 from pipecat.frames.frames import (
+    AudioRawFrame,
+    EndFrame,
+    InterruptionFrame,
     OutputAudioRawFrame,
+    StartFrame,
+    TTSAudioRawFrame,
     TTSSpeakFrame,
     TranscriptionFrame,
 )
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
 from pipecat.pipeline.task import PipelineParams, PipelineTask
-from pipecat.processors.frame_processor import FrameProcessor, FrameDirection
+from pipecat.processors.audio.vad_processor import VADProcessor
+from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
 from pipecat.services.whisper.stt import WhisperSTTService
 from pipecat.transports.livekit.transport import LiveKitParams, LiveKitTransport
 
+from realtime.avatar import AVATAR_FPS, AVATAR_HEIGHT, AVATAR_WIDTH, AvatarProcessor
 from realtime.tts import synthesize as tts_synthesize
 
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 
-# ---------------------------------------------------------------------------
-# Custom processors
-# ---------------------------------------------------------------------------
+AUDIO_OUT_SAMPLE_RATE = int(os.getenv("AVATAR_AUDIO_SAMPLE_RATE", "48000"))
+WHISPER_MODEL = os.getenv("STT_MODEL", "base")
+WHISPER_DEVICE = os.getenv("STT_DEVICE", "cpu")
+_WHISPER_CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "huggingface", "hub")
+
+
+def _stt_ready() -> bool:
+    import glob
+
+    model_dir = os.path.join(_WHISPER_CACHE_DIR, "models--Systran--faster-whisper-base")
+    if not os.path.exists(model_dir):
+        return False
+    if glob.glob(os.path.join(model_dir, "**", "*.incomplete"), recursive=True):
+        return False
+    return True
+
+
+_INDEX_LOAD_LOCK = threading.Lock()
+
 
 class TutorProcessor(FrameProcessor):
-    """Takes TranscriptionFrame → calls KG-RAG tutor → outputs TTSSpeakFrame."""
+    """Turns student speech (TranscriptionFrame) into a spoken tutor answer.
+
+    Uses the same RAG+CoT engine as the text chat (src.tutor.tutor_engine),
+    with an HTTP fallback to the backend /api/chat endpoint if the index
+    cannot be loaded in-process.
+    """
 
     def __init__(self):
         super().__init__()
         self._index = None
-        self._documents = None
-        self._filenames = None
+        self._documents = []
+        self._filenames = []
+        self._index_state = "unloaded"
+        self._answer_task: Optional[asyncio.Task] = None
 
-    def _ensure_loaded(self):
-        if self._index is not None:
+    def _load_index(self):
+        if self._index_state == "loaded":
             return
-        from src.rag.embed_documents import load_index
-        self._index, self._documents, self._filenames = load_index()
-        if self._index.ntotal == 0:
-            from src.rag.embed_documents import build_vector_index, save_index
-            self._index, self._documents, self._filenames = build_vector_index()
-            save_index(self._index, self._documents, self._filenames)
-
-    async def process_frame(self, frame, direction: FrameDirection):
-        await super().process_frame(frame, direction)
-
-        if isinstance(frame, TranscriptionFrame) and direction == FrameDirection.DOWNSTREAM:
-            text = frame.text.strip()
-            if not text:
+        with _INDEX_LOAD_LOCK:
+            if self._index_state == "loaded":
                 return
-
-            print(f"[tutor] User: {text}")
-
-            def _run():
-                from src.tutor.tutor_engine import ask_tutor
-                answer, _ = ask_tutor(
-                    question=text,
-                    index=self._index,
-                    documents=self._documents,
-                    filenames=self._filenames,
-                    session_id="livekit-agent",
-                    use_cot=False,
-                    learner_level="beginner",
-                )
-                return answer
-
-            answer = await asyncio.to_thread(_run)
-            print(f"[tutor] Bot: {answer[:120]}...")
-            await self.push_frame(TTSSpeakFrame(text=answer))
-
-        else:
-            await self.push_frame(frame, direction)
-
-
-class WindowsTTSProcessor(FrameProcessor):
-    """Takes TTSSpeakFrame → generates WAV via System.Speech → outputs OutputAudioRawFrame."""
+            self._index_state = "loading"
+            try:
+                from src.rag.embed_documents import load_index
+                self._index, self._documents, self._filenames = load_index()
+                n = len(self._documents or [])
+                self._index_state = "loaded" if n else "empty"
+                logger.info(f"Voice tutor RAG index loaded: {n} docs")
+            except Exception as e:
+                logger.warning(f"Voice tutor RAG index load failed: {e}")
+                self._index_state = "failed"
 
     async def process_frame(self, frame, direction: FrameDirection):
         await super().process_frame(frame, direction)
+        if isinstance(frame, TranscriptionFrame) and direction == FrameDirection.DOWNSTREAM:
+            text = (frame.text or "").strip()
+            print(f"[tutor] got transcript: {text!r}", flush=True)
+            if len(text) >= 3:
+                if self._answer_task and not self._answer_task.done():
+                    self._answer_task.cancel()
+                self._answer_task = asyncio.create_task(self._answer(text))
+            return
+        await self.push_frame(frame, direction)
 
+    async def _answer(self, question: str):
+        print(f"[tutor] answer start: {question[:60]!r}", flush=True)
+        try:
+            answer = ""
+            if self._index_state != "loaded":
+                await asyncio.to_thread(self._load_index)
+            if self._index_state == "loaded":
+                try:
+                    answer = await asyncio.to_thread(self._ask_inprocess, question)
+                except Exception as e:
+                    logger.warning(f"in-process ask failed: {e}; falling back to backend API")
+            if not answer:
+                answer = await self._ask_backend(question)
+            if answer:
+                print(f"[tutor] Q: {question[:80]} -> A: {len(answer)} chars", flush=True)
+                await self.push_frame(TTSSpeakFrame(text=answer[:1500]))
+                print("[tutor] pushed TTSSpeakFrame downstream", flush=True)
+            else:
+                print(f"[tutor] no answer for: {question[:80]}", flush=True)
+        except asyncio.CancelledError:
+            raise
+        except Exception as e:
+            logger.exception(f"Tutor answer failed: {e}")
+
+    def _ask_inprocess(self, question: str) -> str:
+        from src.tutor.tutor_engine import ask_tutor
+        answer, _debug = ask_tutor(
+            question=question,
+            index=self._index,
+            documents=self._documents,
+            filenames=self._filenames,
+            session_id="live-voice",
+            use_cot=False,
+            use_kg=True,
+        )
+        return answer or ""
+
+    async def _ask_backend(self, question: str) -> str:
+        try:
+            import aiohttp
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    "http://127.0.0.1:8000/api/chat",
+                    json={"question": question, "session_id": "live-voice", "use_cot": False},
+                    timeout=aiohttp.ClientTimeout(total=60),
+                ) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        return data.get("answer") or ""
+        except Exception as e:
+            logger.warning(f"backend chat fallback failed: {e}")
+        return ""
+
+
+class TTSProcessor(FrameProcessor):
+    async def process_frame(self, frame, direction: FrameDirection):
+        await super().process_frame(frame, direction)
         if isinstance(frame, TTSSpeakFrame) and direction == FrameDirection.DOWNSTREAM:
             text = frame.text
             if not text:
                 return
-
             wav_bytes = await tts_synthesize(text[:2000])
             if not wav_bytes:
+                print("[tts] synthesis returned no audio", flush=True)
                 return
-
             audio_frame = self._wav_to_audio_frame(wav_bytes)
             if audio_frame:
+                print(f"[tts] pushing audio frame {len(audio_frame.audio)}B sr={audio_frame.sample_rate}", flush=True)
                 await self.push_frame(audio_frame)
         else:
             await self.push_frame(frame, direction)
 
     @staticmethod
     def _wav_to_audio_frame(wav_bytes: bytes):
-        """Convert WAV bytes to OutputAudioRawFrame."""
         try:
             with wave.open(io.BytesIO(wav_bytes), "rb") as wf:
                 channels = wf.getnchannels()
@@ -126,28 +179,16 @@ class WindowsTTSProcessor(FrameProcessor):
                 pcm_data = wf.readframes(wf.getnframes())
         except Exception:
             return None
+        return OutputAudioRawFrame(audio=pcm_data, sample_rate=sample_rate, num_channels=channels)
 
-        return OutputAudioRawFrame(
-            audio=pcm_data,
-            sample_rate=sample_rate,
-            num_channels=channels,
-        )
-
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 async def run_agent(room_name: str = "tutor-room"):
     url = os.environ.get("LIVEKIT_URL", "ws://127.0.0.1:7880")
     api_key = os.environ.get("LIVEKIT_API_KEY", "devkey")
     api_secret = os.environ.get("LIVEKIT_API_SECRET", "secret")
-
     from pipecat.runner.livekit import generate_token_with_agent
     token = generate_token_with_agent(room_name, "AI-Tutor", api_key, api_secret)
-
     print(f"[agent] Connecting to {url} room={room_name}")
-
     transport = LiveKitTransport(
         url=url,
         token=token,
@@ -155,57 +196,71 @@ async def run_agent(room_name: str = "tutor-room"):
         params=LiveKitParams(
             audio_in_enabled=True,
             audio_out_enabled=True,
+            audio_out_sample_rate=AUDIO_OUT_SAMPLE_RATE,
+            video_out_enabled=True,
+            video_out_is_live=True,
+            video_out_width=AVATAR_WIDTH,
+            video_out_height=AVATAR_HEIGHT,
+            video_out_framerate=AVATAR_FPS,
+            video_out_color_format="RGB",
         ),
     )
-
-    stt = WhisperSTTService(
-        model=os.environ.get("STT_MODEL", "base"),
-        device=os.environ.get("STT_DEVICE", "cpu"),
-        compute_type="int8",
-    )
-    tutor = TutorProcessor()
-    tts = WindowsTTSProcessor()
-
-    pipeline = Pipeline([
-        transport.input(),
-        stt,
-        tutor,
-        tts,
-        transport.output(),
-    ])
-
-    task = PipelineTask(
-        pipeline,
-        PipelineParams(
-            enable_metrics=True,
-            enable_usage_metrics=False,
-        ),
-    )
-
+    processors: list = []
+    if _stt_ready():
+        processors += [
+            VADProcessor(vad_analyzer=SileroVADAnalyzer()),
+            WhisperSTTService(
+                device=WHISPER_DEVICE,
+                compute_type="int8",
+                settings=WhisperSTTService.Settings(model=WHISPER_MODEL),
+            ),
+        ]
+    else:
+        print("[agent] faster-whisper model not downloaded yet: lecture mode (no voice input). Run realtime/ensure_stt_model.py and restart.")
+    tutor_proc = TutorProcessor()
+    processors += [tutor_proc, TTSProcessor(), AvatarProcessor(width=AVATAR_WIDTH, height=AVATAR_HEIGHT, fps=AVATAR_FPS)]
+    tutor_proc._preload_task = asyncio.create_task(asyncio.to_thread(tutor_proc._load_index))
+    out = transport.output()
+    _orig_write = out.write_audio_frame
+    async def _dbg_write(frame):
+        ok = await _orig_write(frame)
+        print(f"[audio-out] {len(frame.audio)}B sr={frame.sample_rate} ok={ok}", flush=True)
+        return ok
+    out.write_audio_frame = _dbg_write
+    pipeline = Pipeline([transport.input(), *processors, out])
+    task = PipelineTask(pipeline, params=PipelineParams(enable_metrics=True, enable_usage_metrics=False), setup_timeout_secs=90, enable_rtvi=False, idle_timeout_secs=None)
     runner = PipelineRunner()
-
+    greeting_task = None
     @transport.event_handler("on_first_participant_joined")
     async def on_first_participant_joined(transport, participant_id):
+        nonlocal greeting_task
         print(f"[agent] Participant joined: {participant_id}")
-        await asyncio.sleep(1)
-        await task.queue_frame(
-            TTSSpeakFrame(text="Hello! I'm your AI tutor. What would you like to learn today?")
-        )
-
+        async def say_hi():
+            try:
+                await asyncio.sleep(1.0)
+                await task.queue_frame(TTSSpeakFrame(text="Hello! I'm your AI tutor. What would you like to learn today?"))
+                print("[agent] Greeting queued", flush=True)
+            except Exception as e:
+                print(f"[agent] Greeting failed: {e}", flush=True)
+        greeting_task = asyncio.create_task(say_hi())
     @transport.event_handler("on_participant_disconnected")
     async def on_participant_disconnected(transport, participant_id):
         print(f"[agent] Participant left: {participant_id}")
-
     await runner.run(task)
 
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="Pipecat voice tutor agent")
+    parser = argparse.ArgumentParser(description="AI Tutor LiveKit Agent")
     parser.add_argument("--room", default="tutor-room", help="LiveKit room name")
     args = parser.parse_args()
-
-    asyncio.run(run_agent(args.room))
+    try:
+        asyncio.run(run_agent(args.room))
+    except KeyboardInterrupt:
+        logger.info("Agent stopped by user")
+    except Exception as e:
+        logger.error(f"Agent error: {e}")
+        raise
 
 
 if __name__ == "__main__":

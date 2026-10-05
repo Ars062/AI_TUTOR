@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { LiveKitRoom, VideoConference } from "@livekit/components-react";
+import {
+  LiveKitRoom,
+  RoomAudioRenderer,
+  ControlBar,
+  useTracks,
+  VideoTrack,
+} from "@livekit/components-react";
+import { Track, VideoQuality } from "livekit-client";
 import "@livekit/components-styles";
 
 const GREETING = "Hello! What would you like to learn today?";
@@ -59,6 +66,77 @@ function UploadPanel() {
   );
 }
 
+function MeetLayout() {
+  const tracks = useTracks([{ source: Track.Source.Camera, withPlaceholder: true }]);
+
+  useEffect(() => {
+    for (const t of tracks) {
+      const pub = t.publication;
+      if (
+        !t.participant.isLocal &&
+        pub &&
+        typeof pub.setVideoQuality === "function"
+      ) {
+        try {
+          pub.setVideoQuality(VideoQuality.HIGH);
+        } catch {
+          /* publication may not be subscribed yet */
+        }
+      }
+    }
+  }, [tracks]);
+
+  const teacher = tracks.find(
+    (t) => !t.participant.isLocal && !t.placeholder
+  );
+  const local = tracks.find(
+    (t) => t.participant.isLocal && !t.placeholder
+  );
+  const localVisible = local && !local.publication?.isMuted;
+
+  return (
+    <div className="meet-stage">
+      <div className="meet-main">
+        {teacher ? (
+          <VideoTrack trackRef={teacher} className="meet-main-video" />
+        ) : (
+          <div className="meet-waiting">
+            <div className="avatar-face big">🧑‍🏫</div>
+            <p>AI Tutor is connecting…</p>
+          </div>
+        )}
+      </div>
+
+      <div className="meet-pip">
+        {localVisible ? (
+          <VideoTrack
+            trackRef={local}
+            className="meet-pip-video"
+            style={{ transform: "scaleX(-1)" }}
+          />
+        ) : (
+          <div className="meet-pip-off">📷</div>
+        )}
+        <span className="meet-pip-label">You</span>
+      </div>
+
+      <RoomAudioRenderer />
+
+      <ControlBar
+        controls={{
+          microphone: true,
+          camera: true,
+          screenShare: false,
+          chat: false,
+          leave: true,
+          settings: false,
+        }}
+        variation="verbose"
+      />
+    </div>
+  );
+}
+
 function LiveSession() {
   const [identity] = useState(
     () => "student-" + Math.random().toString(36).slice(2, 7)
@@ -110,7 +188,7 @@ function LiveSession() {
         video
         style={{ height: "100%", width: "100%" }}
       >
-        <VideoConference />
+        <MeetLayout />
       </LiveKitRoom>
     </main>
   );

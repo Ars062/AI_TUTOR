@@ -364,3 +364,95 @@ body {
 .live-room {
   height: 100vh;
 }
+
+/* ---- Meet-style live room: teacher big, student in small corner PiP ---- */
+
+.meet-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #0b0f14;
+  overflow: hidden;
+}
+
+.meet-main {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meet-main-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.meet-waiting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #9fb2c8;
+}
+
+.meet-waiting .avatar-face {
+  width: 96px;
+  height: 96px;
+  font-size: 52px;
+}
+
+.meet-pip {
+  position: absolute;
+  right: 16px;
+  bottom: 82px;
+  width: 22%;
+  min-width: 150px;
+  max-width: 240px;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #16202b;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  z-index: 5;
+}
+
+.meet-pip-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.meet-pip-off {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: #8fa3b8;
+}
+
+.meet-pip-label {
+  position: absolute;
+  left: 8px;
+  bottom: 6px;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.meet-stage .lk-control-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 6;
+}

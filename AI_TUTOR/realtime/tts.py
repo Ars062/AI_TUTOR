@@ -2,7 +2,7 @@
 
 TTS_PROVIDER selects the implementation:
   sapi   - Windows built-in voices (default, zero download, CPU)
-  piper  - reserved for the open-source Piper neural voice on GPU laptop
+  piper  - open-source Piper neural voice (offline, pip install piper-tts)
 
 The interface mirrors the spec (synthesize / stream) so implementations can
 be swapped without touching the tutor or frontend.
@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-TTS_PROVIDER = os.getenv("TTS_PROVIDER", "sapi")
+TTS_PROVIDER = os.getenv("TTS_PROVIDER", "piper")
 TTS_VOICE = os.getenv("TTS_VOICE", "")
 
 
@@ -83,12 +83,47 @@ class SapiProvider(TTSProvider):
 
 
 class PiperProvider(TTSProvider):
-    """Placeholder for the open-source Piper neural TTS (future)."""
+    """Open-source Piper neural TTS via onnxruntime (offline, cross-platform).
 
-    async def synthesize(self, text: str) -> bytes:
-        raise NotImplementedError(
-            "Piper provider lands with the GPU-machine phase"
+    Model (voice .onnx + .onnx.json sidecar) lives under models/piper by
+    default; override the path with PIPER_MODEL. Piper is the Linux path in
+    place of the Windows-only SapiProvider.
+    """
+
+    def __init__(self, voice: str = "", rate: int = 175, model: str = ""):
+        self._voice = voice
+        self._rate = rate
+        default_model = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "models", "piper", "en_US-lessac-medium.onnx",
         )
+        self._model_path = model or os.getenv("PIPER_MODEL", default_model)
+        self._voice_model = None
+
+    def _load(self):
+        if self._voice_model is None:
+            from piper import PiperVoice
+            if not os.path.exists(self._model_path):
+                raise RuntimeError(
+                    f"Piper model not found at {self._model_path}. "
+                    "Download en_US-lessac-medium.onnx + .onnx.json into models/piper/"
+                )
+            self._voice_model = PiperVoice.load(self._model_path)
+        return self._voice_model
+
+    async def synthesize(self, text: str, rate: int = 0) -> bytes:
+        import asyncio
+        import io
+        import wave
+
+        def render() -> bytes:
+            voice = self._load()
+            buf = io.BytesIO()
+            with wave.open(buf, "wb") as wf:
+                voice.synthesize_wav(text, wf)
+            return buf.getvalue()
+
+        return await asyncio.to_thread(render)
 
 
 _PROVIDERS = {
