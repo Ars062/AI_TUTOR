@@ -68,6 +68,9 @@ function UploadPanel() {
 
 function MeetLayout() {
   const tracks = useTracks([{ source: Track.Source.Camera, withPlaceholder: true }]);
+  const aTracks = useTracks([{ source: Track.Source.Microphone }]);
+  const recRef = useRef(null);
+  const [recording, setRecording] = useState(false);
 
   useEffect(() => {
     for (const t of tracks) {
@@ -94,6 +97,99 @@ function MeetLayout() {
   );
   const localVisible = local && !local.publication?.isMuted;
 
+  const teacherAudio = aTracks.find(
+    (t) => !t.participant.isLocal && !t.placeholder
+  );
+  const localMic = aTracks.find(
+    (t) => t.participant.isLocal && !t.placeholder
+  );
+
+  async function startRecording() {
+    if (!teacher || recRef.current) return;
+    let display;
+    try {
+      display = await navigator.mediaDevices.getDisplayMedia({
+        video: { frameRate: 25 },
+        audio: false,
+      });
+    } catch (e) {
+      console.error("record: screen share cancelled/failed", e);
+      return;
+    }
+    try {
+      const ctx = new AudioContext();
+      await ctx.resume();
+      const dest = ctx.createMediaStreamDestination();
+      const add = (msTrack) => {
+        try {
+          if (msTrack && msTrack.readyState === "live")
+            ctx.createMediaStreamSource(new MediaStream([msTrack])).connect(dest);
+        } catch (e) {
+          console.error("record: audio source failed", e);
+        }
+      };
+      add(teacherAudio?.publication?.track?.mediaStreamTrack);
+      add(localMic?.publication?.track?.mediaStreamTrack);
+      const stream = new MediaStream([
+        ...display.getVideoTracks(),
+        ...dest.stream.getAudioTracks(),
+      ]);
+      const rec = new MediaRecorder(stream, {
+        mimeType: "video/webm;codecs=vp8,opus",
+        videoBitsPerSecond: 2500000,
+      });
+      const chunks = [];
+      rec.ondataavailable = (e) => {
+        if (e.data && e.data.size) chunks.push(e.data);
+      };
+      rec.onstop = () => {
+        try {
+          const blob = new Blob(chunks, { type: "video/webm" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          const ts = new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace(/[T:]/g, "-");
+          a.download = `lesson_${ts}.webm`;
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(a.href), 15000);
+        } catch (e) {
+          console.error("record: save failed", e);
+        }
+        display.getTracks().forEach((t) => t.stop());
+        ctx.close().catch(() => {});
+        setRecording(false);
+      };
+      rec.start(1000);
+      recRef.current = rec;
+      setRecording(true);
+    } catch (e) {
+      console.error("record: start failed", e);
+      display.getTracks().forEach((t) => t.stop());
+    }
+  }
+
+  function stopRecording() {
+    try {
+      recRef.current?.stop();
+    } catch (e) {
+      console.error("record: stop failed", e);
+    }
+    recRef.current = null;
+  }
+
+  useEffect(() => {
+    return () => {
+      try {
+        if (recRef.current && recRef.current.state !== "inactive")
+          recRef.current.stop();
+      } catch {
+        /* page unloading */
+      }
+    };
+  }, []);
+
   return (
     <div className="meet-stage">
       <div className="meet-main">
@@ -119,6 +215,17 @@ function MeetLayout() {
         )}
         <span className="meet-pip-label">You</span>
       </div>
+
+      <button
+        type="button"
+        className={`meet-record-btn${recording ? " recording" : ""}`}
+        title="Record lesson"
+        disabled={!recording && !teacher}
+        onClick={recording ? stopRecording : startRecording}
+      >
+        {recording && <span className="meet-rec-dot" />}
+        {recording ? "Stop" : "Record"}
+      </button>
 
       <RoomAudioRenderer />
 

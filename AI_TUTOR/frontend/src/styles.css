@@ -456,3 +456,51 @@ body {
   transform: translateX(-50%);
   z-index: 6;
 }
+
+.meet-record-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 7;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 15px;
+  border-radius: 999px;
+  border: 1px solid #3a4350;
+  background: rgba(16, 20, 26, 0.88);
+  color: #e6edf3;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.meet-record-btn:hover:not(:disabled) {
+  background: #1d242e;
+  border-color: #566273;
+}
+
+.meet-record-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.meet-record-btn.recording {
+  border-color: #e5484d;
+  color: #ff9599;
+  background: rgba(46, 12, 14, 0.9);
+}
+
+.meet-rec-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e5484d;
+  animation: rec-blink 1s steps(2, start) infinite;
+}
+
+@keyframes rec-blink {
+  50% {
+    opacity: 0.15;
+  }
+}
