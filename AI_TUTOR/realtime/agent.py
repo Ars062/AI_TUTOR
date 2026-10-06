@@ -3,12 +3,14 @@ import asyncio
 import io
 import os
 import threading
+import time
 import wave
 from typing import Optional
 
 from dotenv import load_dotenv
 from loguru import logger
 from pipecat.audio.vad.silero import SileroVADAnalyzer
+from pipecat.audio.vad.vad_analyzer import VADParams
 from pipecat.frames.frames import (
     AudioRawFrame,
     EndFrame,
@@ -207,12 +209,71 @@ async def run_agent(room_name: str = "tutor-room"):
     )
     processors: list = []
     if _stt_ready():
+        vad_analyzer = SileroVADAnalyzer(params=VADParams(confidence=0.6, min_volume=0.1))
+        _orig_run = vad_analyzer._run_analyzer
+        _orig_conf = vad_analyzer.voice_confidence
+        _dbg = {"last": "", "t": 0.0, "conf": 0.0}
+
+        def _conf(buf):
+            c = _orig_conf(buf)
+            _dbg["conf"] = c
+            return c
+
+        vad_analyzer.voice_confidence = _conf
+
+        def _f(x):
+            try:
+                return float(x)
+            except Exception:
+                try:
+                    return float(x.reshape(-1)[0])
+                except Exception:
+                    return -1.0
+
+        _cap = {"b": bytearray(), "sr": 0, "done": False}
+
+        def _capture(buffer):
+            if _cap["done"]:
+                return
+            _cap["b"] += buffer
+            try:
+                _cap["sr"] = int(vad_analyzer.sample_rate) or 16000
+            except Exception:
+                _cap["sr"] = 16000
+            if len(_cap["b"]) >= _cap["sr"] * 2 * 15:
+                try:
+                    with wave.open("/tmp/opencode/vad_cap.wav", "wb") as w:
+                        w.setnchannels(1)
+                        w.setsampwidth(2)
+                        w.setframerate(_cap["sr"])
+                        w.writeframes(bytes(_cap["b"]))
+                    print(f"[vad] captured {len(_cap['b'])}B sr={_cap['sr']} -> /tmp/opencode/vad_cap.wav", flush=True)
+                except Exception as exc:
+                    print(f"[vad] capture failed: {exc}", flush=True)
+                _cap["done"] = True
+
+        def _run_dbg(buffer):
+            _capture(buffer)
+            state = _orig_run(buffer)
+            now = time.monotonic()
+            tag = f"{state}"
+            if tag != _dbg["last"] or now - _dbg["t"] >= 2.0:
+                print(
+                    f"[vad] vol={_f(vad_analyzer._prev_volume):.3f} conf={_f(_dbg['conf']):.2f} state={tag}",
+                    flush=True,
+                )
+                _dbg["last"] = tag
+                _dbg["t"] = now
+            return state
+
+        vad_analyzer._run_analyzer = _run_dbg
         processors += [
-            VADProcessor(vad_analyzer=SileroVADAnalyzer()),
+            VADProcessor(vad_analyzer=vad_analyzer),
             WhisperSTTService(
                 device=WHISPER_DEVICE,
                 compute_type="int8",
                 settings=WhisperSTTService.Settings(model=WHISPER_MODEL),
+                audio_passthrough=False,
             ),
         ]
     else:

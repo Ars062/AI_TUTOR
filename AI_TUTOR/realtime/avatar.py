@@ -28,6 +28,7 @@ import asyncio
 import math
 import os
 import sys
+import time
 
 import numpy as np
 
@@ -436,6 +437,13 @@ class AvatarProcessor(FrameProcessor):
             frame, (OutputAudioRawFrame, TTSAudioRawFrame, AudioRawFrame)
         ):
             if frame.audio and frame.sample_rate > 0:
+                now = time.monotonic()
+                if now - getattr(self, "_in_t", 0.0) >= 1.5:
+                    print(
+                        f"[avatar-in] {type(frame).__name__} sr={frame.sample_rate} n={getattr(frame, 'num_frames', 0)}",
+                        flush=True,
+                    )
+                    self._in_t = now
                 if self._emit_task and not self._emit_task.done():
                     self._emit_task.cancel()
                 self._emit_task = asyncio.create_task(self._emit_utterance(frame))
